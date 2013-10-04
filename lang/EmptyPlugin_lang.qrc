@@ -1,0 +1,23 @@
+<RCC>
+  <qresource prefix="/lang">
+    <file>EmptyPlugin_cs.qm</file>
+    <file>EmptyPlugin_da.qm</file>
+    <file>EmptyPlugin_de.qm</file>
+    <file>EmptyPlugin_el.qm</file>
+    <file>EmptyPlugin_en.qm</file>
+    <file>EmptyPlugin_es.qm</file>
+    <file>EmptyPlugin_fi.qm</file>
+    <file>EmptyPlugin_fr.qm</file>
+    <file>EmptyPlugin_hu.qm</file>
+    <file>EmptyPlugin_it.qm</file>
+    <file>EmptyPlugin_ja_JP.qm</file>
+    <file>EmptyPlugin_ko.qm</file>
+    <file>EmptyPlugin_nl.qm</file>
+    <file>EmptyPlugin_pl.qm</file>
+    <file>EmptyPlugin_ru.qm</file>
+    <file>EmptyPlugin_sv.qm</file>
+    <file>EmptyPlugin_tr.qm</file>
+    <file>EmptyPlugin_zh_CN.qm</file>
+  </qresource>
+</RCC>
+
