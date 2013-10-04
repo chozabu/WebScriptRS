@@ -14,10 +14,12 @@ otherwise
 ```
   useradd retrotester
 ```
-### instpect then run the build and test script (KDE)
+### inspect then run the build and test script (KDE)
 ```
   cat testit.sh
   ./testit.sh
 ```
+### Exit the new instance of retroshare when done testing
+
 
 
