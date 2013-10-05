@@ -1,7 +1,9 @@
 Empty Plugin for Retroshare
 
-This is an empty plugin for retroshare with no networking
-
+This is an empty plugin for retroshare with no networking.
+It is the LinksCloud plugin stripped down.
+I have perhaps done a few silly things, like hardcode the translations.
+Please do send a pull request with any further fixes/tweaks/strippings.
 
 
 ## Quick Start:
