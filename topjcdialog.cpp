@@ -24,10 +24,12 @@ WebScriptDialog::WebScriptDialog(QWidget *parent) :
     webview->setUrl(QUrl(loadfirst));
 
 
-    jslog = new QTextBrowser();
-    this->ui->verticalLayout->addWidget(jslog,1);
-    jslog->show();
+    //jslog = new QTextBrowser();
+    //this->ui->verticalLayout->addWidget(jslog,1);
+    //jslog->show();
     QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
+
+    connect(ui->testButton, SIGNAL(clicked()), this->webview, SLOT(reload()));
 
 }
 

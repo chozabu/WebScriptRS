@@ -32,7 +32,7 @@ protected:
 private:
     Ui::WebScriptDialog *ui;
     WebViewRS* webview;
-    QTextBrowser* jslog;
+    //QTextBrowser* jslog;
 };
 
 #endif // TOPJCDIALOG_H
