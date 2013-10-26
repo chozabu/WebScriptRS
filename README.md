@@ -14,7 +14,7 @@ otherwise
 
 ### Make a new user
 ```
-  useradd retrotester
+  adduser retrotester
 ```
 ### inspect then run the build and test script (KDE)
 ```
