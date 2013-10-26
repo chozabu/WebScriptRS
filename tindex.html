@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 25 March 2009), see www.w3.org" />
+
+  <title>nope</title>
+  <script src="three.min.js"></script>
+  <script type="text/javascript">
+  function myFunction()
+  {
+    document.getElementById("demo").innerHTML="<p>Hello World<\/p>";
+    document.getElementById("demo").innerHTML+=god;
+    document.getElementById("demo").innerHTML+="<p>Helasdlo World<\/p>";
+    god.onChange();
+  }
+  function testecho()
+  {
+    result = god.echothis('aaddaad');
+    document.getElementById("demo").innerHTML="<p>Hello World<\/p>";
+    document.getElementById("demo").innerHTML+=result;
+    document.getElementById("demo").innerHTML+="<p>Helasdlo World<\/p>";
+  }
+  function tick()
+  {
+    //document.getElementById("demo").innerHTML+="1";
+    msgs = god.getMessages();
+    //document.getElementById("demo").innerHTML+="2";
+    for (m in msgs){
+      //{"type":"chat","msg":"ert"},2b9646fb460efc8583601e2a58525e69,ChozabuTest (Virtual)
+      //document.getElementById("chatout").innerHTML=msgs[m];
+      var packet = msgs[m]
+      var packetdata = JSON.parse(msgs[m][0]);
+      
+      if (packetdata["type"] == "chat"){
+        var text = packetdata["msg"];
+        document.getElementById("chatout").innerHTML+=packet[2]+" says:<br/>"+text+"<br/>";
+       }
+    }
+  }
+  function submitChat()
+  {
+    //return;
+    //document.getElementById("demo").innerHTML="<p>Hello World<\/p>";
+    //document.getElementById("chatout").innerHTML+="1";
+      var input = document.getElementById('chatInput'),
+          msg = input.value;
+    //document.getElementById("chatout").innerHTML+="2";
+    var packetdata = {"type":"chat","msg":msg};
+    god.broadcastMessage(JSON.stringify(packetdata));
+    //document.getElementById("chatout").innerHTML+="3";
+    document.getElementById("chatout").innerHTML+="you say:<br/>"+msg+"<br/>";
+    input.value = "";
+  }
+  window.setInterval(tick,100);
+  </script>
+</head>
+
+<body>
+  <p>testpage!</p>
+  <!--
+  <p>Click the button to trigger a function.</p><br />
+  
+  <button onclick="myFunction()">Click me</button> <button onclick="testecho()">test
+  echo</button> <button onclick="god.go2index2()">barefunc</button> <button onclick=
+  "god.go2page('index2.html')">richfunk</button>
+  -->
+  <p id="demo"></p>
+  Chat:
+  <p id="chatout"></p>
+    <input name="chatInput" id="chatInput" type="text" /> <button onclick=
+    "submitChat()">Submit Message</button>
+</body>
+</html>
