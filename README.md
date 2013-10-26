@@ -1,27 +1,9 @@
-Empty Plugin for Retroshare
+#Webkit Plugin for Retroshare
 
-This is an empty plugin for retroshare with no networking.
-It is the LinksCloud plugin stripped down.
-I have perhaps done a few silly things, like hardcode the translations.
-Please do send a pull request with any further fixes/tweaks/strippings.
-
+This embeds webkit in a plugin page, along with the startings of a javascript bridge
+Still some way to go to be handy, but enough is implemented for simple broadcast chat functionality
 
 ## Quick Start:
 
-If you know what you are doing, do that!
-
-otherwise
-
-### Make a new user
-```
-  adduser retrotester
-```
-### inspect then run the build and test script (KDE)
-```
-  cat testit.sh
-  ./testit.sh
-```
-### Exit the new instance of retroshare when done testing
-
-
-
+Build and install the plugin as usual.
+run from the directory with the (missing) html files... (to be improved)
