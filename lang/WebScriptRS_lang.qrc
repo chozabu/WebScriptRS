@@ -1,0 +1,23 @@
+<RCC>
+  <qresource prefix="/lang">
+    <file>WebScriptRS_cs.qm</file>
+    <file>WebScriptRS_da.qm</file>
+    <file>WebScriptRS_de.qm</file>
+    <file>WebScriptRS_el.qm</file>
+    <file>WebScriptRS_en.qm</file>
+    <file>WebScriptRS_es.qm</file>
+    <file>WebScriptRS_fi.qm</file>
+    <file>WebScriptRS_fr.qm</file>
+    <file>WebScriptRS_hu.qm</file>
+    <file>WebScriptRS_it.qm</file>
+    <file>WebScriptRS_ja_JP.qm</file>
+    <file>WebScriptRS_ko.qm</file>
+    <file>WebScriptRS_nl.qm</file>
+    <file>WebScriptRS_pl.qm</file>
+    <file>WebScriptRS_ru.qm</file>
+    <file>WebScriptRS_sv.qm</file>
+    <file>WebScriptRS_tr.qm</file>
+    <file>WebScriptRS_zh_CN.qm</file>
+  </qresource>
+</RCC>
+
