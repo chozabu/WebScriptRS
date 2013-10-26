@@ -51,6 +51,7 @@ QVariantList WebViewRS::getMessages()
         QStringList qMsg;
         qMsg.append(QString(item.getMessage().c_str()));
         qMsg.append(QString(item.PeerId().c_str()));
+        qMsg.append(QString(rsPeers->getPeerName(item.PeerId()).c_str()));
         qMsgList.append(qMsg);
     }
     return qMsgList;
