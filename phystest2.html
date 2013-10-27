@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                <title>three.js webgl - geometry - cube</title>
+                <meta charset="utf-8">
+                <style>
+                        body {
+                                margin: 0px;
+                                background-color: #00000f;
+                                overflow: hidden;
+                        }
+                </style>
+        </head>
+        <body>
+              
+                <script src="three.min.js"></script>
+
+                <script>
+
+                        var camera, scene, renderer;
+                        var mesh, mesher;
+                        var camzpos = 400;
+                        var isMouseDown= false;
+                        
+                        var ballMesh = [];
+                        var ballData = [];
+                        
+                        var remoteMice = {};
+                        var mouse = { x: 0, y: 0 };
+                        var mouseDown = false;
+
+                        init();
+                        animate();
+
+                        function init() {
+
+
+                                container = document.createElement( 'div' );
+                                document.body.appendChild( container );
+
+                                var info = document.createElement( 'div' );
+                                info.style.position = 'absolute';
+                                info.style.top = '10px';
+                                info.style.width = '100%';
+                                info.style.textAlign = 'center';
+                                info.innerHTML = ' <a href="index.html">back to index</a>';
+                                container.appendChild( info );
+
+                                renderer = new THREE.WebGLRenderer();
+                                renderer.setSize( window.innerWidth, window.innerHeight );
+                                document.body.appendChild( renderer.domElement );
+
+                                //
+
+                                camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 1, 1000 );
+                                camera.position.z = camzpos;
+                                
+                                x = camera;
+                                y = camzpos;
+                                
+                                //camera.position.y = 100;
+
+                                scene = new THREE.Scene();
+
+                                
+                                //meshes
+                                var smallcube = new THREE.CubeGeometry( 20, 20, 20 );
+
+                                var material = new THREE.MeshLambertMaterial( { color: 0xdddddd, shading: THREE.SmoothShading } );
+                                //new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 90, shading: THREE.FlatShading } );
+
+                                
+                                for (var i=0;i<3;i++){
+                                  ball = {
+                                    "x":Math.random()*window.innerWidth-window.innerWidth/2,
+                                    "y":Math.random()*window.innerHeight-window.innerHeight/2,
+                                    "xvel":Math.random()*-0.5,
+                                    "yvel":Math.random()*-0.5
+                                  }
+                                  mesh = new THREE.Mesh( smallcube, material );
+                                  mesh.position.x = ball.x;
+                                  mesh.position.y = ball.y;
+                                  ballMesh.push(mesh);
+                                  ballData.push(ball);
+                                  scene.add( mesh );
+                                  
+                                }
+
+                                //
+                                // Lights
+
+                                scene.add( new THREE.AmbientLight( 0x111111 ) );
+
+                                var directionalLight = new THREE.DirectionalLight( /*Math.random() * */ 0xffffff, 0.425 );
+
+                                directionalLight.position.x = 0 - 0.5;
+                                directionalLight.position.y = 0.5;
+                                directionalLight.position.z = 0.5;//Math.random() - 0.5;
+
+                                directionalLight.position.normalize();
+
+                                scene.add( directionalLight );
+
+                                pointLight = new THREE.PointLight( 0xffffff, 1 );
+                                pointLight.position.x = 0;
+                                pointLight.position.y = 0;
+                                pointLight.position.z = 0;
+                                //scene.add( pointLight );
+
+                                window.addEventListener( 'resize', onWindowResize, false );
+
+                                document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+                                document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+                                document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+
+                        }
+
+                        function onWindowResize() {
+
+                                camera.aspect = window.innerWidth / window.innerHeight;
+                                camera.updateProjectionMatrix();
+
+                                renderer.setSize( window.innerWidth, window.innerHeight );
+
+                        }
+
+                        function animate() {
+
+                                requestAnimationFrame( animate );
+
+
+                                var pos = [mouse.x,mouse.y];
+                                var packetdata = {"type":"physupdate","ballData":ballData};
+                                var sendupdate = false;
+                                
+                                //loop over each ball, to do momentum,collision,update renderpos
+                                for (var i = 0;i<ballData.length;i++){
+                                  if (mouseDown){
+                                    ballData[i].xvel-=(ballData[i].x-mouse.x)*0.004;
+                                    ballData[i].yvel-=(ballData[i].y-mouse.y)*0.004;
+
+                                  }
+                                  for (var id in remoteMice){
+                                    rmouse = remoteMice[id];
+                                    if (rmouse.buttondown){
+                                      rmouse.bdata[i].xvel-=(rmouse.bdata[i].x-rmouse.x)*0.004;
+                                      rmouse.bdata[i].yvel-=(rmouse.bdata[i].y-rmouse.y)*0.004;
+
+                                    }
+                                    rmouse.mesh.position.x=rmouse.x;
+                                    rmouse.mesh.position.y=rmouse.y;
+
+
+                                  for (var j =0;j<ballData.length;j++){
+                                    ba = ballData[i];
+                                    bb = rmouse.bdata[j];
+                                    var sendu = collideBalls(ba,bb);
+                                    if (sendu) sendupdate=true;
+                                    }
+                                  rmouse.bmesh[i].x+=(rmouse.bmesh[i].xvel);//*0.95+mouse.x*0.05);
+                                  rmouse.bmesh[i].y+=(rmouse.bmesh[i].yvel);//*0.95+mouse.y*0.05);
+                                  rmouse.bmesh[i].xvel*=0.95;//+=(ballData[i].xvel);//*0.95+mouse.x*0.05);
+                                  rmouse.bmesh[i].yvel*=0.95;//+=(ballData[i].yvel);//*0.95+mouse.y*0.05);
+                                    rmouse.bmesh[i].position.x=rmouse.bmesh[i].position.x*0.85+rmouse.bdata[i].x*0.15;
+                                    rmouse.bmesh[i].position.y=rmouse.bmesh[i].position.y*0.85+rmouse.bdata[i].y*0.15;
+
+
+                                  }
+                                  //self collision
+                                  for (var j =i+1;j<ballData.length;j++){
+                                    ba = ballData[i];
+                                    bb = ballData[j];
+                                    collideBalls(ba,bb);
+                                  }
+
+                                  //physics intergration
+                                  ballData[i].x+=(ballData[i].xvel);//*0.95+mouse.x*0.05);
+                                  ballData[i].y+=(ballData[i].yvel);//*0.95+mouse.y*0.05);
+                                  ballData[i].xvel*=0.95;//+=(ballData[i].xvel);//*0.95+mouse.x*0.05);
+                                  ballData[i].yvel*=0.95;//+=(ballData[i].yvel);//*0.95+mouse.y*0.05);
+
+                                  ballMesh[i].position.x=ballMesh[i].position.x*0.85+ballData[i].x*0.15;
+                                  ballMesh[i].position.y=ballMesh[i].position.y*0.85+ballData[i].y*0.15;
+                                }
+                                if(Math.random()>0.9 || sendupdate)
+                                god.broadcastMessage(JSON.stringify(packetdata));
+                                renderer.render( scene, camera );
+
+                        }
+                      function collideBalls(ba,bb){
+                          if (bb == undefined)return false;
+                          range=40;
+                          xd = ba.x-bb.x;
+                          yd = ba.y-bb.y;
+                          td2 = xd*xd+yd*yd
+                          if (td2<range*range){
+                              var td = Math.sqrt(td2);
+                              var diffd = (range-td);
+                              xd/=td;
+                              yd/=td;
+                              ba.xvel+=xd*diffd;
+                              ba.yvel+=yd*diffd;
+                              bb.xvel-=xd*diffd;
+                              bb.yvel-=yd*diffd;
+                              ba.x+=xd*diffd;
+                              ba.y+=yd*diffd;
+                              bb.x-=xd*diffd;
+                              bb.y-=yd*diffd;
+                              return true;
+                          }
+                          return false;
+                      }
+                      function onDocumentMouseDown( event ) {
+                                event.preventDefault();
+                                mouseDown = true;
+                                var packetdata = {"type":"mousedown"};
+                                god.broadcastMessage(JSON.stringify(packetdata));
+                    }
+                    function onDocumentMouseUp( event ) {
+                        event.preventDefault();
+                        mouseDown = false;
+                        var packetdata = {"type":"mouseup"};
+                        god.broadcastMessage(JSON.stringify(packetdata));
+                     }
+                      function onDocumentMouseMove( event ) {
+                          event.preventDefault();
+                          //mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+                          //mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+                          mouse.x = ( event.clientX - window.innerWidth/2 );// * 2 - 1;
+                          mouse.y = - ( event.clientY - window.innerHeight/2 );// * 2 + 1;
+                          var pos = {"x":mouse.x,"y":mouse.y};
+                          var packetdata = {"type":"mousepos","pos":pos};
+                          god.broadcastMessage(JSON.stringify(packetdata));
+                          //makeParticleXY(mouse.x,mouse.y);
+
+                        }
+                        
+                      bridge.msgPush.connect(incomingMsg);
+                      function incomingMsg(message){
+                        msg = JSON.parse(message[0]);
+                        id = message[1];
+                        name = message[2]
+                        //console.log(msg);
+                        if (msg["type"] == "mousepos"){
+                        remoteMice[id].x = msg.pos.x;
+                        remoteMice[id].y = msg.pos.y;
+                        }else if(msg["type"] == "mousedown"){
+                        remoteMice[id].buttondown = true;
+
+                        }else if(msg["type"] == "mouseup"){
+                        remoteMice[id].buttondown = false;
+
+                        }else if(msg["type"] == "physupdate"){
+                        checkormakepeer(message[1]);
+                        peer = remoteMice[message[1]]
+                          for (var i in ballData){
+                          var weight = 0.0;//Math.random();
+                          var inv=1.0-weight;
+                          var vweight = 0.0;//Math.random();
+                          var vinv=1.0-weight;
+                          peer.bdata[i].x=(peer.bdata[i].x*weight+msg.ballData[i].x*inv);
+                          peer.bdata[i].y=(peer.bdata[i].y*weight+msg.ballData[i].y*inv);
+                          peer.bdata[i].xvel=(peer.bdata[i].xvel*vweight+msg.ballData[i].xvel*vinv);
+                          peer.bdata[i].yvel=(peer.bdata[i].yvel*vweight+msg.ballData[i].yvel*vinv);
+                          }
+                        }
+                        //console.log();
+                        //console.log(msg.pos);
+                        //remotepos = msg.pos;
+                        //remoteon = true;
+                        //makeParticleXY(msg.pos[0],msg.pos[1]);
+                      }
+                      function checkormakepeer(id){
+                      if(!(id in remoteMice)){
+
+                      var bmesh = [];
+                      var bdata = [];
+                              //meshes
+                              var smallcube = new THREE.CubeGeometry( 20, 20, 20 );
+
+                              var material = new THREE.MeshLambertMaterial( { color: 0xdddddd, shading: THREE.SmoothShading } );
+                              //new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 90, shading: THREE.FlatShading } );
+
+
+                              for (var i=0;i<3;i++){
+                                ball = {
+                                  "x":Math.random()*window.innerWidth-window.innerWidth/2,
+                                  "y":Math.random()*window.innerHeight-window.innerHeight/2,
+                                  "xvel":Math.random()*-0.5,
+                                  "yvel":Math.random()*-0.5
+                                }
+                                mesh = new THREE.Mesh( smallcube, material );
+                                mesh.position.x = ball.x;
+                                mesh.position.y = ball.y;
+                                bmesh.push(mesh);
+                                bdata.push(ball);
+                                scene.add( mesh );
+
+                              }
+
+                      var smallsphere = new THREE.SphereGeometry( 20, 20, 20 );
+
+
+                        mesh = new THREE.Mesh( smallsphere, material );
+                        scene.add( mesh );
+                          remoteMice[id] = {"x":0,"y":0,"buttondown":false, "mesh":mesh, "bmesh":bmesh,"bdata":bdata}
+                      }
+                     }
+                        /*function onDocumentMouseMove( event ) {
+
+                              event.preventDefault();
+                              //mesher.scale.y=event.clientY*0.001;
+                              //mesher.scale.x=event.clientY*0.001;
+                              //mesher.scale.z=event.clientY*0.001;
+                              
+                              //mesher.rotation.y = event.clientX*0.01;
+                              /*if ( isMouseDown ) {
+
+                                  theta = - ( ( event.clientX - onMouseDownPosition.x ) * 0.5 )
+                                          + onMouseDownTheta;
+                                  phi = ( ( event.clientY - onMouseDownPosition.y ) * 0.5 )
+                                        + onMouseDownPhi;
+
+                                  phi = Math.min( 180, Math.max( 0, phi ) );
+
+                                  camera.position.x = radious * Math.sin( theta * Math.PI / 360 )
+                                                      * Math.cos( phi * Math.PI / 360 );
+                                  camera.position.y = radious * Math.sin( phi * Math.PI / 360 );
+                                  camera.position.z = radious * Math.cos( theta * Math.PI / 360 )
+                                                      * Math.cos( phi * Math.PI / 360 );
+                                  camera.updateMatrix();
+
+                              }*/
+
+                              /*mouse3D = projector.unprojectVector(
+                                  new THREE.Vector3(
+                                      ( event.clientX / renderer.domElement.width ) * 2 - 1,
+                                      - ( event.clientY / renderer.domElement.height ) * 2 + 1,
+                                      0.5
+                                  ),
+                                  camera
+                              );
+                              ray.direction = mouse3D.subSelf( camera.position ).normalize();
+
+                              interact();
+                              render();*/
+
+                          //}//*/
+
+                </script>
+
+        </body>
+</html>
