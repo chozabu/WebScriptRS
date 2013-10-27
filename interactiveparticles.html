@@ -120,6 +120,7 @@
                                 var pos = [mouse.x,mouse.y];
                                 var packetdata = {"type":"mousepos","pos":pos};
                                 god.broadcastMessage(JSON.stringify(packetdata));
+                                makeParticleXY(mouse.x,mouse.y);
 
                         }
                         
@@ -131,11 +132,12 @@
                         console.log(msg.pos);
                         remotepos = msg.pos;
                         remoteon = true;
-                        
-                        
+                        makeParticleXY(msg.pos[0],msg.pos[1]);
+                      }
+                      function makeParticleXY(x,y){
                         var particle = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: Math.random() * 0x808080 + 0x808080, program: programStroke } ) );
-                        particle.position.x = msg.pos[0]*window.innerHeight;
-                        particle.position.y = msg.pos[1]*window.innerWidth;
+                        particle.position.x = x*window.innerHeight;
+                        particle.position.y = y*window.innerWidth;
                         particle.position.z = Math.random() * 20 - 10;
                         particle.scale.x = particle.scale.y = Math.random() * 10 + 10;
                         scene.add( particle );
