@@ -157,10 +157,10 @@
                                     var sendu = collideBalls(ba,bb);
                                     if (sendu) sendupdate=true;
                                     }
-                                  rmouse.bmesh[i].x+=(rmouse.bmesh[i].xvel);//*0.95+mouse.x*0.05);
-                                  rmouse.bmesh[i].y+=(rmouse.bmesh[i].yvel);//*0.95+mouse.y*0.05);
-                                  rmouse.bmesh[i].xvel*=0.95;//+=(ballData[i].xvel);//*0.95+mouse.x*0.05);
-                                  rmouse.bmesh[i].yvel*=0.95;//+=(ballData[i].yvel);//*0.95+mouse.y*0.05);
+                                  rmouse.bdata[i].x+=(rmouse.bdata[i].xvel);//*0.95+mouse.x*0.05);
+                                  rmouse.bdata[i].y+=(rmouse.bdata[i].yvel);//*0.95+mouse.y*0.05);
+                                  rmouse.bdata[i].xvel*=0.95;//+=(ballData[i].xvel);//*0.95+mouse.x*0.05);
+                                  rmouse.bdata[i].yvel*=0.95;//+=(ballData[i].yvel);//*0.95+mouse.y*0.05);
                                     rmouse.bmesh[i].position.x=rmouse.bmesh[i].position.x*0.85+rmouse.bdata[i].x*0.15;
                                     rmouse.bmesh[i].position.y=rmouse.bmesh[i].position.y*0.85+rmouse.bdata[i].y*0.15;
 
