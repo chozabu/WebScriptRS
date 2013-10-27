@@ -47,4 +47,5 @@ OTHER_FILES += \
     testit.sh \
     interactiveparticles.html \
     index.html \
-    broadcastchat.html
+    broadcastchat.html \
+    README.md
