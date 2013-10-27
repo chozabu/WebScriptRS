@@ -12,6 +12,7 @@
 //#include "topjcdialog.h"
 
 #include "msgQue.h"
+#include "webbridgers.h"
 #include <QMap>
 #include <QString>
 
@@ -31,6 +32,7 @@ public:
     virtual void testit();
     virtual void msgPeer(std::string peerId, std::string msg);//, std::string message){
     msgQue * mMsgque;
+    WebBridgeRS * bridge;
     QMap<QString,QString> compatablePeers;
 
 private:

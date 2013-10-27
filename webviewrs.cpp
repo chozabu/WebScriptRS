@@ -1,6 +1,7 @@
 #include "webviewrs.h"
 #include <QDebug>
 #include <QWebFrame>
+#include "webbridgers.h"
 
 WebViewRS::WebViewRS(QWidget *parent) :
     QWebView(parent)
@@ -10,12 +11,17 @@ WebViewRS::WebViewRS(QWidget *parent) :
     //this->acceptDrops()
     //connect(this->page()->mainFrame(), SIGNAL (javaS))
     connect( this->page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()),    this,   SLOT(onJavaScriptWindowObjectCleared()) );
+    bridge = new WebBridgeRS();
+
+
+
 }
 void WebViewRS::onJavaScriptWindowObjectCleared()
 {
     QWebFrame *frame = this->page()->mainFrame();
     //frame->setZoomFactor(4);
     frame->addToJavaScriptWindowObject("god", this);
+    frame->addToJavaScriptWindowObject("bridge", bridge);
  //   QString script = "console.log('init!');";
     //   this->page()->mainFrame()->evaluateJavaScript( script );
 }
@@ -23,6 +29,7 @@ void WebViewRS::onJavaScriptWindowObjectCleared()
 void WebViewRS::setP3service(p3JsonRS *p3servicein)
 {
     p3service = p3servicein;
+    p3service->bridge = bridge;
 }
 void WebViewRS::broadcastMessage(QString msg)
 {

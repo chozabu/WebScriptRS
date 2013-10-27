@@ -27,6 +27,7 @@
 
 
 
+
 // after getting data from 3 peers, we believe we're complete
 static const int INIT_THRESHOLD = 3;
 
@@ -102,6 +103,11 @@ void p3JsonRS::handleJsonItem( RsJsonItem * item )
         compatablePeers.insert(item->PeerId().c_str(),msg.c_str());
         return;
     }
+    QStringList qMsg;
+    qMsg.append(QString(item->getMessage().c_str()));
+    qMsg.append(QString(item->PeerId().c_str()));
+    qMsg.append(QString(rsPeers->getPeerName(item->PeerId()).c_str()));
+    bridge->pushMsgToJs(qMsg);
     mMsgque->storeMsg(item);
 }
 
