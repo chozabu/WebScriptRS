@@ -6,6 +6,8 @@ implemented features include<br>
 -broadcast chat<br>
 -three.js circle... thing
 
+###### Warning Watch your cpu and network usage when running the latter two tests.<br> Should be fine.
+
 ## Usage:
 
 Build and install the plugin as usual.<br>
