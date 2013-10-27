@@ -126,7 +126,7 @@
                         
                       bridge.msgPush.connect(incomingMsg);
                       function incomingMsg(message){
-                        msg = JSON.parse(message[0]);
+                        msg = JSON.parse(message.message);
                         console.log(msg);
                         console.log(msg["type"]);
                         console.log(msg.pos);

@@ -37,10 +37,10 @@
     }
   }
   function processPacket(packet){
-      var packetdata = JSON.parse(packet[0]);
+      var packetdata = JSON.parse(packet.message);
       if (packetdata["type"] == "chat"){
         var text = packetdata["msg"];
-        document.getElementById("chatout").innerHTML+=packet[2]+" says:<br/>"+text+"<br/>";
+        document.getElementById("chatout").innerHTML+=packet.peerName+" says:<br/>"+text+"<br/>";
        }
   }
   function submitChat()

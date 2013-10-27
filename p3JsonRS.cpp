@@ -25,6 +25,8 @@
 #include <algorithm>
 #include <iterator>
 
+#include<QVariantMap>
+
 
 
 
@@ -103,11 +105,15 @@ void p3JsonRS::handleJsonItem( RsJsonItem * item )
         compatablePeers.insert(item->PeerId().c_str(),msg.c_str());
         return;
     }
-    QStringList qMsg;
+    QVariantMap qDict;
+    qDict.insert("message",QString(item->getMessage().c_str()));
+    qDict.insert("peerID",QString(item->PeerId().c_str()));
+    qDict.insert("peerName",QString(rsPeers->getPeerName(item->PeerId()).c_str()));
+    /*QStringList qMsg;
     qMsg.append(QString(item->getMessage().c_str()));
     qMsg.append(QString(item->PeerId().c_str()));
-    qMsg.append(QString(rsPeers->getPeerName(item->PeerId()).c_str()));
-    bridge->pushMsgToJs(qMsg);
+    qMsg.append(QString(rsPeers->getPeerName(item->PeerId()).c_str()));*/
+    bridge->pushMsgToJs(qDict);
     //mMsgque->storeMsg(item);
 }
 

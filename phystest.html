@@ -211,19 +211,19 @@
                         
                       bridge.msgPush.connect(incomingMsg);
                       function incomingMsg(message){
-                        msg = JSON.parse(message[0]);
-                        id = message[1];
-                        name = message[2]
+                        msg = JSON.parse(message.message);
+                        id = message.peerID;
+                        name = message.peerName;
                         //console.log(msg);
                         if (msg["type"] == "mousepos"){
-                        if(!(message[1] in remoteMice)){
+                        if(!(id in remoteMice)){
                         var smallcube = new THREE.SphereGeometry( 20, 20, 20 );
 
                         var material = new THREE.MeshLambertMaterial( { color: 0xdddddd, shading: THREE.SmoothShading } );
 
                           mesh = new THREE.Mesh( smallcube, material );
                           scene.add( mesh );
-                            remoteMice[message[1]] = {"x":0,"y":0,"buttondown":false, "mesh":mesh}
+                            remoteMice[id] = {"x":0,"y":0,"buttondown":false, "mesh":mesh}
                         }
                         remoteMice[id].x = msg.pos.x;
                         remoteMice[id].y = msg.pos.y;

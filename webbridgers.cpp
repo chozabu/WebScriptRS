@@ -7,7 +7,7 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
 
 }
 
-void WebBridgeRS::pushMsgToJs(QStringList message)
+void WebBridgeRS::pushMsgToJs(QVariantMap message)
 {
  emit msgPush(message);
 }

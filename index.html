@@ -4,9 +4,9 @@
 var peers = {}
 bridge.msgPush.connect(incomingMsg);
 function incomingMsg(message){
-  //msg = JSON.parse(message[0]);
-  id = message[1];
-  name = message[2]
+  //msg = JSON.parse(message.message);
+  id = message.peerID;
+  name = message.peerName;
   if(id in peers)return;
   peers[id] = name
   //console.log(msg);

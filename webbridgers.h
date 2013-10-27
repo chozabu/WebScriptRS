@@ -3,17 +3,17 @@
 
 #include <QObject>
 #include <QStringList>
-
+#include<QVariantMap>
 
 class WebBridgeRS : public QObject
 {
     Q_OBJECT
 public:
     explicit WebBridgeRS(QObject *parent = 0);
-    void pushMsgToJs(QStringList message);
+    void pushMsgToJs(QVariantMap message);
 
 signals:
-    void msgPush(QStringList message);
+    void msgPush(QVariantMap message);
 public slots:
 
 };
