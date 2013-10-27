@@ -14,7 +14,6 @@ const uint32_t CONFIG_TYPE_JSON_PLUGIN     = 0x0000BACE;
 
 RsItem* RsJsonSerialiser::deserialise(void *data, uint32_t *pktsize)
 {
-    std::cerr << "Zero Reserve: deserialise()" << std::endl;
 
     /* get the type and size */
     uint32_t rstype = getRsItemId(data);

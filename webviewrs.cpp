@@ -34,10 +34,10 @@ void WebViewRS::setP3service(p3JsonRS *p3servicein)
 void WebViewRS::broadcastMessage(QString msg)
 {
     QMapIterator<QString, QString> mi(p3service->compatablePeers);
-    std::cout << "boardcasting\n";
+    //std::cout << "boardcasting\n";
     while ( mi.hasNext() ) {
       mi.next();
-      std::cout << "to: " << mi.key().toStdString() << std::endl;
+      //std::cout << "to: " << mi.key().toStdString() << std::endl;
       //qDebug() << mi.key() << ":" << mi.value().surname() << mi.value().forename();
       p3service->msgPeer(mi.key().toStdString(),msg.toStdString());
   }

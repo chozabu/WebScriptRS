@@ -48,4 +48,5 @@ OTHER_FILES += \
     interactiveparticles.html \
     index.html \
     broadcastchat.html \
-    README.md
+    README.md \
+    phystest.html

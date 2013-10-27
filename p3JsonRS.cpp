@@ -96,9 +96,9 @@ int p3JsonRS::tick()
 
 void p3JsonRS::handleJsonItem( RsJsonItem * item )
 {
-    std::cout << "GOT MSG\n";
+    //std::cout << "GOT MSG\n";
     std::string msg = item->getMessage();
-    std::cout << msg << "\n\n";
+    //std::cout << msg << "\n\n";
     if (msg.substr(0,4).compare("JINT") == 0){
         compatablePeers.insert(item->PeerId().c_str(),msg.c_str());
         return;
