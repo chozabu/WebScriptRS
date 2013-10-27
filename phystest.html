@@ -34,6 +34,18 @@
 
                         function init() {
 
+
+                                container = document.createElement( 'div' );
+                                document.body.appendChild( container );
+
+                                var info = document.createElement( 'div' );
+                                info.style.position = 'absolute';
+                                info.style.top = '10px';
+                                info.style.width = '100%';
+                                info.style.textAlign = 'center';
+                                info.innerHTML = ' <a href="index.html">back to index</a>';
+                                container.appendChild( info );
+
                                 renderer = new THREE.WebGLRenderer();
                                 renderer.setSize( window.innerWidth, window.innerHeight );
                                 document.body.appendChild( renderer.domElement );
@@ -54,7 +66,8 @@
                                 //meshes
                                 var smallcube = new THREE.CubeGeometry( 20, 20, 20 );
 
-                                var material = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 90, shading: THREE.FlatShading } );
+                                var material = new THREE.MeshLambertMaterial( { color: 0xdddddd, shading: THREE.SmoothShading } );
+                                //new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 90, shading: THREE.FlatShading } );
 
                                 
                                 for (var i=0;i<5;i++){
@@ -119,11 +132,8 @@
                                 var pos = [mouse.x,mouse.y];
                                 var packetdata = {"type":"physupdate","ballData":ballData};
                                 
+                                //loop over each ball, to do momentum,collision,update renderpos
                                 for (var i = 0;i<ballData.length;i++){
-                                ballData[i].x+=(ballData[i].xvel);//*0.95+mouse.x*0.05);
-                                ballData[i].y+=(ballData[i].yvel);//*0.95+mouse.y*0.05);
-                                ballData[i].xvel*=0.95;//+=(ballData[i].xvel);//*0.95+mouse.x*0.05);
-                                ballData[i].yvel*=0.95;//+=(ballData[i].yvel);//*0.95+mouse.y*0.05);
                                   if (mouseDown){
                                     ballData[i].xvel-=(ballData[i].x-mouse.x)*0.004;
                                     ballData[i].yvel-=(ballData[i].y-mouse.y)*0.004;
@@ -136,7 +146,11 @@
                                       ballData[i].yvel-=(ballData[i].y-rmouse.y)*0.004;
 
                                     }
+                                    rmouse.mesh.position.x=rmouse.x;
+                                    rmouse.mesh.position.y=rmouse.y;
+
                                   }
+                                  //self collision
                                   for (var j =i+1;j<ballData.length;j++){
                                     ba = ballData[i];
                                     bb = ballData[j];
@@ -156,11 +170,15 @@
                                         bb.yvel-=yd*diffd;
                                     }
                                   }
+                                  ballData[i].x+=(ballData[i].xvel);//*0.95+mouse.x*0.05);
+                                  ballData[i].y+=(ballData[i].yvel);//*0.95+mouse.y*0.05);
+                                  ballData[i].xvel*=0.95;//+=(ballData[i].xvel);//*0.95+mouse.x*0.05);
+                                  ballData[i].yvel*=0.95;//+=(ballData[i].yvel);//*0.95+mouse.y*0.05);
 
-                                  ballMesh[i].position.x=ballMesh[i].position.x*0.9+ballData[i].x*0.1;
-                                  ballMesh[i].position.y=ballMesh[i].position.y*0.9+ballData[i].y*0.1;
+                                  ballMesh[i].position.x=ballMesh[i].position.x*0.85+ballData[i].x*0.15;
+                                  ballMesh[i].position.y=ballMesh[i].position.y*0.85+ballData[i].y*0.15;
                                 }
-                                if(Math.random()>0.9)
+                                if(Math.random()>0.85)
                                 god.broadcastMessage(JSON.stringify(packetdata));
                                 renderer.render( scene, camera );
 
@@ -199,7 +217,13 @@
                         //console.log(msg);
                         if (msg["type"] == "mousepos"){
                         if(!(message[1] in remoteMice)){
-                            remoteMice[message[1]] = {"x":0,"y":0,"buttondown":false}
+                        var smallcube = new THREE.SphereGeometry( 20, 20, 20 );
+
+                        var material = new THREE.MeshLambertMaterial( { color: 0xdddddd, shading: THREE.SmoothShading } );
+
+                          mesh = new THREE.Mesh( smallcube, material );
+                          scene.add( mesh );
+                            remoteMice[message[1]] = {"x":0,"y":0,"buttondown":false, "mesh":mesh}
                         }
                         remoteMice[id].x = msg.pos.x;
                         remoteMice[id].y = msg.pos.y;
@@ -211,9 +235,9 @@
 
                         }else if(msg["type"] == "physupdate"){
                           for (var i in ballData){
-                          var weight = 0.5995;
+                          var weight = 0.9;//Math.random();
                           var inv=1-weight;
-                          var vweight = 0.59;
+                          var vweight = 0.8;//Math.random();
                           var vinv=1-weight;
                           ballData[i].x=(ballData[i].x*weight+msg.ballData[i].x*inv);
                           ballData[i].y=(ballData[i].y*weight+msg.ballData[i].y*inv);
