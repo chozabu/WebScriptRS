@@ -179,7 +179,7 @@
                                   ballMesh[i].position.y=ballMesh[i].position.y*0.85+ballData[i].y*0.15;
                                 }
                                 if(Math.random()>0.85)
-                                god.broadcastMessage(JSON.stringify(packetdata));
+                                bridgeWV.broadcastMessage(JSON.stringify(packetdata));
                                 renderer.render( scene, camera );
 
                         }
@@ -188,13 +188,13 @@
                                 event.preventDefault();
                                 mouseDown = true;
                                 var packetdata = {"type":"mousedown"};
-                                god.broadcastMessage(JSON.stringify(packetdata));
+                                bridgeWV.broadcastMessage(JSON.stringify(packetdata));
                     }
                     function onDocumentMouseUp( event ) {
                         event.preventDefault();
                         mouseDown = false;
                         var packetdata = {"type":"mouseup"};
-                        god.broadcastMessage(JSON.stringify(packetdata));
+                        bridgeWV.broadcastMessage(JSON.stringify(packetdata));
                      }
                       function onDocumentMouseMove( event ) {
                           event.preventDefault();
@@ -204,7 +204,7 @@
                           mouse.y = - ( event.clientY - window.innerHeight/2 );// * 2 + 1;
                           var pos = {"x":mouse.x,"y":mouse.y};
                           var packetdata = {"type":"mousepos","pos":pos};
-                          god.broadcastMessage(JSON.stringify(packetdata));
+                          bridgeWV.broadcastMessage(JSON.stringify(packetdata));
                           //makeParticleXY(mouse.x,mouse.y);
 
                         }

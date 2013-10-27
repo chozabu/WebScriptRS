@@ -7,7 +7,7 @@ WebViewRS::WebViewRS(QWidget *parent) :
     QWebView(parent)
 {
     //this->
-    //this->page()->mainFrame()->addToJavaScriptWindowObject( "god", this );
+    //this->page()->mainFrame()->addToJavaScriptWindowObject( "bridgeWV", this );
     //this->acceptDrops()
     //connect(this->page()->mainFrame(), SIGNAL (javaS))
     connect( this->page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()),    this,   SLOT(onJavaScriptWindowObjectCleared()) );
@@ -20,7 +20,7 @@ void WebViewRS::onJavaScriptWindowObjectCleared()
 {
     QWebFrame *frame = this->page()->mainFrame();
     //frame->setZoomFactor(4);
-    frame->addToJavaScriptWindowObject("god", this);
+    frame->addToJavaScriptWindowObject("bridgeWV", this);
     frame->addToJavaScriptWindowObject("bridge", bridge);
  //   QString script = "console.log('init!');";
     //   this->page()->mainFrame()->evaluateJavaScript( script );

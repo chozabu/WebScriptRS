@@ -21,7 +21,7 @@ function incomingMsg(message){
 tick();
 function tick(){
     var packetdata = {"type":"indexping","msg":"hi there"};
-    god.broadcastMessage(JSON.stringify(packetdata));
+    bridgeWV.broadcastMessage(JSON.stringify(packetdata));
   //document.getElementById("peerlist").innerHTML="asd";
   //document.getElementById("demo").innerHTML="asd";
 setTimeout(tick,1000);
@@ -41,9 +41,9 @@ setTimeout(tick,1000);
 <br>
 <button onclick="myFunction()">Click me</button>
 <button onclick="testecho()">test echo</button>
-<button onclick="god.go2index2()">barefunc</button>
-<button onclick="god.go2page('index2.html')">richfunk</button>
-<button onclick="god.go2page('tindex.html')">to tindex</button>-->
+<button onclick="bridgeWV.go2index2()">barefunc</button>
+<button onclick="bridgeWV.go2page('index2.html')">richfunk</button>
+<button onclick="bridgeWV.go2page('tindex.html')">to tindex</button>-->
 
 <p id="demo"></p>
 Compatable Peers:

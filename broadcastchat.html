@@ -12,13 +12,13 @@
   function myFunction()
   {
     document.getElementById("demo").innerHTML="<p>Hello World<\/p>";
-    document.getElementById("demo").innerHTML+=god;
+    document.getElementById("demo").innerHTML+=bridgeWV;
     document.getElementById("demo").innerHTML+="<p>Helasdlo World<\/p>";
-    god.onChange();
+    bridgeWV.onChange();
   }
   function testecho()
   {
-    result = god.echothis('aaddaad');
+    result = bridgeWV.echothis('aaddaad');
     document.getElementById("demo").innerHTML="<p>Hello World<\/p>";
     document.getElementById("demo").innerHTML+=result;
     document.getElementById("demo").innerHTML+="<p>Helasdlo World<\/p>";
@@ -26,7 +26,7 @@
   function tick()
   {
     //document.getElementById("demo").innerHTML+="1";
-    msgs = god.getMessages();
+    msgs = bridgeWV.getMessages();
     //document.getElementById("demo").innerHTML+="2";
     for (m in msgs){
       //{"type":"chat","msg":"ert"},2b9646fb460efc8583601e2a58525e69,ChozabuTest (Virtual)
@@ -52,7 +52,7 @@
           msg = input.value;
     //document.getElementById("chatout").innerHTML+="2";
     var packetdata = {"type":"chat","msg":msg};
-    god.broadcastMessage(JSON.stringify(packetdata));
+    bridgeWV.broadcastMessage(JSON.stringify(packetdata));
     //document.getElementById("chatout").innerHTML+="3";
     document.getElementById("chatout").innerHTML+="you say:<br/>"+msg+"<br/>";
     input.value = "";
@@ -75,8 +75,8 @@
   <p>Click the button to trigger a function.</p><br />
   
   <button onclick="myFunction()">Click me</button> <button onclick="testecho()">test
-  echo</button> <button onclick="god.go2index2()">barefunc</button> <button onclick=
-  "god.go2page('index2.html')">richfunk</button>
+  echo</button> <button onclick="bridgeWV.go2index2()">barefunc</button> <button onclick=
+  "bridgeWV.go2page('index2.html')">richfunk</button>
   -->
   <p id="demo"></p>
   Chat:
