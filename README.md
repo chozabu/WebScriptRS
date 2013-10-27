@@ -5,7 +5,10 @@ Still some way to go to be handy, So far it can broadcast, and perhaps send targ
 implemented tests include<br>
 -broadcast chat<br>
 -three.js circle... shared drawing... thing<br>
--simple physics test with dodgy "averaging" of pos/vel over network.
+-simple p2p physics test with dodgy "averaging" of pos/vel over network.<br/>
+
+The physics test does full simulation on each peer, and merges posions/velocitys
+
 
 
 
