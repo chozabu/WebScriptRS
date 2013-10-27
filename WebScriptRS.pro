@@ -44,4 +44,7 @@ TRANSLATIONS +=  \
                         lang/WebScriptRS_zh_CN.ts
 
 OTHER_FILES += \
-    testit.sh
+    testit.sh \
+    interactiveparticles.html \
+    index.html \
+    broadcastchat.html

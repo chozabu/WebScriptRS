@@ -20,7 +20,7 @@ WebScriptDialog::WebScriptDialog(QWidget *parent) :
     webview->show();
     QString loadfirst = "";//QDir::homePath();
 
-    loadfirst.append("tindex.html");
+    loadfirst.append("index.html");
     webview->setUrl(QUrl(loadfirst));
 
 

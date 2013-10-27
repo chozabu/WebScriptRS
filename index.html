@@ -1,0 +1,37 @@
+<html><head><title>nope</title>
+
+<script>
+function myFunction()
+{
+document.getElementById("demo").innerHTML="<p>Hello World</p>";
+document.getElementById("demo").innerHTML+=god;
+document.getElementById("demo").innerHTML+="<p>Helasdlo World</p>";
+god.onChange();
+}
+function testecho()
+{
+result = god.echothis('aaddaad');
+document.getElementById("demo").innerHTML="<p>Hello World</p>";
+document.getElementById("demo").innerHTML+=result;
+document.getElementById("demo").innerHTML+="<p>Helasdlo World</p>";
+}
+</script>
+</head>
+</head><body>
+
+<p> try these pages</p>
+<a href="broadcastchat.html">Broadcast Chat</a><br/>
+<a href="interactiveparticles.html">Broadcast Particles</a>
+
+<p>old testing: Click the button to trigger a function.</p>
+
+<br>
+<button onclick="myFunction()">Click me</button>
+<button onclick="testecho()">test echo</button>
+<!--<button onclick="god.go2index2()">barefunc</button>
+<button onclick="god.go2page('index2.html')">richfunk</button>
+<button onclick="god.go2page('tindex.html')">to tindex</button>-->
+
+<p id="demo"></p>
+</body>
+</html>
