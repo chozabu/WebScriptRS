@@ -27,6 +27,10 @@ public:
     void setP3service(p3JsonRS *p3servicein);
     p3JsonRS *p3service;
 
+protected slots:
+    void adjustLocation();
+    void changeLocation();
+
 protected:
     void javaScriptConsoleMessage(const QString& message, int lineNumber, const QString& sourceID);
 private:

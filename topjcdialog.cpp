@@ -29,13 +29,29 @@ WebScriptDialog::WebScriptDialog(QWidget *parent) :
     //jslog->show();
     QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
 
-    connect(ui->testButton, SIGNAL(clicked()), this->webview, SLOT(reload()));
+    //connect(ui->testButton, SIGNAL(clicked()), this->webview, SLOT(reload()));
+    connect(ui->testButton, SIGNAL(clicked()), this, SLOT(changeLocation()));
+
+
+    connect(ui->lineEdit, SIGNAL(returnPressed()), SLOT(changeLocation()));
+    connect(webview, SIGNAL(loadFinished(bool)), SLOT(adjustLocation()));
 
 }
 
 WebScriptDialog::~WebScriptDialog()
 {
     delete ui;
+}
+
+void WebScriptDialog::changeLocation()
+{
+    QUrl url = QUrl(ui->lineEdit->text());
+    webview->load(url);
+    webview->setFocus();
+}
+void WebScriptDialog::adjustLocation()
+{
+    ui->lineEdit->setText(webview->url().toString());
 }
 
 void WebScriptDialog::setP3service(p3JsonRS *p3servicein)
