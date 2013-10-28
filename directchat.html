@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 25 March 2009), see www.w3.org" />
+
+  <title>nope</title>
+  <script src="three.min.js"></script>
+  <script type="text/javascript">
+  var peerID = getUrlVars()["peerid"];
+  peerID = peerID.substr(1,peerID.length-2);
+  
+  function processPacket(packet){
+      var packetdata = JSON.parse(packet.message);
+      if (packetdata["type"] == "chat"){
+        var text = packetdata["msg"];
+        document.getElementById("chatout").innerHTML+=packet.peerName+" says:<br/>"+text+"<br/>";
+       }
+  }
+  function submitChat()
+  {
+    //return;
+    //document.getElementById("demo").innerHTML="<p>Hello World<\/p>";
+    //document.getElementById("chatout").innerHTML+="1";
+      var input = document.getElementById('chatInput'),
+          msg = input.value;
+    //document.getElementById("chatout").innerHTML+="2";
+    var packetdata = {"type":"chat","msg":msg};
+    //bridgeWV.broadcastMessage(JSON.stringify(packetdata));
+    //void sendMessage(QString peer, QString msg);
+    bridgeWV.sendMessage(peerID, JSON.stringify(packetdata));
+    //document.getElementById("chatout").innerHTML+="3";
+    document.getElementById("chatout").innerHTML+="you say:<br/>"+msg+"<br/>";
+    input.value = "";
+  }
+  bridge.msgPush.connect(incomingMsg);
+  function incomingMsg(message){
+    processPacket(message);
+   }
+  
+  function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+
+  </script>
+</head>
+
+<body>
+  <p>
+  <a href="index.html">Back to index</a></p>
+  <p id="demo"></p>
+  Chat:
+  <p id="chatout"></p>
+    <input name="chatInput" id="chatInput" type="text" /> <button onclick=
+    "submitChat()">Submit Message</button>
+    
+    
+    <script>
+    document.getElementById("chatout").innerHTML+="talking to: "+peerID+"<br/>";
+    </script>
+    
+    
+    
+</body>
+</html>

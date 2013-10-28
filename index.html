@@ -20,6 +20,9 @@ function incomingMsg(message){
           //document.getElementById("peerlist").innerHTML+="3";
           peerPanel = "<p id='"+id+"'>"+peers[id].name+"</p>";
           document.getElementById("peerlist").innerHTML+=peerPanel;
+
+          peerPanel =peers[id].name+" <a href=directchat.html?peerid='"+id+"'>chat</a>";
+          document.getElementById("peerlistplain").innerHTML+=peerPanel;
           //document.getElementById("peerlist").innerHTML+=peers[peerid]+"<br>";
           //document.getElementById("peerlist").innerHTML+="4";
       //}
@@ -63,6 +66,8 @@ setTimeout(tick,1000);
 
 <p id="demo"></p>
 Compatable Peers:
+<p id="peerlistplain"></p>
+Last packet from peers
 <p id="peerlist"></p>
 </body>
 </html>

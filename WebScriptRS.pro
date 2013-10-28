@@ -86,4 +86,5 @@ OTHER_FILES += \
     lang/WebScriptRS_de.ts \
     lang/WebScriptRS_da.ts \
     lang/WebScriptRS_cs.ts \
-    phystest2.html
+    phystest2.html \
+    directchat.html
