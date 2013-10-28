@@ -10,7 +10,7 @@
   <script src="three.min.js"></script>
   <script type="text/javascript">
   var peerID = getUrlVars()["peerid"];
-  peerID = peerID.substr(1,peerID.length-2);
+  //peerID = peerID.substr(1,peerID.length-2);
   
   function processPacket(packet){
       var packetdata = JSON.parse(packet.message);

@@ -21,7 +21,7 @@ function incomingMsg(message){
           peerPanel = "<p id='"+id+"'>"+peers[id].name+"</p>";
           document.getElementById("peerlist").innerHTML+=peerPanel;
 
-          peerPanel =peers[id].name+" <a href=directchat.html?peerid='"+id+"'>chat</a>";
+          peerPanel =peers[id].name+" <a href=directchat.html?peerid="+id+">chat</a>";
           document.getElementById("peerlistplain").innerHTML+=peerPanel;
           //document.getElementById("peerlist").innerHTML+=peers[peerid]+"<br>";
           //document.getElementById("peerlist").innerHTML+="4";
