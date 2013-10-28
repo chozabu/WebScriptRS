@@ -4,19 +4,35 @@
 var peers = {}
 bridge.msgPush.connect(incomingMsg);
 function incomingMsg(message){
+//document.getElementById("peerlist").innerHTML+="1";
   //msg = JSON.parse(message.message);
   id = message.peerID;
   name = message.peerName;
-  if(id in peers)return;
-  peers[id] = name
-  //console.log(msg);
-  document.getElementById("peerlist").innerHTML="";
-  for (peerid in peers){
-      console.log(peerid);
-      console.log(peers);
-      console.log(peers[peerid]);
-    document.getElementById("peerlist").innerHTML+=peers[peerid]+"<br>"
-  }
+  if(!(id in peers)){//return;
+  //document.getElementById("peerlist").innerHTML+="2";
+      peers[id] = {"name":name}
+      //console.log(msg);
+      //document.getElementById("peerlist").innerHTML="";
+      //for (peerid in peers){
+          //console.log(peerid);
+          //console.log(peers);
+          //console.log(peers[peerid]);
+          //document.getElementById("peerlist").innerHTML+="3";
+          peerPanel = "<p id='"+id+"'>"+peers[id].name+"</p>";
+          document.getElementById("peerlist").innerHTML+=peerPanel;
+          //document.getElementById("peerlist").innerHTML+=peers[peerid]+"<br>";
+          //document.getElementById("peerlist").innerHTML+="4";
+      //}
+
+   }
+   //peerlist = document.getElementById("peerlist");
+   //document.getElementById("peerlist").innerHTML+="5";
+   //document.getElementById(id).children.namedItem("lastmsg").innerHTML+=message.message;
+   peerPanel = peers[id].name+"<br/>Last message="+message.message;
+   document.getElementById(id).innerHTML = peerPanel
+   //document.getElementById(id).children.namedItem("lastmsg").innerHTML=message.message;
+   //document.getElementById("peerlist").innerHTML+="6";
+
 }
 tick();
 function tick(){
