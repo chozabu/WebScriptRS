@@ -1,7 +1,7 @@
 #Webkit Plugin for Retroshare
 
 This embeds webkit in a plugin page, along with the startings of a javascript bridge<br>
-Still some way to go to be handy, So far it can broadcast, and perhaps send targeted messages<br>
+Still some way to go to be handy, So far it can broadcast to compatable peers, and send targeted messages<br>
 implemented tests include<br>
 -packet inspection on index<br>
 -broadcast chat<br>
@@ -11,11 +11,12 @@ implemented tests include<br>
 -simple p2p physics test with "ownership" of objects.<br/>
 
 
+#### Warning Included tests do not sanitise HTML. Probably "Worm Compatable" - even the index page.
 ![My image](http://chozabu.net/stuff/WebScriptRS.png)
 
 
 
-###### Warning Watch your cpu and network usage when running the latter two tests.<br> Should be fine.
+##### Warning Watch your cpu and network usage when running the physics/shared drawing tests.<br> Should be fine.
 
 ## Usage:
 
