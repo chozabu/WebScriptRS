@@ -5,6 +5,7 @@
 #include <QStringList>
 #include<QVariantMap>
 
+
 class WebBridgeRS : public QObject
 {
     Q_OBJECT
@@ -14,6 +15,14 @@ public:
 
 signals:
     void msgPush(QVariantMap message);
+
+    /*
+    rsPeers->getOwnId();
+    rsPeers->getOnlineList();
+    rsPeers->getFriendList();
+    rsFiles->FileDetails();
+    rsFiles->SearchKeywords();
+    */
 public slots:
 
 };
