@@ -3,8 +3,9 @@
 This embeds webkit in a plugin page, along with the startings of a javascript bridge<br>
 Still some way to go to be handy, So far it can broadcast, and perhaps send targeted messages<br>
 implemented tests include<br>
--packet inspection on index
+-packet inspection on index<br>
 -broadcast chat<br>
+-direct chat<br>
 -three.js circle... shared drawing... thing<br>
 -simple p2p physics test with "averaging" of pos/vel over network.<br/>
 -simple p2p physics test with "ownership" of objects.<br/>
@@ -29,12 +30,16 @@ var packetdata = {"type":"chatmessage","pos":"thiscouldbeanything"}; <br>
 bridgeWV.broadcastMessage(JSON.stringify(packetdata)); <br>
 </code>
 
+or directly like this: <br>
+<code>
+bridgeWV.sendMessage(peer_id_as_string, JSON.stringify(packetdata)); <br>
+</code>
 And get one like this: <br>
 <code>
 bridge.msgPush.connect(incomingMsg); <br>
 function incomingMsg(message){ <br>
-  packetdata = JSON.parse(message.message); <br>
-  id = message.peerID; <br>
-  name = message.peerName;
+  var packetdata = JSON.parse(message.message); <br>
+  var peer_id_as_string = message.peerID; <br>
+  var name = message.peerName;
 }
 </code>
