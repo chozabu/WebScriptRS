@@ -4,46 +4,34 @@
 var peers = {}
 bridge.msgPush.connect(incomingMsg);
 function incomingMsg(message){
-//document.getElementById("peerlist").innerHTML+="1";
   //msg = JSON.parse(message.message);
   id = message.peerID;
   name = message.peerName;
-  if(!(id in peers)){//return;
-  //document.getElementById("peerlist").innerHTML+="2";
+
+//make peer if missing
+  if(!(id in peers)){
       peers[id] = {"name":name}
-      //console.log(msg);
-      //document.getElementById("peerlist").innerHTML="";
-      //for (peerid in peers){
-          //console.log(peerid);
-          //console.log(peers);
-          //console.log(peers[peerid]);
-          //document.getElementById("peerlist").innerHTML+="3";
           peerPanel = "<p id='"+id+"'>"+peers[id].name+"</p>";
           document.getElementById("peerlist").innerHTML+=peerPanel;
 
           peerPanel =peers[id].name+" <a href=directchat.html?peerid="+id+">chat</a><br/>";
           document.getElementById("peerlistplain").innerHTML+=peerPanel;
-          //document.getElementById("peerlist").innerHTML+=peers[peerid]+"<br>";
-          //document.getElementById("peerlist").innerHTML+="4";
       //}
 
    }
-   //peerlist = document.getElementById("peerlist");
-   //document.getElementById("peerlist").innerHTML+="5";
-   //document.getElementById(id).children.namedItem("lastmsg").innerHTML+=message.message;
+
+   //show peers last  message
    peerPanel = peers[id].name+"<br/>Last message="+message.message;
    document.getElementById(id).innerHTML = peerPanel
-   //document.getElementById(id).children.namedItem("lastmsg").innerHTML=message.message;
-   //document.getElementById("peerlist").innerHTML+="6";
 
 }
 tick();
+
+//send a message to everyone each second, so they know we are alive
 function tick(){
     var packetdata = {"type":"indexping","msg":"hi there"};
     bridgeWV.broadcastMessage(JSON.stringify(packetdata));
-  //document.getElementById("peerlist").innerHTML="asd";
-  //document.getElementById("demo").innerHTML="asd";
-setTimeout(tick,1000);
+    setTimeout(tick,1000);
 }
 </script>
 </head>
@@ -54,6 +42,7 @@ setTimeout(tick,1000);
 <a href="interactiveparticles.html">Broadcast Particles</a> - medium data - paints lots of circles with three.js<br/>
 <a href="phystest.html">p2p Averaging Physics Test</a> - all clients control all objects<br/>
 <a href="phystest2.html">p2p owned-objects Physics Test</a> - clients control their own objects<br/>
+<a href="ivank/kevents.html">Ivank simple drivable car</a> - clients control their own object<br/>
 <!--
 <p>old testing: Click the button to trigger a function.</p>
 
