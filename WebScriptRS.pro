@@ -87,4 +87,8 @@ OTHER_FILES += \
     lang/WebScriptRS_da.ts \
     lang/WebScriptRS_cs.ts \
     phystest2.html \
-    directchat.html
+    directchat.html \
+    ivank/car.png \
+    ivank/asphalt.jpg \
+    ivank/ivank.js \
+    ivank/kevents.html

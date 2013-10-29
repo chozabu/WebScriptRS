@@ -1,0 +1,115 @@
+<html>
+<head>
+	<script type="text/javascript" src="ivank.js"></script>
+	<script type="text/javascript">
+                //Date.now()
+                var peers = {};
+                var cars = {};
+		var stage;//, car, angle = 0, speed = 0;
+		//var l, r, u, d;
+		var ownid = "shoulduserealid"
+		
+		function Start()
+		{
+			stage = new Stage("c");
+			
+			// background
+			var s = new Sprite();
+			s.graphics.beginBitmapFill(new BitmapData("asphalt.jpg"));
+			s.graphics.drawRect(0,0,stage.stageWidth, stage.stageHeight);
+			stage.addChild(s);
+			
+			//add self
+			checkormakepeer(ownid);
+			
+			// events
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKD);
+			stage.addEventListener(KeyboardEvent.KEY_UP  , onKU);
+			stage.addEventListener(Event.ENTER_FRAME     , onEF);
+		}
+		function checkormakepeer(id){
+                  if(!(id in peers)){
+                            
+                        // car                  
+                        var car = new Sprite(); 
+                        car.x = stage.stageWidth/2;
+                        car.y = stage.stageHeight/2;
+                        var cb = new Bitmap(new BitmapData("car.png"));
+                        cb.x = -123; cb.y = -50; car.addChild(cb);
+                        stage.addChild(car);
+                        peers[id]={"u":false,"d":false,"l":false,"r":false,"angle":0,"speed":0, "x":car.x,"y":car.y};
+                        cars[id]=car;
+                  }
+                 }
+		
+		function onKD (e)
+		{ 
+			console.log(e.keyCode);
+			keyPressID(ownid,e.keyCode);
+		}
+		function keyPressID(id,keyCode){
+			if(keyCode == 37) peers[id].l = true;
+			if(keyCode == 38) peers[id].u = true;
+			if(keyCode == 39) peers[id].r = true;
+			if(keyCode == 40) peers[id].d = true;
+		}
+		
+		function onKU (e)
+		{
+                        keyLiftID(ownid,e.keyCode);
+                }
+                function keyLiftID(id,keyCode){
+                        if(keyCode == 37) peers[id].l = false;
+                        if(keyCode == 38) peers[id].u = false;
+                        if(keyCode == 39) peers[id].r = false;
+                        if(keyCode == 40) peers[id].d = false;
+                }
+		
+		function onEF (e)
+		{
+                    for (id in peers){
+                        var cpeer = peers[id];
+			cpeer.speed *= 0.9;
+			if(cpeer.u) cpeer.speed += 1+cpeer.speed*0.06;
+			if(cpeer.d) cpeer.speed -= 1;
+			
+			if(cpeer.r) cpeer.angle += cpeer.speed * 0.003;
+			if(cpeer.l) cpeer.angle -= cpeer.speed * 0.003;
+                        cpeer.x += Math.cos(cpeer.angle) * cpeer.speed;
+                        cpeer.y += Math.sin(cpeer.angle) * cpeer.speed;
+				
+			cars[id].rotation = cpeer.angle*180/Math.PI;
+                        cars[id].x = cpeer.x;
+                        cars[id].y = cpeer.y;
+                    }
+                    if (Math.random()>0.8){
+                    packetdata = {"type":"carphysupdate","data":peers[ownid]};
+                    bridgeWV.broadcastMessage(JSON.stringify(packetdata));
+                    }
+		}
+		
+		bridge.msgPush.connect(incomingMsg);
+                      function incomingMsg(message){
+                        msg = JSON.parse(message.message);
+                        id = message.peerID;
+                        name = message.peerName;
+                        //console.log(msg);
+                        if (msg["type"] == "mousepos"){
+                        //peers[id].x = msg.pos.x;
+                        //peers[id].y = msg.pos.y;
+                        }else if(msg["type"] == "mousedown"){
+                        peers[id].buttondown = true;
+
+                        }else if(msg["type"] == "mouseup"){
+                        peers[id].buttondown = false;
+
+                        }else if(msg["type"] == "carphysupdate"){
+                        checkormakepeer(id);
+                        peers[id]=msg.data;
+                        cpeer = peers[id]
+                        }
+                      }
+	</script>
+</head>
+<body onload="Start();"><canvas id="c"></canvas></body>
+</html>
