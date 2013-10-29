@@ -93,20 +93,10 @@
                         msg = JSON.parse(message.message);
                         id = message.peerID;
                         name = message.peerName;
-                        //console.log(msg);
-                        if (msg["type"] == "mousepos"){
-                        //peers[id].x = msg.pos.x;
-                        //peers[id].y = msg.pos.y;
-                        }else if(msg["type"] == "mousedown"){
-                        peers[id].buttondown = true;
-
-                        }else if(msg["type"] == "mouseup"){
-                        peers[id].buttondown = false;
-
-                        }else if(msg["type"] == "carphysupdate"){
-                        checkormakepeer(id);
-                        peers[id]=msg.data;
-                        cpeer = peers[id]
+                        if(msg["type"] == "carphysupdate"){
+                          checkormakepeer(id);
+                          peers[id]=msg.data;
+                          cpeer = peers[id]
                         }
                       }
 	</script>
