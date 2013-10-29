@@ -13,6 +13,9 @@ public:
     explicit WebBridgeRS(QObject *parent = 0);
     void pushMsgToJs(QVariantMap message);
 
+public slots:
+    QString getOwnId();
+    QString getDownloadDirectory();
 signals:
     void msgPush(QVariantMap message);
 
