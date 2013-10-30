@@ -30,6 +30,7 @@
             x: 0,
             y: 0
         };
+        var material;
 
         var nearestConv, selectedConv;
         var nearestSphere, selectedSphere;
@@ -83,7 +84,7 @@
 
             //meshes
             var smallsphere = new THREE.SphereGeometry(10, 10, 10);
-            var material = new THREE.MeshLambertMaterial({
+            material = new THREE.MeshLambertMaterial({
                 color: 0xdddddd,
                 shading: THREE.SmoothShading
             });
@@ -238,20 +239,31 @@
                 words.position.x = selectedConv.position.x-5+Math.random()*10;
                 words.position.y = selectedConv.position.y - lineHeight;
                 if (selectedConv.replies.length>0){
-                  altwords = selectedConv.replies[0];
+                  for (conv in conversations){
+                  altwords = conversations[conv];
+                  altwords.position.z-=10;
                   xd = words.position.x-altwords.position.x;
                   yd = words.position.y-altwords.position.y;
                   td = Math.sqrt(xd*xd-yd*yd);
-                  desiredd = 80;
+                  
+                  desiredd = 40;
+                  if(td<desiredd){
                   diffd = desiredd-td;
                   xd/=td;
                   yd/=td;
                   words.position.x+=xd*diffd;
                   words.position.y+=yd*diffd;
-                  altwords.position.x-=xd*diffd;
-                  altwords.position.y-=yd*diffd;
+                  }
+                  }
+                  //altwords.position.x-=xd*diffd;
+                  //altwords.position.y-=yd*diffd;
                 
                 }
+              var geometry = new THREE.Geometry();
+              geometry.vertices.push(new THREE.Vector3(0,0,0));
+              geometry.vertices.push(selectedConv.position.clone().sub(words.position));
+                var line = new THREE.Line(geometry, material);
+                words.add(line);
                 selectedConv.replies.push(words);
             } else {
                 words.position.x = Math.random() * window.innerWidth - window.innerWidth / 2;
