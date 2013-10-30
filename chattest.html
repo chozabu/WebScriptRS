@@ -292,10 +292,6 @@
               var words = addText(packetData.msg,packetData.parentID);
               words.convID = packetData.convID;
               convDictID[words.convID] = words;
-              for (wtf in packetData){
-              console.log(wtf);
-              console.log(packetData);
-              }
               words.originID = packetData.originID;
               console.log("new packet originID is"+words.originID);
               
