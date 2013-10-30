@@ -25,6 +25,7 @@
         var lineHeight = textSize + 15;
         var container, info, inputMain;
         var rootConversations = [];
+        var linelist = [];
         var conversations = [];
         var convDictID = {};
         var mouse = {
@@ -189,14 +190,28 @@
             }
             
             for (var i = 0;i<100;i++){
-            if(conversations.length>2){
-            var ra =  parseInt(Math.random()*conversations.length);
-            var rb =  parseInt(Math.random()*conversations.length);
-            if(ra!=rb)
-            maintainDist(conversations[ra],conversations[rb],1,0.5,lineHeight*1.2);
+              if(conversations.length>4){
+              var ra =  parseInt(Math.random()*conversations.length);
+              var rb =  parseInt(Math.random()*conversations.length);
+              if(ra!=rb)
+              maintainDist(conversations[ra],conversations[rb],0.5,0.5,lineHeight*1.4);
+              
+              var l = parseInt(Math.random()*linelist.length);
+              cl = linelist[l];
+              cl.geometry[0] = cl.refa.position;
+              cl.geometry[1] = cl.refb.position;
+              cl.geometry.verticesNeedUpdate = true;
+              }
             }
-            }
-
+            
+            /*for (l in linelist){
+              cl = linelist[l];
+              console.log(cl.geometry[0]);
+              console.log(cl.refa.position);
+              cl.geometry[0] = cl.refa.position;
+              cl.geometry[1] = cl.refb.position;
+              cl.geometry.verticesNeedUpdate = true;
+             }*/
             renderer.render(scene, camera);
 
             setTimeout(nextFrame, 100);
@@ -282,6 +297,9 @@
               geometry.vertices.push(words.position);//new THREE.Vector3(0,0,0));
               geometry.vertices.push(parent.position);//.clone().sub(words.position));
                 var line = new THREE.Line(geometry, material);
+                line .refa = parent;
+                line.refb = words;
+                linelist.push(line);
                 scene.add(line);
                 parent.replies.push(words);
             } else {
