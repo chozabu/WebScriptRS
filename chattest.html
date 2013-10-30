@@ -237,8 +237,8 @@
         //console.log(parentID);
         var words = createWords(text);
         parent = convDictID[parentID];
-        console.log(parent);
-                    if (parent) {
+        //console.log(parent);
+            if (parent) {
                 words.position.x = parent.position.x-5+Math.random()*10;
                 words.position.y = parent.position.y - lineHeight;
                 if (parent.replies.length>0){
@@ -284,20 +284,22 @@
             var packetData = JSON.parse(packet.message);
             if (packetData["type"] == "chat"){
               //console.log("incoming originID is:"+packetData.originID);
-              console.log(packetData);
-              //console.log(packetData["originID"]);
-              //console.log("incoming originID is:"+packetData.originID);
-              //if(convDictID[packetData.convID])return;
+              //console.log(packetData);
+              if(convDictID[packetData.convID]){
+                console.log("DROPPING DUPE MESSAGE");
+                return;
+              }
               var text = packetData["msg"];
               var words = addText(packetData.msg,packetData.parentID);
               words.convID = packetData.convID;
               convDictID[words.convID] = words;
               words.originID = packetData.originID;
               console.log("new packet originID is"+words.originID);
-              
-              //if(packetData.parentID == ownid){
-            //bridgeWV.broadcastMessage(JSON.stringify(packetData));
-            //}
+              console.log(packetData.parentID +" vs " + ownid)
+              if(packetData.originID == ownid){
+              console.log("BROADCASTING REPLY MESSAGE");
+            bridgeWV.broadcastMessage(JSON.stringify(packetData));
+            }
               //document.getElementById("chatout").innerHTML+=packet.peerName+" says:<br/>"+text+"<br/>";
             }
         }
@@ -307,7 +309,7 @@
             var cid = undefined;
             var originID = ownid;
             if (selectedConv){
-              console.log("selectedConv.originID="+selectedConv.originID);
+              //console.log("selectedConv.originID="+selectedConv.originID);
               cid=selectedConv.convID;
               packetData.parentID = cid;
               originID = selectedConv.originID;
@@ -325,44 +327,6 @@
             } else{
             bridgeWV.broadcastMessage(JSON.stringify(packetData));
             }
-            /*var words = createWords(input.value);
-            if (selectedConv) {
-                words.position.x = selectedConv.position.x-5+Math.random()*10;
-                words.position.y = selectedConv.position.y - lineHeight;
-                if (selectedConv.replies.length>0){
-                  for (conv in conversations){
-                    altwords = conversations[conv];
-                    altwords.position.z-=10;
-                    xd = words.position.x-altwords.position.x;
-                    yd = words.position.y-altwords.position.y;
-                    td = Math.sqrt(xd*xd-yd*yd);
-                    
-                    desiredd = 40;
-                    if(td<desiredd){
-                      diffd = desiredd-td;
-                      xd/=td;
-                      yd/=td;
-                      words.position.x+=xd*diffd;
-                      words.position.y+=yd*diffd;
-                    }
-                  }
-                  //altwords.position.x-=xd*diffd;
-                  //altwords.position.y-=yd*diffd;
-                
-                }
-              var geometry = new THREE.Geometry();
-              geometry.vertices.push(new THREE.Vector3(0,0,0));
-              geometry.vertices.push(selectedConv.position.clone().sub(words.position));
-                var line = new THREE.Line(geometry, material);
-                words.add(line);
-                selectedConv.replies.push(words);
-            } else {
-                words.position.x = Math.random() * window.innerWidth - window.innerWidth / 2;
-                words.position.y = window.innerHeight / 2 - lineHeight;
-                rootConversations.push(words);
-            }
-            words.replies = [];
-            conversations.push(words);*/
             selectedConv = words;
             input.value = "";
         }
