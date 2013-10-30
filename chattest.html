@@ -22,7 +22,7 @@
         var camera, scene, projector, renderer;
         var camzpos = 400;
         var textSize = 20;
-        var lineHeight = textSize + 5;
+        var lineHeight = textSize + 15;
         var container, info, inputMain;
         var rootConversations = [];
         var conversations = [];
@@ -187,6 +187,15 @@
                 selectedSphere.position.x = selectedSphere.position.x * 0.9;
                 selectedSphere.position.y = selectedSphere.position.y * 0.9;
             }
+            
+            for (var i = 0;i<100;i++){
+            if(conversations.length>2){
+            var ra =  parseInt(Math.random()*conversations.length);
+            var rb =  parseInt(Math.random()*conversations.length);
+            if(ra!=rb)
+            maintainDist(conversations[ra],conversations[rb],1,0.5,lineHeight*1.2);
+            }
+            }
 
             renderer.render(scene, camera);
 
@@ -232,7 +241,26 @@
                 return false;
             }
         }
-        
+        function maintainDist(a,b,strength,weight,desiredd){
+                    var xd = a.position.x-b.position.x;
+                    var yd = a.position.y-b.position.y;
+                    //zd = a.position.z-b.position.z;
+                    var td = xd*xd+yd*yd;
+                    
+                    //desiredd = 60;
+                    if(td<desiredd*desiredd){
+                    var invWeight = (1-weight)*strength;
+                    weight*=strength;
+                    td = Math.sqrt(td);
+                      diffd = desiredd-td;
+                      xd/=td;
+                      yd/=td;
+                      a.position.x+=xd*diffd*weight;
+                      a.position.y+=yd*diffd*weight;
+                      b.position.x-=xd*diffd*invWeight;
+                      b.position.y-=yd*diffd*invWeight;
+                      }
+            }
         function addText(text, parentID){
         //console.log(parentID);
         var words = createWords(text);
@@ -240,33 +268,21 @@
         //console.log(parent);
             if (parent) {
                 words.position.x = parent.position.x-5+Math.random()*10;
-                words.position.y = parent.position.y - lineHeight;
+                words.position.y = parent.position.y - lineHeight-Math.random()*10;;
                 if (parent.replies.length>0){
                   for (conv in conversations){
-                    altwords = conversations[conv];
-                    altwords.position.z-=10;
-                    xd = words.position.x-altwords.position.x;
-                    yd = words.position.y-altwords.position.y;
-                    td = Math.sqrt(xd*xd-yd*yd);
-                    
-                    desiredd = 40;
-                    if(td<desiredd){
-                      diffd = desiredd-td;
-                      xd/=td;
-                      yd/=td;
-                      words.position.x+=xd*diffd;
-                      words.position.y+=yd*diffd;
-                    }
+                  conversations[conv].z-=10;
+                    maintainDist(words, conversations[conv],1,1,60);
                   }
                   //altwords.position.x-=xd*diffd;
                   //altwords.position.y-=yd*diffd;
                 
                 }
               var geometry = new THREE.Geometry();
-              geometry.vertices.push(new THREE.Vector3(0,0,0));
-              geometry.vertices.push(parent.position.clone().sub(words.position));
+              geometry.vertices.push(words.position);//new THREE.Vector3(0,0,0));
+              geometry.vertices.push(parent.position);//.clone().sub(words.position));
                 var line = new THREE.Line(geometry, material);
-                words.add(line);
+                scene.add(line);
                 parent.replies.push(words);
             } else {
                 words.position.x = Math.random() * (window.innerWidth/2) - window.innerWidth / 4;
@@ -332,7 +348,7 @@
         }
 
         function createWords(text) {
-            var shape = new THREE.TextGeometry(text, {
+            /*var shape = new THREE.TextGeometry(text, {
                 font: 'helvetiker',
                 curveSegments: 1,
                 size: textSize,
@@ -341,10 +357,86 @@
             var wrapper = new THREE.MeshNormalMaterial({
                 color: 0x00ff00
             });
-            var words = new THREE.Mesh(shape, wrapper);
+            var words = new THREE.Mesh(shape, wrapper);*/
+            var words = makeTextSprite(text,{ fontsize: 32, fontface: "Georgia", borderColor: {r:0, g:0, b:255, a:1.0} });
             scene.add(words);
             return words;
         }
+        
+        
+function makeTextSprite( message, parameters )
+{
+        if ( parameters === undefined ) parameters = {};
+        
+        var fontface = parameters.hasOwnProperty("fontface") ? 
+                parameters["fontface"] : "Arial";
+        
+        var fontsize = parameters.hasOwnProperty("fontsize") ? 
+                parameters["fontsize"] : 18;
+        
+        var borderThickness = parameters.hasOwnProperty("borderThickness") ? 
+                parameters["borderThickness"] : 4;
+        
+        var borderColor = parameters.hasOwnProperty("borderColor") ?
+                parameters["borderColor"] : { r:0, g:0, b:0, a:1.0 };
+        
+        var backgroundColor = parameters.hasOwnProperty("backgroundColor") ?
+                parameters["backgroundColor"] : { r:255, g:255, b:255, a:1.0 };
+
+        var spriteAlignment = THREE.SpriteAlignment.topLeft;
+                
+        var canvas = document.createElement('canvas');
+        var context = canvas.getContext('2d');
+        context.font = "Bold " + fontsize + "px " + fontface;
+    
+        // get size data (height depends only on font size)
+        var metrics = context.measureText( message );
+        var textWidth = metrics.width;
+        
+        // background color
+        context.fillStyle   = "rgba(" + backgroundColor.r + "," + backgroundColor.g + ","
+                                                                  + backgroundColor.b + "," + backgroundColor.a + ")";
+        // border color
+        context.strokeStyle = "rgba(" + borderColor.r + "," + borderColor.g + ","
+                                                                  + borderColor.b + "," + borderColor.a + ")";
+
+        context.lineWidth = borderThickness;
+        roundRect(context, borderThickness/2, borderThickness/2, textWidth + borderThickness, fontsize * 1.4 + borderThickness, 6);
+        // 1.4 is extra height factor for text below baseline: g,j,p,q.
+        
+        // text color
+        context.fillStyle = "rgba(0, 0, 0, 1.0)";
+
+        context.fillText( message, borderThickness, fontsize + borderThickness);
+        
+        // canvas contents will be used for a texture
+        var texture = new THREE.Texture(canvas) 
+        texture.needsUpdate = true;
+
+        var spriteMaterial = new THREE.SpriteMaterial( 
+                { map: texture, useScreenCoordinates: false, alignment: spriteAlignment } );
+        var sprite = new THREE.Sprite( spriteMaterial );
+        sprite.scale.set(100,50,1.0);
+        return sprite;  
+}
+
+// function for drawing rounded rectangles
+function roundRect(ctx, x, y, w, h, r) 
+{
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.lineTo(x+w-r, y);
+    ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+    ctx.lineTo(x+w, y+h-r);
+    ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+    ctx.lineTo(x+r, y+h);
+    ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+    ctx.lineTo(x, y+r);
+    ctx.quadraticCurveTo(x, y, x+r, y);
+    ctx.closePath();
+    ctx.fill();
+        ctx.stroke();   
+}
     </script>
 
 </body>
