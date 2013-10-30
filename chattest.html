@@ -26,6 +26,7 @@
         var container, info, inputMain;
         var rootConversations = [];
         var conversations = [];
+        var convDictID = {};
         var mouse = {
             x: 0,
             y: 0
@@ -229,31 +230,97 @@
                 return false;
             }
         }
-
+        
+        function addText(text, parentID){
+        //console.log(parentID);
+        var words = createWords(text);
+        parent = convDictID[parentID];
+                    if (parent) {
+                words.position.x = parent.position.x-5+Math.random()*10;
+                words.position.y = parent.position.y - lineHeight;
+                if (parent.replies.length>0){
+                  for (conv in conversations){
+                    altwords = conversations[conv];
+                    altwords.position.z-=10;
+                    xd = words.position.x-altwords.position.x;
+                    yd = words.position.y-altwords.position.y;
+                    td = Math.sqrt(xd*xd-yd*yd);
+                    
+                    desiredd = 40;
+                    if(td<desiredd){
+                      diffd = desiredd-td;
+                      xd/=td;
+                      yd/=td;
+                      words.position.x+=xd*diffd;
+                      words.position.y+=yd*diffd;
+                    }
+                  }
+                  //altwords.position.x-=xd*diffd;
+                  //altwords.position.y-=yd*diffd;
+                
+                }
+              var geometry = new THREE.Geometry();
+              geometry.vertices.push(new THREE.Vector3(0,0,0));
+              geometry.vertices.push(parent.position.clone().sub(words.position));
+                var line = new THREE.Line(geometry, material);
+                words.add(line);
+                parent.replies.push(words);
+            } else {
+                words.position.x = Math.random() * window.innerWidth - window.innerWidth / 2;
+                words.position.y = window.innerHeight / 2 - lineHeight;
+                rootConversations.push(words);
+            }
+            words.replies = [];
+            conversations.push(words);
+            return words;
+          }
+          
+        //bridge is defined in c++
+        bridge.msgPush.connect(incomingMsg);
+        function incomingMsg(packet){
+            var packetdata = JSON.parse(packet.message);
+            if (packetdata["type"] == "chat"){
+              //console.log(packetdata);
+              var text = packetdata["msg"];
+              var words = addText(packetdata.msg,packetdata.parentID);
+              words.convID = packetdata.convID;
+              convDictID[words.convID] = words;
+              //document.getElementById("chatout").innerHTML+=packet.peerName+" says:<br/>"+text+"<br/>";
+            }
+        }
         function submitChat() {
             var input = document.getElementById('chatInput');
-            //var packetdata = {"type":"chat","msg":input.value};
-            //bridgeWV.broadcastMessage(JSON.stringify(packetdata));
-            var words = createWords(input.value);
+            var packetdata = {"type":"chat","msg":input.value};
+            var cid = undefined;
+            if (selectedConv){
+              cid=selectedConv.convID;
+              packetdata.parentID = cid;
+             }
+            var words = addText(input.value,cid);
+            words.convID = Math.random();
+            convDictID[words.convID] = words;
+            packetdata.convID = words.convID;
+            bridgeWV.broadcastMessage(JSON.stringify(packetdata));
+            /*var words = createWords(input.value);
             if (selectedConv) {
                 words.position.x = selectedConv.position.x-5+Math.random()*10;
                 words.position.y = selectedConv.position.y - lineHeight;
                 if (selectedConv.replies.length>0){
                   for (conv in conversations){
-                  altwords = conversations[conv];
-                  altwords.position.z-=10;
-                  xd = words.position.x-altwords.position.x;
-                  yd = words.position.y-altwords.position.y;
-                  td = Math.sqrt(xd*xd-yd*yd);
-                  
-                  desiredd = 40;
-                  if(td<desiredd){
-                  diffd = desiredd-td;
-                  xd/=td;
-                  yd/=td;
-                  words.position.x+=xd*diffd;
-                  words.position.y+=yd*diffd;
-                  }
+                    altwords = conversations[conv];
+                    altwords.position.z-=10;
+                    xd = words.position.x-altwords.position.x;
+                    yd = words.position.y-altwords.position.y;
+                    td = Math.sqrt(xd*xd-yd*yd);
+                    
+                    desiredd = 40;
+                    if(td<desiredd){
+                      diffd = desiredd-td;
+                      xd/=td;
+                      yd/=td;
+                      words.position.x+=xd*diffd;
+                      words.position.y+=yd*diffd;
+                    }
                   }
                   //altwords.position.x-=xd*diffd;
                   //altwords.position.y-=yd*diffd;
@@ -271,7 +338,7 @@
                 rootConversations.push(words);
             }
             words.replies = [];
-            conversations.push(words);
+            conversations.push(words);*/
             selectedConv = words;
             input.value = "";
         }
