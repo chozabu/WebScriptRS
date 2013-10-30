@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>three.js webgl - geometry - cube</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            margin: 0px;
+            background-color: #00000f;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script src="three.min.js"></script>
+    <script src="helvetiker_regular.typeface.js"></script>
+
+    <script>
+        var camera, scene, projector, renderer;
+        var camzpos = 400;
+        var textSize = 20;
+        var lineHeight = textSize + 5;
+        var container, info, inputMain;
+        var rootConversations = [];
+        var conversations = [];
+        var mouse = {
+            x: 0,
+            y: 0
+        };
+
+        var nearestConv, selectedConv;
+        var nearestSphere, selectedSphere;
+
+        init();
+        animate();
+
+        function preventevent(event) {
+            event.preventDefault();
+        }
+
+        function init() {
+
+
+            container = document.createElement('div');
+            document.body.appendChild(container);
+
+            var info = document.createElement('div');
+            info.style.position = 'absolute';
+            info.style.top = '10px';
+            info.style.width = '100%';
+            info.style.textAlign = 'center';
+            info.innerHTML = ' <a href="index.html">back to index</a>';
+            container.appendChild(info);
+
+            var inputMain = document.createElement('div');
+            inputMain.style.position = 'absolute';
+            inputMain.style.bottom = '10px';
+            inputMain.style.width = '100%';
+            inputMain.style.textAlign = 'center';
+            inputMain.innerHTML = '<input name="chatInput" id="chatInput" type="text"  onkeypress="return chatKeyDown(event)" /> <button onclick="submitChat()">Submit Message</button>';
+            container.appendChild(inputMain);
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            //
+
+            camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.z = camzpos;
+
+            x = camera;
+            y = camzpos;
+
+            //camera.position.y = 100;
+
+            scene = new THREE.Scene();
+
+            projector = new THREE.Projector();
+
+            //meshes
+            var smallsphere = new THREE.SphereGeometry(10, 10, 10);
+            var material = new THREE.MeshLambertMaterial({
+                color: 0xdddddd,
+                shading: THREE.SmoothShading
+            });
+            nearestSphere = new THREE.Mesh(smallsphere, material);
+            scene.add(nearestSphere);
+
+
+            var smallsphere = new THREE.SphereGeometry(20, 20, 20);
+            var material = new THREE.MeshLambertMaterial({
+                color: 0xdddddd,
+                shading: THREE.SmoothShading
+            });
+            selectedSphere = new THREE.Mesh(smallsphere, material);
+            scene.add(selectedSphere);
+
+
+            //
+            // Lights
+
+            scene.add(new THREE.AmbientLight(0x111111));
+
+            var directionalLight = new THREE.DirectionalLight( /*Math.random() * */ 0xffffff, 0.425);
+
+            directionalLight.position.x = 0 - 0.5;
+            directionalLight.position.y = 0.5;
+            directionalLight.position.z = 0.5; //Math.random() - 0.5;
+
+            directionalLight.position.normalize();
+
+            scene.add(directionalLight);
+
+            pointLight = new THREE.PointLight(0xffffff, 1);
+            pointLight.position.x = 0;
+            pointLight.position.y = 0;
+            pointLight.position.z = 0;
+            //scene.add( pointLight );
+
+            window.addEventListener('resize', onWindowResize, false);
+            //window.addEventListener('keyup', onWindowKeyDown, false);
+            //window.addEventListener('keydown', onWindowKeyUp, false);
+
+
+
+            document.addEventListener('mousemove', onDocumentMouseMove, false);
+            renderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
+            renderer.domElement.addEventListener('mouseup', onDocumentMouseUp, false);
+
+        }
+
+        function onWindowResize() {
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+        }
+
+        function onWindowKeyDown(event) {
+            console.log(event);
+        }
+
+        function onWindowKeyUp(event) {
+
+        }
+
+        function findNearestConversation(x, y, shortestdist) {
+            if (conversations.length == 0) return null;
+            var nearest = null;
+            if (typeof (shortestdist) === 'undefined') shortestdist = 1000000000;
+            for (c in conversations) {
+                cc = conversations[c];
+                dx = cc.position.x - x;
+                dy = cc.position.y - y;
+                td = dx * dx + dy * dy;
+                if (td < shortestdist) {
+                    shortestdist = td;
+                    nearest = cc;
+                }
+            }
+            return nearest;
+        }
+
+        function animate() {
+
+            //mouseObjects = raycast(mouse.x, mouse.y);
+            //console.log(mouseObjects);
+            nearestConv = findNearestConversation(mouse.x, mouse.y,200 * 200);
+            if (nearestConv) {
+                nearestSphere.position.x = nearestSphere.position.x * 0.9 + nearestConv.position.x * 0.1;
+                nearestSphere.position.y = nearestSphere.position.y * 0.9 + nearestConv.position.y * 0.1;
+            }
+            if (selectedConv) {
+                selectedSphere.position.x = selectedSphere.position.x * 0.9 + selectedConv.position.x * 0.1;
+                selectedSphere.position.y = selectedSphere.position.y * 0.9 + selectedConv.position.y * 0.1;
+            } else {
+                selectedSphere.position.x = selectedSphere.position.x * 0.9;
+                selectedSphere.position.y = selectedSphere.position.y * 0.9;
+            }
+
+            renderer.render(scene, camera);
+
+            setTimeout(nextFrame, 100);
+
+        }
+
+        function nextFrame() {
+            requestAnimationFrame(animate);
+        }
+
+        function onDocumentMouseDown(event) {
+            //event.preventDefault();
+            mouse.x = event.clientX - window.innerWidth / 2;
+            mouse.y = -(event.clientY - window.innerHeight / 2);
+            selectedConv = findNearestConversation(mouse.x, mouse.y, 200 * 200);
+        }
+
+        function onDocumentMouseUp(event) {
+            //event.preventDefault();
+        }
+
+        function onDocumentMouseMove(event) {
+            event.preventDefault();
+            //console.log(event);
+            mouse.x = event.clientX - window.innerWidth / 2;
+            mouse.y = -(event.clientY - window.innerHeight / 2);
+
+        }
+
+        function raycast(x, y) {
+            var vector = new THREE.Vector3(x, y, 0.5);
+            projector.unprojectVector(vector, camera);
+
+            var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+
+            return raycaster.intersectObjects(scene.children);
+        }
+
+        function chatKeyDown(e) {
+            if (e.keyCode == 13) {
+                submitChat()
+                return false;
+            }
+        }
+
+        function submitChat() {
+            var input = document.getElementById('chatInput');
+            //var packetdata = {"type":"chat","msg":input.value};
+            //bridgeWV.broadcastMessage(JSON.stringify(packetdata));
+            var words = createWords(input.value);
+            if (selectedConv) {
+                words.position.x = selectedConv.position.x-5+Math.random()*10;
+                words.position.y = selectedConv.position.y - lineHeight;
+                if (selectedConv.replies.length>0){
+                  altwords = selectedConv.replies[0];
+                  xd = words.position.x-altwords.position.x;
+                  yd = words.position.y-altwords.position.y;
+                  td = Math.sqrt(xd*xd-yd*yd);
+                  desiredd = 80;
+                  diffd = desiredd-td;
+                  xd/=td;
+                  yd/=td;
+                  words.position.x+=xd*diffd;
+                  words.position.y+=yd*diffd;
+                  altwords.position.x-=xd*diffd;
+                  altwords.position.y-=yd*diffd;
+                
+                }
+                selectedConv.replies.push(words);
+            } else {
+                words.position.x = Math.random() * window.innerWidth - window.innerWidth / 2;
+                words.position.y = window.innerHeight / 2 - lineHeight;
+                rootConversations.push(words);
+            }
+            words.replies = [];
+            conversations.push(words);
+            selectedConv = words;
+            input.value = "";
+        }
+
+        function createWords(text) {
+            var shape = new THREE.TextGeometry(text, {
+                font: 'helvetiker',
+                curveSegments: 1,
+                size: textSize,
+                height: 5
+            });
+            var wrapper = new THREE.MeshNormalMaterial({
+                color: 0x00ff00
+            });
+            var words = new THREE.Mesh(shape, wrapper);
+            scene.add(words);
+            return words;
+        }
+    </script>
+
+</body>
+
+</html>
