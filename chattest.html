@@ -35,6 +35,8 @@
 
         var nearestConv, selectedConv;
         var nearestSphere, selectedSphere;
+        
+        var ownid = bridge.getOwnId();
 
         init();
         animate();
@@ -267,7 +269,7 @@
                 words.add(line);
                 parent.replies.push(words);
             } else {
-                words.position.x = Math.random() * window.innerWidth - window.innerWidth / 2;
+                words.position.x = Math.random() * (window.innerWidth/2) - window.innerWidth / 4;
                 words.position.y = window.innerHeight / 2 - lineHeight;
                 rootConversations.push(words);
             }
@@ -279,29 +281,54 @@
         //bridge is defined in c++
         bridge.msgPush.connect(incomingMsg);
         function incomingMsg(packet){
-            var packetdata = JSON.parse(packet.message);
-            if (packetdata["type"] == "chat"){
-              //console.log(packetdata);
-              var text = packetdata["msg"];
-              var words = addText(packetdata.msg,packetdata.parentID);
-              words.convID = packetdata.convID;
+            var packetData = JSON.parse(packet.message);
+            if (packetData["type"] == "chat"){
+              //console.log("incoming originID is:"+packetData.originID);
+              console.log(packetData);
+              //console.log(packetData["originID"]);
+              //console.log("incoming originID is:"+packetData.originID);
+              //if(convDictID[packetData.convID])return;
+              var text = packetData["msg"];
+              var words = addText(packetData.msg,packetData.parentID);
+              words.convID = packetData.convID;
               convDictID[words.convID] = words;
+              for (wtf in packetData){
+              console.log(wtf);
+              console.log(packetData);
+              }
+              words.originID = packetData.originID;
+              console.log("new packet originID is"+words.originID);
+              
+              //if(packetData.parentID == ownid){
+            //bridgeWV.broadcastMessage(JSON.stringify(packetData));
+            //}
               //document.getElementById("chatout").innerHTML+=packet.peerName+" says:<br/>"+text+"<br/>";
             }
         }
         function submitChat() {
             var input = document.getElementById('chatInput');
-            var packetdata = {"type":"chat","msg":input.value};
+            var packetData = {"type":"chat","msg":input.value};
             var cid = undefined;
+            var originID = ownid;
             if (selectedConv){
+              console.log("selectedConv.originID="+selectedConv.originID);
               cid=selectedConv.convID;
-              packetdata.parentID = cid;
+              packetData.parentID = cid;
+              originID = selectedConv.originID;
              }
             var words = addText(input.value,cid);
             words.convID = Math.random();
+            words.originID = originID;
             convDictID[words.convID] = words;
-            packetdata.convID = words.convID;
-            bridgeWV.broadcastMessage(JSON.stringify(packetdata));
+            packetData.convID = words.convID;
+            packetData.originID = originID;
+            if (originID != ownid){
+              //packetData.reBcast = "reply";
+              console.log("sending to:"+originID);
+              bridgeWV.sendMessage(selectedConv.originID, JSON.stringify(packetData));
+            } else{
+            bridgeWV.broadcastMessage(JSON.stringify(packetData));
+            }
             /*var words = createWords(input.value);
             if (selectedConv) {
                 words.position.x = selectedConv.position.x-5+Math.random()*10;
