@@ -195,6 +195,12 @@
               var rb =  parseInt(Math.random()*conversations.length);
               if(ra!=rb)
               maintainDist(conversations[ra],conversations[rb],0.2,0.5,lineHeight*1.6,0.4);
+              for (var cid in conversations[ra].replies){
+                var replyRef = conversations[ra].replies[cid];
+                var thisref = conversations[ra]
+                
+                replyRef.position.x=replyRef.position.x*0.99+thisref.position.x*0.01;
+              }
               
               var l = parseInt(Math.random()*linelist.length);
               cl = linelist[l];
