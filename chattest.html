@@ -234,7 +234,28 @@
              camera.position.x=camera.position.x*0.8+campos.x*0.18+mouse.x*0.02;
              camera.position.y=camera.position.y*0.8+campos.y*0.18+mouse.y*0.02;
              
+             var selectedDiff = 1.5;
+             if (selectedConv){
+             selectedConv.scale.x*=selectedDiff;
+             selectedConv.scale.y*=selectedDiff;
+             selectedConv.scale.z*=selectedDiff;
+             }
+             if (nearestConv){
+             nearestConv.scale.x*=selectedDiff;
+             nearestConv.scale.y*=selectedDiff;
+             nearestConv.scale.z*=selectedDiff;
+             }
             renderer.render(scene, camera);
+             if (selectedConv){
+             selectedConv.scale.x/=selectedDiff;
+             selectedConv.scale.y/=selectedDiff;
+             selectedConv.scale.z/=selectedDiff;
+             }
+             if (nearestConv){
+             nearestConv.scale.x/=selectedDiff;
+             nearestConv.scale.y/=selectedDiff;
+             nearestConv.scale.z/=selectedDiff;
+             }
 
             setTimeout(nextFrame, 100);
 
