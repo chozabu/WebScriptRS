@@ -21,6 +21,7 @@
     <script>
         var camera, scene, projector, renderer;
         var camzpos = 400;
+        var campos = new THREE.Vector3(0,0,camzpos);
         var textSize = 20;
         var lineHeight = textSize + 15;
         var container, info, inputMain;
@@ -194,14 +195,15 @@
               var ra =  parseInt(Math.random()*conversations.length);
               var rb =  parseInt(Math.random()*conversations.length);
               if(ra!=rb)
-              maintainDist(conversations[ra],conversations[rb],0.2,0.5,lineHeight*1.6,0.4);
+              maintainDist(conversations[ra],conversations[rb],0.13,0.5,lineHeight*1.6,0.1);
               var thisref = conversations[ra];
-              thisref.position.z-=0.1;
+              thisref.position.z-=0.02;
               for (var cid in conversations[ra].replies){
                 var replyRef = conversations[ra].replies[cid];
                 
                 
                 replyRef.position.x=replyRef.position.x*0.99+thisref.position.x*0.01;
+                thisref.position.x=thisref.position.x*0.99+replyRef.position.x*0.01;
               }
               
               var l = parseInt(Math.random()*linelist.length);
@@ -220,6 +222,10 @@
               cl.geometry[1] = cl.refb.position;
               cl.geometry.verticesNeedUpdate = true;
              }*/
+             
+             camera.position.x=camera.position.x*0.8+campos.x*0.1+mouse.x*0.1;
+             camera.position.y=camera.position.y*0.8+campos.y*0.1+mouse.y*0.1;
+             
             renderer.render(scene, camera);
 
             setTimeout(nextFrame, 100);
@@ -298,7 +304,7 @@
                 words.position.y = parent.position.y - lineHeight-Math.random()*10;;
                 if (parent.replies.length>0){
                   for (conv in conversations){
-                  conversations[conv].z-=10;
+                  conversations[conv].position.z-=10;
                     maintainDist(words, conversations[conv],0.4,1,60);
                   }
                   //altwords.position.x-=xd*diffd;
