@@ -194,7 +194,7 @@
               var ra =  parseInt(Math.random()*conversations.length);
               var rb =  parseInt(Math.random()*conversations.length);
               if(ra!=rb)
-              maintainDist(conversations[ra],conversations[rb],0.5,0.5,lineHeight*1.4);
+              maintainDist(conversations[ra],conversations[rb],0.2,0.5,lineHeight*1.6,0.4);
               
               var l = parseInt(Math.random()*linelist.length);
               cl = linelist[l];
@@ -256,11 +256,12 @@
                 return false;
             }
         }
-        function maintainDist(a,b,strength,weight,desiredd){
+        function maintainDist(a,b,strength,weight,desiredd,xstretch){
+                    if (xstretch == undefined)xstretch = 1;
                     var xd = a.position.x-b.position.x;
                     var yd = a.position.y-b.position.y;
                     //zd = a.position.z-b.position.z;
-                    var td = xd*xd+yd*yd;
+                    var td = xd*xd*xstretch+yd*yd;
                     
                     //desiredd = 60;
                     if(td<desiredd*desiredd){
@@ -278,6 +279,9 @@
             }
         function addText(text, parentID){
         //console.log(parentID);
+                  for (conv in conversations){
+                  conversations[conv].z-=100;
+                  }
         var words = createWords(text);
         parent = convDictID[parentID];
         //console.log(parent);
@@ -287,7 +291,7 @@
                 if (parent.replies.length>0){
                   for (conv in conversations){
                   conversations[conv].z-=10;
-                    maintainDist(words, conversations[conv],1,1,60);
+                    maintainDist(words, conversations[conv],0.4,1,60);
                   }
                   //altwords.position.x-=xd*diffd;
                   //altwords.position.y-=yd*diffd;
@@ -366,7 +370,9 @@
         }
 
         function createWords(text) {
-            /*var shape = new THREE.TextGeometry(text, {
+            var words;
+            if (text[0]==" "){
+            var shape = new THREE.TextGeometry(text, {
                 font: 'helvetiker',
                 curveSegments: 1,
                 size: textSize,
@@ -375,8 +381,10 @@
             var wrapper = new THREE.MeshNormalMaterial({
                 color: 0x00ff00
             });
-            var words = new THREE.Mesh(shape, wrapper);*/
-            var words = makeTextSprite(text,{ fontsize: 32, fontface: "Georgia", borderColor: {r:0, g:0, b:255, a:1.0} });
+            words = new THREE.Mesh(shape, wrapper);
+            }else{
+            words = makeTextSprite(text,{ fontsize: 32, fontface: "Georgia", borderColor: {r:0, g:0, b:255, a:1.0} });
+            }
             scene.add(words);
             return words;
         }
