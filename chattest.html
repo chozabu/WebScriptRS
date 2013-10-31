@@ -147,7 +147,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
 
         }
-
+        var dragging = false;
         function onWindowKeyDown(event) {
             console.log(event);
         }
@@ -228,8 +228,8 @@
               cl.geometry.verticesNeedUpdate = true;
              }*/
              
-             camera.position.x=camera.position.x*0.8+campos.x*0.1+mouse.x*0.1;
-             camera.position.y=camera.position.y*0.8+campos.y*0.1+mouse.y*0.1;
+             camera.position.x=camera.position.x*0.8+campos.x*0.18+mouse.x*0.02;
+             camera.position.y=camera.position.y*0.8+campos.y*0.18+mouse.y*0.02;
              
             renderer.render(scene, camera);
 
@@ -256,11 +256,19 @@
         }
 
         function onDocumentMouseMove(event) {
+            //console.log(event);
             event.preventDefault();
             //console.log(event);
+            var ox = mouse.x;
+            var oy = mouse.y;
             var wp = getWorldFromScreen(event);
             mouse.x = wp.x;
             mouse.y = wp.y;
+            if(event.shiftKey){
+              campos.x+=mouse.x-ox;
+              campos.y+=mouse.y-oy;
+             }
+              
             //mouse.x = event.clientX - window.innerWidth / 2;
             //mouse.y = -(event.clientY - window.innerHeight / 2);
 
