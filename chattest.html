@@ -183,13 +183,16 @@
             if (nearestConv) {
                 nearestSphere.position.x = nearestSphere.position.x * weight + nearestConv.position.x * invWeight;
                 nearestSphere.position.y = nearestSphere.position.y * weight + nearestConv.position.y * invWeight;
+            } else {
+                nearestSphere.position.x = nearestSphere.position.x * weight + mouse.x * invWeight;
+                nearestSphere.position.y = nearestSphere.position.y * weight + mouse.y * invWeight;
             }
             if (selectedConv) {
                 selectedSphere.position.x = selectedSphere.position.x * weight + selectedConv.position.x * invWeight;
                 selectedSphere.position.y = selectedSphere.position.y * weight + selectedConv.position.y * invWeight;
             } else {
-                selectedSphere.position.x = selectedSphere.position.x * 0.9;
-                selectedSphere.position.y = selectedSphere.position.y * 0.9;
+                selectedSphere.position.x = selectedSphere.position.x * weight + mouse.x * invWeight;
+                selectedSphere.position.y = selectedSphere.position.y * weight + mouse.y * invWeight;
             }
             
             for (var i = 0;i<100;i++){
