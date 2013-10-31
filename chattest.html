@@ -178,13 +178,15 @@
             //mouseObjects = raycast(mouse.x, mouse.y);
             //console.log(mouseObjects);
             nearestConv = findNearestConversation(mouse.x, mouse.y,200 * 200);
+            var weight = 0.6;
+            var invWeight = 1.0-weight;
             if (nearestConv) {
-                nearestSphere.position.x = nearestSphere.position.x * 0.9 + nearestConv.position.x * 0.1;
-                nearestSphere.position.y = nearestSphere.position.y * 0.9 + nearestConv.position.y * 0.1;
+                nearestSphere.position.x = nearestSphere.position.x * weight + nearestConv.position.x * invWeight;
+                nearestSphere.position.y = nearestSphere.position.y * weight + nearestConv.position.y * invWeight;
             }
             if (selectedConv) {
-                selectedSphere.position.x = selectedSphere.position.x * 0.9 + selectedConv.position.x * 0.1;
-                selectedSphere.position.y = selectedSphere.position.y * 0.9 + selectedConv.position.y * 0.1;
+                selectedSphere.position.x = selectedSphere.position.x * weight + selectedConv.position.x * invWeight;
+                selectedSphere.position.y = selectedSphere.position.y * weight + selectedConv.position.y * invWeight;
             } else {
                 selectedSphere.position.x = selectedSphere.position.x * 0.9;
                 selectedSphere.position.y = selectedSphere.position.y * 0.9;
@@ -238,8 +240,9 @@
 
         function onDocumentMouseDown(event) {
             //event.preventDefault();
-            mouse.x = event.clientX - window.innerWidth / 2;
-            mouse.y = -(event.clientY - window.innerHeight / 2);
+            var wp = getWorldFromScreen(event);
+            mouse.x = wp.x;
+            mouse.y = wp.y;
             selectedConv = findNearestConversation(mouse.x, mouse.y, 200 * 200);
         }
 
@@ -252,9 +255,27 @@
         function onDocumentMouseMove(event) {
             event.preventDefault();
             //console.log(event);
-            mouse.x = event.clientX - window.innerWidth / 2;
-            mouse.y = -(event.clientY - window.innerHeight / 2);
+            var wp = getWorldFromScreen(event);
+            mouse.x = wp.x;
+            mouse.y = wp.y;
+            //mouse.x = event.clientX - window.innerWidth / 2;
+            //mouse.y = -(event.clientY - window.innerHeight / 2);
 
+        }
+        function getWorldFromScreen(event){
+          var vector = new THREE.Vector3(
+              ( event.clientX / window.innerWidth ) * 2 - 1,
+              - ( event.clientY / window.innerHeight ) * 2 + 1,
+              0.5 );
+
+          projector.unprojectVector( vector, camera );
+
+          var dir = vector.sub( camera.position ).normalize();
+
+          var distance = - camera.position.z / dir.z;
+
+          var pos = camera.position.clone().add( dir.multiplyScalar( distance ) );
+          return pos;
         }
 
         function raycast(x, y) {
