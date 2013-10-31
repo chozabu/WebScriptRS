@@ -209,6 +209,9 @@
                 
                 replyRef.position.x=replyRef.position.x*0.99+thisref.position.x*0.01;
                 thisref.position.x=thisref.position.x*0.99+replyRef.position.x*0.01;
+                
+                replyRef.position.y=replyRef.position.y*0.99+thisref.position.y*0.01;
+                thisref.position.y=thisref.position.y*0.99+replyRef.position.y*0.01;
               }
               
               var l = parseInt(Math.random()*linelist.length);
