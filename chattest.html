@@ -240,25 +240,26 @@
         function nextFrame() {
             requestAnimationFrame(animate);
         }
-
+        var buttonDown = false;
         function onDocumentMouseDown(event) {
             //event.preventDefault();
             var wp = getWorldFromScreen(event);
             mouse.x = wp.x;
             mouse.y = wp.y;
             selectedConv = findNearestConversation(mouse.x, mouse.y, 200 * 200);
+            buttonDown = true;
         }
 
         function onDocumentMouseUp(event) {
             //event.preventDefault();
             
             document.getElementById('chatInput').focus();
+            buttonDown = false;
         }
 
         function onDocumentMouseMove(event) {
-            //console.log(event);
+            console.log(event);
             event.preventDefault();
-            //console.log(event);
             var ox = mouse.x;
             var oy = mouse.y;
             var wp = getWorldFromScreen(event);
@@ -267,7 +268,11 @@
             if(event.shiftKey){
               campos.x+=mouse.x-ox;
               campos.y+=mouse.y-oy;
-             }
+            }
+            if(buttonDown && selectedConv){
+              selectedConv.position.x+=mouse.x-ox;
+              selectedConv.position.y+=mouse.y-oy;
+            }
               
             //mouse.x = event.clientX - window.innerWidth / 2;
             //mouse.y = -(event.clientY - window.innerHeight / 2);
