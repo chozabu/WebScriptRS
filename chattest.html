@@ -389,7 +389,10 @@
               convDictID[words.convID] = words;
               words.originID = packetData.originID;
               console.log("new packet originID is"+words.originID);
-              console.log(packetData.parentID +" vs " + ownid)
+              //console.log(packetData.parentID +" vs " + ownid)
+              if(convDictID[packetData.parentID]==selectedConv){
+              selectedConv = words;
+              }
               if(packetData.originID == ownid){
               console.log("BROADCASTING REPLY MESSAGE");
             bridgeWV.broadcastMessage(JSON.stringify(packetData));
