@@ -136,7 +136,18 @@
             document.addEventListener('mousemove', onDocumentMouseMove, false);
             renderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
             renderer.domElement.addEventListener('mouseup', onDocumentMouseUp, false);
+            
+            renderer.domElement.addEventListener("mousewheel", MouseWheelHandler, false);
+            // Firefox
+            //renderer.domElement.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
 
+        }
+        
+        function MouseWheelHandler(event) {
+          if (event.wheelDeltaY>0)camera.position.z*=0.98;
+          else camera.position.z*=1.018;
+          //camera.position.z-=event.wheelDeltaY*0.1;
+          console.log(event);
         }
 
         function onWindowResize() {
@@ -268,6 +279,7 @@
         function onDocumentMouseDown(event) {
             //event.preventDefault();
             var wp = getWorldFromScreen(event);
+            console.log(event);
             mouse.x = wp.x;
             mouse.y = wp.y;
             selectedConv = findNearestConversation(mouse.x, mouse.y, 200 * 200);
@@ -282,7 +294,6 @@
         }
 
         function onDocumentMouseMove(event) {
-            console.log(event);
             event.preventDefault();
             var ox = mouse.x;
             var oy = mouse.y;
