@@ -10,7 +10,7 @@ implemented tests include<br>
 -simple p2p physics test with "averaging" of pos/vel over network.<br/>
 -simple p2p physics test with "ownership" of objects.<br/>
 -car driving test - ported from ivanks keyboard demo, players broadcast positions<br/>
--3d broadcast/wall chat - ported from ivanks keyboard demo, players broadcast positions - draggable text nodes. Shift+mouse moves camera<br/>
+-3d broadcast/wall chat - draggable text nodes. Shift+mouse moves camera<br/>
 
 
 
