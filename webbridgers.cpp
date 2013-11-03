@@ -36,14 +36,14 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
 
 }
 
-QVariantList WebBridgeRS::searchKeywords(const QString& keywords, bool seachFriends)
+QVariantList WebBridgeRS::searchKeywords(const QString& keywords, bool searchFriends)
 {
     std::cerr << "webscriptrs: search called cerr" << std::endl;
     std::cout << "webscriptrs: search called" << std::endl;
     std::cerr << "webscriptrs: keywords in " << keywords.toStdString().c_str() << std::endl;
     QVariantList qResults;
     if (keywords.length() < 3){
-        std::cerr << "webscriptrs: returning dur to keywords.length " << keywords.length() << std::endl;
+        std::cerr << "webscriptrs: not searching due to keywords.length = " << keywords.length() << std::endl;
         return qResults;
     }
 
@@ -56,7 +56,7 @@ QVariantList WebBridgeRS::searchKeywords(const QString& keywords, bool seachFrie
     int n = words.size() ;
 
     if (n < 1){
-        std::cerr << "webscriptrs: returning dur to words.size() " << n << std::endl;
+        std::cerr << "webscriptrs: searching due to words.size() = " << n << std::endl;
         return qResults;
     }
 
@@ -76,7 +76,7 @@ QVariantList WebBridgeRS::searchKeywords(const QString& keywords, bool seachFrie
     //RS_FILE_HINTS_REMOTE
     //rsFiles->SearchBoolExp(&exprs, initialResults, RS_FILE_HINTS_LOCAL);// | DIR_FLAGS_NETWORK_WIDE | DIR_FLAGS_BROWSABLE) ;
     FileSearchFlags fsf = RS_FILE_HINTS_LOCAL;
-    if(seachFriends) fsf |= RS_FILE_HINTS_REMOTE;
+    if(searchFriends) fsf = RS_FILE_HINTS_REMOTE;
     rsFiles->SearchKeywords(words, initialResults, fsf);
     //rsFiles->getSharedDirectories();
     //SharedDirInfo sdinfo;
