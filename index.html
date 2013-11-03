@@ -24,6 +24,47 @@ function incomingMsg(message){
    document.getElementById(id).innerHTML = peerPanel
 
 }
+function testSearchold(){
+    searchOptions = {"localindexed":false,"remoteindexed":true,"boolexp":true};
+    var results = bridge.searchKeywords("cat", searchOptions);
+    console.log(results);
+}
+function testSearch(){
+
+    var input = document.getElementById('searchInput');
+    //var packetdata = {"type":"chat","msg":input.value};
+    //bridgeWV.broadcastMessage(JSON.stringify(packetdata));
+    //document.getElementById("chatout").innerHTML+="you say:<br/>"+input.value+"<br/>";
+    //input.value = "";
+    
+    searchTerms = input.value;
+    searchOptions = {"localindexed":true,"remoteindexed":false,"boolexp":true};
+    var results = bridge.searchKeywords(searchTerms, searchOptions);
+    var fullpath = results[0].fullpath+results[0].srname;
+    range = results.length;
+    if (range>10)range=10;
+    var imgpath;
+    for (var i = 0;i<range;i++){
+      var a = results[i].srname;
+      var ext = a.slice(a.length-3,a.length);
+      console.log(ext);
+      if ( (ext == "png" || ext == "jpg")){
+      console.log(results[i].fullpath)
+      console.log(results[i].srname)
+        imgpath = results[i].fullpath+results[i].srname;
+        
+      var imgele = "<img src='"+imgpath+"'></img>";
+      document.getElementById("demo").innerHTML+=imgele;
+      }else{
+      document.getElementById("demo").innerHTML+=results[i].srname+"<br/>";
+      }
+      
+    }
+    //var imgele = "<img src='"+imgpath+"'></img>";
+    //document.getElementById("demo").innerHTML+=imgele;
+    
+    console.log(results);
+}
 tick();
 
 //send a message to everyone each second, so they know we are alive
@@ -32,6 +73,13 @@ function tick(){
     bridgeWV.broadcastMessage(JSON.stringify(packetdata));
     setTimeout(tick,1000);
 }
+
+   function searchKeyDown(e) {
+       if (e.keyCode == 13) {
+            testSearch();
+           return false;
+       }
+   }
 </script>
 </head><body>
 
@@ -51,7 +99,8 @@ function tick(){
 <button onclick="bridgeWV.go2index2()">barefunc</button>
 <button onclick="bridgeWV.go2page('index2.html')">richfunk</button>
 <button onclick="bridgeWV.go2page('tindex.html')">to tindex</button>-->
-
+<input name="searchInput" value=".png" id="searchInput" type="text" onkeypress="return searchKeyDown(event)" ></input> 
+<button onclick="testSearch()">test search</button>
 <p id="demo"></p>
 Compatable Peers:
 <p id="peerlistplain"></p>

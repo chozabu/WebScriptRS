@@ -36,10 +36,8 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
 
 }
 
-QVariantList WebBridgeRS::searchKeywords(const QString& keywords, bool searchFriends)
+QVariantList WebBridgeRS::searchKeywords(const QString& keywords, QVariantMap searchOptions)
 {
-    std::cerr << "webscriptrs: search called cerr" << std::endl;
-    std::cout << "webscriptrs: search called" << std::endl;
     std::cerr << "webscriptrs: keywords in " << keywords.toStdString().c_str() << std::endl;
     QVariantList qResults;
     if (keywords.length() < 3){
@@ -75,9 +73,21 @@ QVariantList WebBridgeRS::searchKeywords(const QString& keywords, bool searchFri
     std::list<DirDetails> initialResults;
     //RS_FILE_HINTS_REMOTE
     //rsFiles->SearchBoolExp(&exprs, initialResults, RS_FILE_HINTS_LOCAL);// | DIR_FLAGS_NETWORK_WIDE | DIR_FLAGS_BROWSABLE) ;
-    FileSearchFlags fsf = RS_FILE_HINTS_LOCAL;
-    if(searchFriends) fsf = RS_FILE_HINTS_REMOTE;
-    rsFiles->SearchKeywords(words, initialResults, fsf);
+    FileSearchFlags fsf;
+    if (searchOptions.value("localindexed", false).toBool()){
+        //std::cerr << "incuding local\n";
+         fsf = RS_FILE_HINTS_LOCAL;
+    }
+    if (searchOptions.value("remoteindexed", false).toBool()){
+        //std::cerr << "incuding remote\n";
+         fsf |= RS_FILE_HINTS_REMOTE;
+    }
+    if (searchOptions.value("boolexp", false).toBool()){
+        rsFiles->SearchBoolExp(&exprs, initialResults, fsf);
+    }else{
+        rsFiles->SearchKeywords(words, initialResults, fsf);
+    }
+    //if(searchFriends) fsf = RS_FILE_HINTS_REMOTE;
     //rsFiles->getSharedDirectories();
     //SharedDirInfo sdinfo;
     //sdinfo.
@@ -106,6 +116,28 @@ QVariantList WebBridgeRS::searchKeywords(const QString& keywords, bool searchFri
         qdd.insert("prow",dd.prow);
         //qdd.insert("message",dd.ref);
         qdd.insert("type",dd.type);
+
+        FileInfo info;
+
+        if (rsFiles->FileDetails(dd.hash, fsf, info)){
+            /* make path for downloaded or downloading files */
+            //QFileInfo qinfo;
+            std::string path;
+            path = info.path.substr(0,info.path.length()-info.fname.length());
+            qdd.insert("fullpath",QString::fromStdString(path));
+
+            /* open folder with a suitable application */
+            /*qinfo.setFile(QString::fromUtf8(path.c_str()));
+            if (qinfo.exists() && qinfo.isDir()) {
+                if (!RsUrlHandler::openUrl(QUrl::fromLocalFile(qinfo.absoluteFilePath()))) {
+                    std::cerr << "openFolderSearch(): can't open folder " << path << std::endl;
+                }
+            }*/
+        } else {
+            std::cout << "file details failed\n";
+        }
+
+
 
         qResults.push_back(qdd);
         //finalResults.push_back(dd);

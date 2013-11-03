@@ -16,7 +16,7 @@ public:
 public slots:
     QString getOwnId();
     QString getDownloadDirectory();
-    QVariantList searchKeywords(const QString& keywords, bool seachFriends);
+    QVariantList searchKeywords(const QString& keywords, QVariantMap searchOptions);
 signals:
     void msgPush(QVariantMap message);
 
