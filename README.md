@@ -6,14 +6,17 @@ implemented tests include<br>
 -packet inspection on index<br>
 -broadcast chat<br>
 -direct chat<br>
--three.js circle... shared drawing... thing<br>
+-three.js circle... shared drawing... thing ported from three.js demo<s br>
 -simple p2p physics test with "averaging" of pos/vel over network.<br/>
 -simple p2p physics test with "ownership" of objects.<br/>
+-car driving test - ported from ivanks keyboard demo, players broadcast positions<br/>
+-3d broadcast/wall chat - draggable text nodes. Shift+mouse moves camera<br/>
 
 
-#### Warning Included tests do not sanitise HTML. Probably "Worm Compatable" - even the index page.
+
+#### Warning Included tests do not sanitise HTML. The JS has not been written with security in mind.
 ![My image](http://chozabu.net/stuff/WebScriptRS.png)
-
+![My image](http://chozabu.net/stuff/WebScriptRS1.png)
 
 
 ##### Warning Watch your cpu and network usage when running the physics/shared drawing tests.<br> Should be fine.
