@@ -39,7 +39,8 @@ function testSearch(){
     searchTerms = input.value;
     searchOptions = {"localindexed":local.checked,"remoteindexed":remote.checked,"boolexp":boolxp.checked};
     var results = bridge.searchKeywords(searchTerms, searchOptions);
-    var fullpath = results[0].fullpath+results[0].srname;
+    console.log
+    
     range = results.length;
     if (range>10)range=10;
     var actualpath;
@@ -48,16 +49,21 @@ function testSearch(){
       var ext = a.slice(a.length-3,a.length);
       console.log(ext);
       actualpath = results[i].fullpath+results[i].srname;
-      if ((results[i].fullpath!="" && results[i].fullpath!=undefined) && (ext == "png" || ext == "jpg")){
-        console.log(results[i].fullpath)
-        console.log(results[i].srname)
-          
-        var imgele = "<img src='"+actualpath+"'></img>";
-        document.getElementById("demo").innerHTML+=imgele;
+      if ((results[i].fullpath!="" && results[i].fullpath!=undefined)){
+        if((ext == "png" || ext == "jpg")){
+          console.log(results[i].fullpath)
+          console.log(results[i].srname)
+            
+          var imgele = "<img src='"+actualpath+"'></img>";
+          document.getElementById("demo").innerHTML+=imgele;
+        }else{
+          var httplink = " <a href='"+actualpath+"'>direct link</a>";
+          //var rslink = " <a href='retroshare://file?name="+results[i].srname+"&size="+results[i].size+"&hash="+results[i].hash+"'>RS link</a>";
+          document.getElementById("demo").innerHTML+=results[i].srname+httplink+"<br/>";
+        }
       }else{
-        var httplink = " <a href='"+actualpath+"'>direct link</a>";
         var rslink = " <a href='retroshare://file?name="+results[i].srname+"&size="+results[i].size+"&hash="+results[i].hash+"'>RS link</a>";
-        document.getElementById("demo").innerHTML+=results[i].srname+httplink+"<br/>";
+        document.getElementById("demo").innerHTML+=results[i].srname+rslink+"<br/>";
       }
       
     }

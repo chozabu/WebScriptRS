@@ -17,6 +17,8 @@ public slots:
     QString getOwnId();
     QString getDownloadDirectory();
     QVariantList searchKeywords(const QString& keywords, QVariantMap searchOptions);
+    //QString processLink(QString url);
+    void processLinks(QStringList urls);
 signals:
     void msgPush(QVariantMap message);
 

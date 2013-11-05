@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QWebFrame>
 #include "webbridgers.h"
+#include "gui/RetroShareLink.h"
 
 WebViewRS::WebViewRS(QWidget *parent) :
     QWebView(parent)
@@ -12,10 +13,22 @@ WebViewRS::WebViewRS(QWidget *parent) :
     //connect(this->page()->mainFrame(), SIGNAL (javaS))
     connect( this->page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()),    this,   SLOT(onJavaScriptWindowObjectCleared()) );
     bridge = new WebBridgeRS();
-
+    this->page()->setLinkDelegationPolicy(QWebPage::DelegateExternalLinks);
+    connect( this->page(), SIGNAL(linkClicked(const QUrl & )),    this,   SLOT(onLinkClicked(const QUrl & )) );
 
 
 }
+void WebViewRS::onLinkClicked(const QUrl & url){
+    std::cout << "processing webkut url: " << url.toString().toStdString().c_str() << std::endl;
+    //QList<RetroShareLink> links;
+    //links.push_back(RetroShareLink(url));
+    //RetroShareLink::process(links,RSLINK_PROCESS_NOTIFY_ALL);
+    QStringList urls;
+    urls.push_back(url.toString());
+    RetroShareLink::process(urls, RetroShareLink::TYPE_UNKNOWN, RSLINK_PROCESS_NOTIFY_ALL);
+//bridge->processLinks();
+}
+
 void WebViewRS::onJavaScriptWindowObjectCleared()
 {
     QWebFrame *frame = this->page()->mainFrame();

@@ -19,6 +19,7 @@ signals:
 
 public slots:
     void onJavaScriptWindowObjectCleared();
+    void onLinkClicked(const QUrl & url);
     //QString getMessage(QString in);
     void broadcastMessage(QString msg);
     void sendMessage(QString peer, QString msg);

@@ -3,6 +3,7 @@
 #include "p3JsonRS.h"
 #include "retroshare/rsposted.h"
 #include <retroshare/rsexpr.h>
+#include "gui/RetroShareLink.h"
 
 //#include "retroshare/rsmsgs.h"
 //#include "retroshare/rspeers.h"
@@ -15,6 +16,7 @@
 WebBridgeRS::WebBridgeRS(QObject *parent) :
     QObject(parent)
 {
+    //mRSLink = new Retro
 
     /*
     rsPeers->getOnlineList();
@@ -34,6 +36,16 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
     //SharedDirInfo *sd;
     //sd->
 
+}
+
+/*QString WebBridgeRS::processLink(QString url){
+   // RetroShareLink(url).;
+    return url;
+}*/
+
+void WebBridgeRS::processLinks(QStringList urls){
+    RetroShareLink::process(urls, RetroShareLink::TYPE_UNKNOWN, RSLINK_PROCESS_NOTIFY_ALL);
+    //rsFiles->FileRequest()
 }
 
 QVariantList WebBridgeRS::searchKeywords(const QString& keywords, QVariantMap searchOptions)
@@ -147,7 +159,6 @@ QVariantList WebBridgeRS::searchKeywords(const QString& keywords, QVariantMap se
     /* abstraction to allow reusee of tree rendering code */
     //resultsToTree(keywords,req_id, finalResults);
     return qResults;
-
 }
 
 void WebBridgeRS::pushMsgToJs(QVariantMap message)
