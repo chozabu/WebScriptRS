@@ -4,27 +4,58 @@
 
 <p> Local Notes - <a href="index.html">back to index</a></p>
 
+<input id="sourcecheckbox" onclick="return toggleSource(event)" type="checkbox">hide source?</input><br/>
 <textarea name="notesarea" id="notesarea" rows="15" cols="80" onkeyup="return textAreaKey(event)">
 
 </textarea>
 <p id="demo"></p>
-Preview
-<p id="preview"></p>
+Rich Text (<input id="editablecheckbox" onclick="return toggleEdit(event)" type="checkbox">editable?</input>)
+<p id="preview" contentEditable="true"  onkeyup="return previewAreaKey(event)"></p>
 
 <script>
 
-    //var searchLimit =document.getElementById('searchLimit');
     if (localStorage.rsnotes == undefined)localStorage.rsnotes = "<a href='search.html'>search</a><br>notes here";
+    if (localStorage.rseditchecked == undefined)localStorage.rseditchecked = "true";
+    if (localStorage.rssourcechecked == undefined)localStorage.rssourcechecked = "false";
     var notesarea =document.getElementById('notesarea');
     var preview =document.getElementById('preview');
+    var editablecheckbox =document.getElementById('editablecheckbox');
+    var sourcecheckbox =document.getElementById('sourcecheckbox');
+    if(localStorage.rseditchecked == "true"){
+      editablecheckbox.checked = true;
+      } else {
+      editablecheckbox.checked = false;
+      }
+    if(localStorage.rssourcechecked != "false"){
+      sourcecheckbox.checked = true;
+      } else {
+      sourcecheckbox.checked = false;
+      }
+      
+    //console.log(editablecheckbox.checked);
+    toggleEdit(null);
+    toggleSource(null);
     notesarea.value = localStorage.rsnotes;
     preview.innerHTML = notesarea.value;
     function textAreaKey(event){
-      console.log(event)
+      //console.log(event)
       //var notesarea =document.getElementById('notesarea');
       localStorage.rsnotes = notesarea.value;
-      console.log(notesarea.value);
+      //console.log(notesarea.value);
       preview.innerHTML = notesarea.value;
+    }
+    function previewAreaKey(event){
+      //console.log(event)
+      notesarea.value = preview.innerHTML;
+      localStorage.rsnotes = notesarea.value;
+    }
+    function toggleEdit(event){
+      preview.contentEditable = editablecheckbox.checked;
+      localStorage.rseditchecked = editablecheckbox.checked;
+    }
+    function toggleSource(event){
+      notesarea.hidden = sourcecheckbox.checked;
+      localStorage.rssourcechecked = sourcecheckbox.checked;
     }
 </script>
 
