@@ -1,8 +1,14 @@
 #Webkit Plugin for Retroshare
 
 This embeds webkit in a plugin page, along with the startings of a javascript bridge<br>
-Still some way to go to be handy, So far it can broadcast to compatable peers, and send targeted messages<br>
+Still some way to go to be handy, So far it can:<br>
+-broadcast to compatable peers<br>
+-send targeted messages<br>
+-search indexed files<br>
+-handle retroshare:// links<br>
+<br>
 implemented tests include<br>
+-file search<br>
 -packet inspection on index<br>
 -broadcast chat<br>
 -direct chat<br>
