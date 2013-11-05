@@ -1,0 +1,72 @@
+<html><head><title>nope</title>
+
+<script>
+
+function testSearch(){
+
+    var input = document.getElementById('searchInput');
+    var local = document.getElementById('searchLocal');
+    var remote = document.getElementById('searchRemote');
+    var boolxp = document.getElementById('boolxp');
+    
+    searchTerms = input.value;
+    searchOptions = {"localindexed":local.checked,"remoteindexed":remote.checked,"boolexp":boolxp.checked};
+    var results = bridge.searchKeywords(searchTerms, searchOptions);
+    console.log
+    
+    range = results.length;
+    if (range>40)range=40;
+    if (range < 1)
+      document.getElementById("demo").innerHTML = "Nothing found";
+    else
+      document.getElementById("demo").innerHTML = "";
+    var actualpath;
+    for (var i = 0;i<range;i++){
+      var a = results[i].srname;
+      var ext = a.slice(a.length-3,a.length);
+      console.log(ext);
+      actualpath = results[i].fullpath+results[i].srname;
+      if ((results[i].fullpath!="" && results[i].fullpath!=undefined)){
+        if((ext == "png" || ext == "jpg")){
+          console.log(results[i].fullpath)
+          console.log(results[i].srname)
+            
+          var imgele = "<img src='"+actualpath+"'></img>";
+          document.getElementById("demo").innerHTML+=imgele;
+        }else{
+          var httplink = " <a href='"+actualpath+"'>direct link</a>";
+          //var rslink = " <a href='retroshare://file?name="+results[i].srname+"&size="+results[i].size+"&hash="+results[i].hash+"'>RS link</a>";
+          document.getElementById("demo").innerHTML+=results[i].srname+httplink+"<br/>";
+        }
+      }else{
+        var rslink = " <a href='retroshare://file?name="+results[i].srname+"&size="+results[i].size+"&hash="+results[i].hash+"'>RS link</a>";
+        document.getElementById("demo").innerHTML+=results[i].srname+rslink+"<br/>";
+      }
+      
+    }
+    //var imgele = "<img src='"+imgpath+"'></img>";
+    //document.getElementById("demo").innerHTML+=imgele;
+    
+    console.log(results);
+}
+
+
+   function searchKeyDown(e) {
+       if (e.keyCode == 13) {
+            testSearch();
+           return false;
+       }
+   }
+</script>
+</head><body>
+
+<a href="index.html">back to index</a> <br/>
+<input name="searchInput" value=".png" id="searchInput" type="text" onkeypress="return searchKeyDown(event)" ></input> 
+<input name="searchLocal"  id="searchLocal" type="checkbox" checked=true >Search Local</input> 
+<input name="searchRemote" id="searchRemote" type="checkbox" >Search Remote</input> 
+<input name="boolxp" checked=true id="boolxp" type="checkbox" >boolexp</input> 
+<button onclick="testSearch()">test search</button>
+<p id="demo"></p>
+Compatable Peers:
+</body>
+</html>

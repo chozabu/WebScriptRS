@@ -24,54 +24,7 @@ function incomingMsg(message){
    document.getElementById(id).innerHTML = peerPanel
 
 }
-function testSearchold(){
-    searchOptions = {"localindexed":false,"remoteindexed":true,"boolexp":true};
-    var results = bridge.searchKeywords("cat", searchOptions);
-    console.log(results);
-}
-function testSearch(){
 
-    var input = document.getElementById('searchInput');
-    var local = document.getElementById('searchLocal');
-    var remote = document.getElementById('searchRemote');
-    var boolxp = document.getElementById('boolxp');
-    
-    searchTerms = input.value;
-    searchOptions = {"localindexed":local.checked,"remoteindexed":remote.checked,"boolexp":boolxp.checked};
-    var results = bridge.searchKeywords(searchTerms, searchOptions);
-    console.log
-    
-    range = results.length;
-    if (range>10)range=10;
-    var actualpath;
-    for (var i = 0;i<range;i++){
-      var a = results[i].srname;
-      var ext = a.slice(a.length-3,a.length);
-      console.log(ext);
-      actualpath = results[i].fullpath+results[i].srname;
-      if ((results[i].fullpath!="" && results[i].fullpath!=undefined)){
-        if((ext == "png" || ext == "jpg")){
-          console.log(results[i].fullpath)
-          console.log(results[i].srname)
-            
-          var imgele = "<img src='"+actualpath+"'></img>";
-          document.getElementById("demo").innerHTML+=imgele;
-        }else{
-          var httplink = " <a href='"+actualpath+"'>direct link</a>";
-          //var rslink = " <a href='retroshare://file?name="+results[i].srname+"&size="+results[i].size+"&hash="+results[i].hash+"'>RS link</a>";
-          document.getElementById("demo").innerHTML+=results[i].srname+httplink+"<br/>";
-        }
-      }else{
-        var rslink = " <a href='retroshare://file?name="+results[i].srname+"&size="+results[i].size+"&hash="+results[i].hash+"'>RS link</a>";
-        document.getElementById("demo").innerHTML+=results[i].srname+rslink+"<br/>";
-      }
-      
-    }
-    //var imgele = "<img src='"+imgpath+"'></img>";
-    //document.getElementById("demo").innerHTML+=imgele;
-    
-    console.log(results);
-}
 tick();
 
 //send a message to everyone each second, so they know we are alive
@@ -91,6 +44,7 @@ function tick(){
 </head><body>
 
 <p> try these pages</p>
+<a href="search.html">Search/download</a> local and remote indexed files<br/>
 <a href="broadcastchat.html">Broadcast Chat</a> - low data<br/>
 <a href="interactiveparticles.html">Broadcast Particles</a> - medium data - paints lots of circles with three.js<br/>
 <a href="phystest.html">p2p Averaging Physics Test</a> - all clients control all objects<br/>
@@ -106,11 +60,7 @@ function tick(){
 <button onclick="bridgeWV.go2index2()">barefunc</button>
 <button onclick="bridgeWV.go2page('index2.html')">richfunk</button>
 <button onclick="bridgeWV.go2page('tindex.html')">to tindex</button>-->
-<input name="searchInput" value=".png" id="searchInput" type="text" onkeypress="return searchKeyDown(event)" ></input> 
-<input name="searchLocal"  id="searchLocal" type="checkbox" checked=true >Search Local</input> 
-<input name="searchRemote" id="searchRemote" type="checkbox" >Search Remote</input> 
-<input name="boolxp" checked=true id="boolxp" type="checkbox" >boolexp</input> 
-<button onclick="testSearch()">test search</button>
+
 <p id="demo"></p>
 Compatable Peers:
 <p id="peerlistplain"></p>
