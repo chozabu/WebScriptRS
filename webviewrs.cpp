@@ -15,6 +15,7 @@ WebViewRS::WebViewRS(QWidget *parent) :
     bridge = new WebBridgeRS();
     this->page()->setLinkDelegationPolicy(QWebPage::DelegateExternalLinks);
     connect( this->page(), SIGNAL(linkClicked(const QUrl & )),    this,   SLOT(onLinkClicked(const QUrl & )) );
+    settings()->enablePersistentStorage();
 
 
 }

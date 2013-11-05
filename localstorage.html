@@ -1,0 +1,32 @@
+<html><head><title>nope</title>
+
+</head><body>
+
+<p> Local Notes - <a href="index.html">back to index</a></p>
+
+<textarea name="notesarea" id="notesarea" rows="15" cols="80" onkeyup="return textAreaKey(event)">
+
+</textarea>
+<p id="demo"></p>
+Preview
+<p id="preview"></p>
+
+<script>
+
+    //var searchLimit =document.getElementById('searchLimit');
+    if (localStorage.rsnotes == undefined)localStorage.rsnotes = "<a href='search.html'>search</a><br>notes here";
+    var notesarea =document.getElementById('notesarea');
+    var preview =document.getElementById('preview');
+    notesarea.value = localStorage.rsnotes;
+    preview.innerHTML = notesarea.value;
+    function textAreaKey(event){
+      console.log(event)
+      //var notesarea =document.getElementById('notesarea');
+      localStorage.rsnotes = notesarea.value;
+      console.log(notesarea.value);
+      preview.innerHTML = notesarea.value;
+    }
+</script>
+
+</body>
+</html>
