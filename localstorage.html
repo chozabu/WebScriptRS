@@ -4,10 +4,11 @@
 
 <p> Local Notes - <a href="index.html">back to index</a></p>
 
-<input id="sourcecheckbox" onclick="return toggleSource(event)" type="checkbox">hide source?</input><br/>
-<textarea name="notesarea" id="notesarea" rows="15" cols="80" onkeyup="return textAreaKey(event)">
-
-</textarea>
+<input id="sourcecheckbox" onclick="return toggleSource(event)" type="checkbox">hide source?</input>
+<input hidden=true id="scriptcheckbox" onclick="return toggleScript(event)" type="checkbox"></input>
+<br/>
+<textarea name="notesarea" id="notesarea" rows="15" cols="80" onkeyup="return textAreaKey(event)"></textarea>
+<textarea hidden=true name="scriptarea" id="scriptarea" rows="15" cols="80" onkeyup="return textAreaKey(event)"></textarea>
 <p id="demo"></p>
 Rich Text (<input id="editablecheckbox" onclick="return toggleEdit(event)" type="checkbox">editable?</input>)
 <p id="preview" contentEditable="true"  onkeyup="return previewAreaKey(event)"></p>
