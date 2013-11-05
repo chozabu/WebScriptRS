@@ -1,0 +1,25 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>three.js webgl - geometry - cube</title>
+    </head>
+    <body>
+    <p>Original external image</p>
+<canvas id="canvas" width=140 height=140></canvas>
+
+<script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+
+        var externalImage1 = new Image();
+        externalImage1.onload = function () {
+            canvas.width = 128;//externalImage1.width;
+            canvas.height = 128;//externalImage1.height;
+            ctx.drawImage(externalImage1, 0, 0);
+        }
+        externalImage1.src = "http://chozabu.net/stuff/jumpingcubepaint.png";
+        </script>
+        </body>
+        </html>

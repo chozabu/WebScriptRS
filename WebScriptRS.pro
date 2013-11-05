@@ -45,11 +45,11 @@ TRANSLATIONS +=  \
 
 OTHER_FILES += \
     testit.sh \
-    interactiveparticles.html \
-    index.html \
-    broadcastchat.html \
+    html/interactiveparticles.html \
+    html/index.html \
+    html/broadcastchat.html \
     README.md \
-    phystest.html \
+    html/phystest.html \
     lang/WebScriptRS_zh_CN.qm \
     lang/WebScriptRS_tr.qm \
     lang/WebScriptRS_sv.qm \
@@ -86,9 +86,9 @@ OTHER_FILES += \
     lang/WebScriptRS_de.ts \
     lang/WebScriptRS_da.ts \
     lang/WebScriptRS_cs.ts \
-    phystest2.html \
-    directchat.html \
-    ivank/car.png \
-    ivank/asphalt.jpg \
-    ivank/ivank.js \
-    ivank/kevents.html
+    html/phystest2.html \
+    html/directchat.html \
+    html/ivank/car.png \
+    html/ivank/asphalt.jpg \
+    html/ivank/ivank.js \
+    html/ivank/kevents.html
