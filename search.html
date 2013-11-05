@@ -8,18 +8,17 @@ function testSearch(){
     var local = document.getElementById('searchLocal');
     var remote = document.getElementById('searchRemote');
     var boolxp = document.getElementById('boolxp');
+    var resultspanel =document.getElementById('searchresults');
+    var searchLimit =document.getElementById('searchLimit');
     
     searchTerms = input.value;
     searchOptions = {"localindexed":local.checked,"remoteindexed":remote.checked,"boolexp":boolxp.checked};
     var results = bridge.searchKeywords(searchTerms, searchOptions);
     console.log
-    
+    var limit = searchLimit.value;
     range = results.length;
-    if (range>40)range=40;
-    if (range < 1)
-      document.getElementById("demo").innerHTML = "Nothing found";
-    else
-      document.getElementById("demo").innerHTML = "";
+    if (range>limit)range=limit;
+    resultspanel.innerHTML = "" + results.length+ " results:<br/>";
     var actualpath;
     for (var i = 0;i<range;i++){
       var a = results[i].srname;
@@ -32,20 +31,20 @@ function testSearch(){
           console.log(results[i].srname)
             
           var imgele = "<img src='"+actualpath+"'></img>";
-          document.getElementById("demo").innerHTML+=imgele;
+          resultspanel.innerHTML+=imgele;
         }else{
           var httplink = " <a href='"+actualpath+"'>direct link</a>";
           //var rslink = " <a href='retroshare://file?name="+results[i].srname+"&size="+results[i].size+"&hash="+results[i].hash+"'>RS link</a>";
-          document.getElementById("demo").innerHTML+=results[i].srname+httplink+"<br/>";
+          resultspanel.innerHTML+=results[i].srname+httplink+"<br/>";
         }
       }else{
         var rslink = " <a href='retroshare://file?name="+results[i].srname+"&size="+results[i].size+"&hash="+results[i].hash+"'>RS link</a>";
-        document.getElementById("demo").innerHTML+=results[i].srname+rslink+"<br/>";
+        resultspanel.innerHTML+=results[i].srname+rslink+"<br/>";
       }
       
     }
     //var imgele = "<img src='"+imgpath+"'></img>";
-    //document.getElementById("demo").innerHTML+=imgele;
+    //resultspanel.innerHTML+=imgele;
     
     console.log(results);
 }
@@ -66,7 +65,7 @@ function testSearch(){
 <input name="searchRemote" id="searchRemote" type="checkbox" >Search Remote</input> 
 <input name="boolxp" checked=true id="boolxp" type="checkbox" >boolexp</input> 
 <button onclick="testSearch()">test search</button>
-<p id="demo"></p>
-Compatable Peers:
+<input name="searchLimit" value="40" id="searchLimit" type="number" >searchLimit</input> 
+<p id="searchresults"></p>
 </body>
 </html>
