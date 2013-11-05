@@ -24,9 +24,13 @@ void WebViewRS::onLinkClicked(const QUrl & url){
     //QList<RetroShareLink> links;
     //links.push_back(RetroShareLink(url));
     //RetroShareLink::process(links,RSLINK_PROCESS_NOTIFY_ALL);
-    QStringList urls;
-    urls.push_back(url.toString());
-    RetroShareLink::process(urls, RetroShareLink::TYPE_UNKNOWN, RSLINK_PROCESS_NOTIFY_ALL);
+    if(url.toString().startsWith("retroshare")){
+        QStringList urls;
+        urls.push_back(url.toString());
+        RetroShareLink::process(urls, RetroShareLink::TYPE_UNKNOWN, RSLINK_PROCESS_NOTIFY_ALL);
+    } else {
+        this->setUrl(url);
+    }
 //bridge->processLinks();
 }
 
