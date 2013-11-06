@@ -82,7 +82,7 @@ QVariantList WebViewRS::getMessages()
     return qMsgList;
 }
 
-QMapIterator<QString, QString> WebViewRS::getPeers()
+QMap<QString, QString> WebViewRS::getPeers()
 {
     return p3service->compatablePeers;
 }

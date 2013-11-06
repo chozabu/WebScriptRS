@@ -24,7 +24,7 @@ public slots:
     void broadcastMessage(QString msg);
     void sendMessage(QString peer, QString msg);
     QVariantList getMessages();
-    QMapIterator<QString, QString> getPeers();
+    QMap<QString, QString> getPeers();
 
 
     void go2index2();

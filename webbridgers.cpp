@@ -8,6 +8,7 @@
 //#include "retroshare/rsmsgs.h"
 //#include "retroshare/rspeers.h"
 //#include "retroshare/rsnotify.h"
+#include "retroshare/rsforums.h"
 
 //rsPosted->;
 //rsMsgs->getPublicChatQueue()
@@ -43,6 +44,29 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
     return url;
 }*/
 
+QVariantList WebBridgeRS::getForums(){
+    std::list<ForumInfo> forumList;
+    rsForums->getForumList(forumList);
+
+    QVariantList qResults;
+    std::list<ForumInfo>::iterator it;
+    for(it = forumList.begin(); it != forumList.end(); it++) {
+        ForumInfo dd;
+        dd = *it;
+        QVariantMap qdd;
+        qdd.insert("forumDesc",QString::fromStdWString(dd.forumDesc));
+        qdd.insert("forumFlags",dd.forumFlags);
+        qdd.insert("forumId",QString::fromStdString(dd.forumId));
+        qdd.insert("forumName",QString::fromStdWString(dd.forumName));
+        qdd.insert("lastPost",QString::number(dd.lastPost));
+        qdd.insert("pop",dd.pop);
+        qdd.insert("subscribeFlags",dd.subscribeFlags);
+
+        qResults.append(qdd);
+    }
+
+    return qResults;
+}
 void WebBridgeRS::processLinks(QStringList urls){
     RetroShareLink::process(urls, RetroShareLink::TYPE_UNKNOWN, RSLINK_PROCESS_NOTIFY_ALL);
     //rsFiles->FileRequest()

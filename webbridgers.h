@@ -14,6 +14,7 @@ public:
     void pushMsgToJs(QVariantMap message);
 
 public slots:
+    QVariantList getForums();
     QString getOwnId();
     QString getDownloadDirectory();
     QVariantList searchKeywords(const QString& keywords, QVariantMap searchOptions);
