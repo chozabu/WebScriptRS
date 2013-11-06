@@ -1,24 +1,47 @@
 <html><head><title>nope</title>
 
-</head><body>
+</head>
+<style type="text/css" media="screen">
+    #notesarea { 
+        position: relative;
+        width: 50%;
+        height: 400px;
+        float: left;
+    }
+    #scriptarea { 
+        position: relative;
+        width: 50%;
+        height: 400px;
+        float: left;
+    }
+</style>
+<body>
 
 <p> Local Notes - <a href="index.html">back to index</a></p>
 
 <input id="sourcecheckbox" onclick="return toggleSource(event)" type="checkbox">hide source?</input>
+<input id="evalbtn" value="Run" onclick="return evalPressed(event)" type="button"></input>
 <input hidden=true id="scriptcheckbox" onclick="return toggleScript(event)" type="checkbox"></input>
 <br/>
-<textarea name="notesarea" id="notesarea" rows="15" cols="80" onkeyup="return textAreaKey(event)"></textarea>
-<textarea hidden=true name="scriptarea" id="scriptarea" rows="15" cols="80" onkeyup="return textAreaKey(event)"></textarea>
+<div name="notesarea" id="notesarea" rows="15" cols="80" onkeyup="return textAreaKey(event)"></div>
+<div name="scriptarea" id="scriptarea" rows="15" cols="80" onkeyup="return scriptAreaKey(event)"></div>
 <p id="demo"></p>
 Rich Text (<input id="editablecheckbox" onclick="return toggleEdit(event)" type="checkbox">editable?</input>)
 <p id="preview" contentEditable="true"  onkeyup="return previewAreaKey(event)"></p>
 
+<script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
 
+    var editor = ace.edit("notesarea");
+    editor.getSession().setMode("ace/mode/html");
+    var scripteditor = ace.edit("scriptarea");
+    scripteditor.getSession().setMode("ace/mode/javascript");
     if (localStorage.rsnotes == undefined)localStorage.rsnotes = "<a href='search.html'>search</a><br>notes here";
+    
     if (localStorage.rseditchecked == undefined)localStorage.rseditchecked = "true";
     if (localStorage.rssourcechecked == undefined)localStorage.rssourcechecked = "false";
     var notesarea =document.getElementById('notesarea');
+    var scriptarea =document.getElementById('scriptarea');
     var preview =document.getElementById('preview');
     var editablecheckbox =document.getElementById('editablecheckbox');
     var sourcecheckbox =document.getElementById('sourcecheckbox');
@@ -36,19 +59,23 @@ Rich Text (<input id="editablecheckbox" onclick="return toggleEdit(event)" type=
     //console.log(editablecheckbox.checked);
     toggleEdit(null);
     toggleSource(null);
-    notesarea.value = localStorage.rsnotes;
-    preview.innerHTML = notesarea.value;
+    editor.setValue(localStorage.rsnotes);
+    scripteditor.setValue(localStorage.rsnotescript);
+    preview.innerHTML = localStorage.rsnotes;
     function textAreaKey(event){
       //console.log(event)
       //var notesarea =document.getElementById('notesarea');
-      localStorage.rsnotes = notesarea.value;
+      localStorage.rsnotes = editor.getValue();
       //console.log(notesarea.value);
-      preview.innerHTML = notesarea.value;
+      preview.innerHTML = editor.getValue();
+    }
+    function scriptAreaKey(event){
+      localStorage.rsnotescript = scripteditor.getValue();
     }
     function previewAreaKey(event){
       //console.log(event)
-      notesarea.value = preview.innerHTML;
-      localStorage.rsnotes = notesarea.value;
+      editor.setValue(preview.innerHTML);
+      localStorage.rsnotes = editor.getValue();
     }
     function toggleEdit(event){
       preview.contentEditable = editablecheckbox.checked;
@@ -56,9 +83,12 @@ Rich Text (<input id="editablecheckbox" onclick="return toggleEdit(event)" type=
     }
     function toggleSource(event){
       notesarea.hidden = sourcecheckbox.checked;
+      scriptarea.hidden = sourcecheckbox.checked;
       localStorage.rssourcechecked = sourcecheckbox.checked;
     }
+    function evalPressed(event){
+      eval(scripteditor.getValue())
+    }
 </script>
-
 </body>
 </html>
