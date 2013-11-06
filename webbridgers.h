@@ -14,6 +14,7 @@ public:
     void pushMsgToJs(QVariantMap message);
 
 public slots:
+    QVariantList getForumInfo(QString flid);
     QVariantList getForums();
     QString getOwnId();
     QString getDownloadDirectory();
