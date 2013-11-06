@@ -17,13 +17,14 @@ implemented tests include<br>
 -simple p2p physics test with "ownership" of objects.<br/>
 -car driving test - ported from ivanks keyboard demo, players broadcast positions<br/>
 -3d broadcast/wall chat - draggable text nodes. Shift+mouse moves camera<br/>
+-local storage notepad - uses html5 persistant storage and editable tags (plus a source editor)<br/>
 
 
 
 #### Warning Included tests do not sanitise HTML. The JS has not been written with security in mind.
 ![My image](http://chozabu.net/stuff/WebScriptRS.png)
 ![My image](http://chozabu.net/stuff/WebScriptRS1.png)
-
+![My image](http://chozabu.net/stuff/WebScriptRS2.png)
 
 ##### Warning Watch your cpu and network usage when running the physics/shared drawing tests.<br> Should be fine.
 
