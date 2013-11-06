@@ -82,9 +82,16 @@ QVariantList WebViewRS::getMessages()
     return qMsgList;
 }
 
-QMap<QString, QString> WebViewRS::getPeers()
+QVariantMap WebViewRS::getPeers()
 {
-    return p3service->compatablePeers;
+    QVariantMap qm;
+    QMapIterator<QString, QString> mi(p3service->compatablePeers);
+    while ( mi.hasNext() ) {
+      mi.next();
+      qm.insert(mi.key(),mi.value());
+    }
+    //QVariantMap qm = p3service->compatablePeers;
+    return qm;
 }
 
 void WebViewRS::go2index2()
