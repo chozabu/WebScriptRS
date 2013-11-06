@@ -9,6 +9,7 @@
 //#include "retroshare/rspeers.h"
 //#include "retroshare/rsnotify.h"
 #include "retroshare/rsforums.h"
+#include "retroshare/rschannels.h"
 
 //rsPosted->;
 //rsMsgs->getPublicChatQueue()
@@ -17,32 +18,44 @@
 WebBridgeRS::WebBridgeRS(QObject *parent) :
     QObject(parent)
 {
-    //mRSLink = new Retro
 
     /*
     rsPeers->getOnlineList();
     rsPeers->getFriendList();
-    rsFiles->FileDetails();
-    rsFiles->SearchKeywords();
     */
     //rsFiles->FileRequest();
     //virtual bool FileRequest(const std::string& fname, const std::string& hash,
     //nt64_t size, const std::string& dest, TransferRequestFlags flags, const std::list<std::string>& srcIds) = 0;
     //rsFiles->getSharedDirectories();
-    /*std::list<std::string> keywords;
-    std::list<DirDetails> *results;
-    keywords.push_back("mp3");
-    rsFiles->SearchKeywords(keywords,results,);
-    rsFiles->SearchBoolExp()*/
-    //SharedDirInfo *sd;
-    //sd->
 
 }
 
-/*QString WebBridgeRS::processLink(QString url){
-   // RetroShareLink(url).;
-    return url;
-}*/
+QVariantList WebBridgeRS::getChannelList(){
+    std::list<ChannelInfo> chanList;
+    rsChannels->getChannelList(chanList);
+
+    QVariantList qResults;
+    std::list<ChannelInfo>::iterator it;
+    for(it = chanList.begin(); it != chanList.end(); it++) {
+        ChannelInfo dd;
+        dd = *it;
+        QVariantMap qdd;
+        qdd.insert("autoDownload",dd.autoDownload);
+        qdd.insert("channelDesc",QString::fromStdWString(dd.channelDesc));
+        qdd.insert("channelFlags",dd.channelFlags);
+        qdd.insert("channelId",QString::fromStdString(dd.channelId));
+        qdd.insert("channelName",QString::fromStdWString(dd.channelName));
+        qdd.insert("destination_directory",QString::fromStdString(dd.destination_directory));
+        qdd.insert("lastPost",QString::number(dd.lastPost));
+        //qdd.insert("pngChanImage",QString::fromStdWString(dd.pngChanImage));
+        //qdd.insert("pngImageLen",QString::fromStdWString(dd.pngImageLen));
+        qdd.insert("pop",dd.pop);
+
+        qResults.append(qdd);
+    }
+
+    return qResults;
+}
 
 QVariantList WebBridgeRS::getForums(){
     std::list<ForumInfo> forumList;
