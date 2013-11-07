@@ -28,6 +28,7 @@ public slots:
     void broadcastMessage(QString msg);
     void sendMessage(QString peer, QString msg);
     QVariantMap getPeers();
+    void downloadFile(QString qname, QString qhash, int qsize);
 signals:
     void msgPush(QVariantMap message);
 

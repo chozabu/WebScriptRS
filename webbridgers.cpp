@@ -30,6 +30,50 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
 
 }
 
+void WebBridgeRS::downloadFile(QString qname, QString qhash, int qsize){
+    std::list<std::string> srcIds;
+
+    // Add the link built-in source. This is needed for EXTRA files, where the source is specified in the link.
+
+    /*if(link.type() == TYPE_EXTRAFILE)
+    {
+    #ifdef DEBUG_RSLINK
+        std::cerr << " RetroShareLink::process Adding built-in source " << link.SSLId().toStdString() << std::endl;
+    #endif
+        srcIds.push_back(link.SSLId().toStdString()) ;
+    }*/
+
+    // Get a list of available direct sources, in case the file is browsable only.
+    //
+    FileInfo finfo ;
+    rsFiles->FileDetails(qhash.toStdString(), RS_FILE_HINTS_REMOTE, finfo) ;
+
+    for(std::list<TransferInfo>::const_iterator it(finfo.peers.begin());it!=finfo.peers.end();++it)
+    {
+    #ifdef DEBUG_RSLINK
+        std::cerr << "  adding peerid " << (*it).peerId << std::endl ;
+    #endif
+        srcIds.push_back((*it).peerId) ;
+    }
+
+    /*QString cleanname = link.name() ;
+    static const QString bad_chars_str = "/\\\"*:?<>|" ;
+
+    for(int i=0;i<cleanname.length();++i)
+        for(int j=0;j<bad_chars_str.length();++j)
+            if(cleanname[i] == bad_chars_str[j])
+            {
+                cleanname[i] = '_';
+                flag |= RSLINK_PROCESS_NOTIFY_BAD_CHARS ;
+            }
+    */
+    if (rsFiles->FileRequest(qname.toStdString(), qhash.toStdString(), qsize, "", RS_FILE_REQ_ANONYMOUS_ROUTING, srcIds)) {
+        //fileAdded.append(link.name());
+    } else {
+        //fileExist.append(link.name());
+    }
+}
+
 QVariantList WebBridgeRS::getChannelList(){
     std::list<ChannelInfo> chanList;
     rsChannels->getChannelList(chanList);
