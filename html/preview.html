@@ -29,8 +29,18 @@
 <article>
 <h2>HTML5 preview</h2>
 
-<p> Local notes - <a href="index.html">back to index</a></p>
+<p> Local notes - <a href="index.html">back to index</a>
+
+    <input name="urlInput" id="urlInput" type="text" value="search2.html" onkeypress="return urlKeyDown(event)" /> <button onclick=
+    "submitURL()">Load URL</button>
+
+</p>
     <textarea id=code name=code>
+    
+    
+    
+    
+    
     
 <!doctype html>
 <html>
@@ -86,6 +96,8 @@ Last packet from peers
   </body>
 </html>
 
+
+
 </textarea>
     <iframe id=preview></iframe>
     <script>
@@ -121,5 +133,24 @@ Last packet from peers
         document.title = "CodeMirror: "+previewFrame.contentDocument.title;
       }
       setTimeout(updatePreview, 300);
+      function loadURL(url){
+        var req = new XMLHttpRequest();  
+        req.open('GET', url, false);   
+        req.send(null);  
+        if(req.status == 0)  
+          editor.setValue(req.responseText);
+      }
+      function urlKeyDown(e) {
+          if (e.keyCode == 13) {
+                submitURL();
+              return false;
+          }
+      }
+      function submitURL()
+      {
+        var input = document.getElementById('urlInput');
+        console.log(input.value)
+        loadURL(input.value);
+      }
     </script>
   </article>
