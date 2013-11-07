@@ -15,8 +15,6 @@ public:
     void setP3service(p3JsonRS *p3servicein);
     p3JsonRS *p3service;
 
-signals:
-
 public slots:
     void onJavaScriptWindowObjectCleared();
     void onLinkClicked(const QUrl & url);

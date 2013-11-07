@@ -30,6 +30,7 @@ public:
 public slots:
     void addTab();
     void removeTab();
+    void onTitleChanged(QString title);
 
 protected slots:
     void adjustLocation();

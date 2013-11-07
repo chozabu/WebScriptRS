@@ -52,3 +52,12 @@ void WebTabContents::setP3service(p3JsonRS *p3servicein)
     webview->setP3service(p3servicein);
     //p3service = p3servicein;
 }
+
+WebViewRS *WebTabContents::getWebView()
+{
+    return webview;
+}
+/*void*WebTabContents::onTitleChanged()
+{
+
+}*/

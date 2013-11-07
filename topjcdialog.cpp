@@ -71,8 +71,14 @@ void WebScriptDialog::addTab()
     WebTabContents * wtc = new WebTabContents(this);
     wtc->setP3service(p3service);
     ui->webTabs->addTab(wtc,QString("hi"));
-    //wtc->show();
+    connect( wtc->getWebView(), SIGNAL(titleChanged(QString)),    this,   SLOT(onTitleChanged(QString)) );
 }
+void WebScriptDialog::onTitleChanged(QString title){
+    WebTabContents * wtc = qobject_cast<WebTabContents *>(QObject::sender()->parent());
+    int index = ui->webTabs->indexOf(wtc);
+    ui->webTabs->setTabText(index, title);
+}
+
 void WebScriptDialog::removeTab()
 {
     WebTabContents * wtc = qobject_cast<WebTabContents *>(ui->webTabs->currentWidget());
