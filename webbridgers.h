@@ -34,7 +34,7 @@ private slots:
     void onUrlDownloaded();
 signals:
     void msgPush(QVariantMap message);
-    void urlDownloaded();
+    void urlDownloaded(QString, QString);
 
     /*
     rsPeers->getOwnId();

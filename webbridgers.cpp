@@ -48,8 +48,8 @@ void WebBridgeRS::onUrlDownloaded(){
     QString fpath = getDownloadDirectory();
 
     fpath.append("/");
-
-    fpath.append(QFileInfo(fileDownloader->url().toString()).fileName());
+    QString urlstring(fileDownloader->url().toString());
+    fpath.append(QFileInfo(urlstring).fileName());
     std::cout << fpath.toStdString() << std::endl;
     QFile file(fpath);
     file.open(QIODevice::WriteOnly);
@@ -60,7 +60,7 @@ void WebBridgeRS::onUrlDownloaded(){
     file.close();
 
     std::cout << fileDownloader->downloadedData().data() << std::endl;
-    emit urlDownloaded();
+    emit urlDownloaded(fpath, urlstring);
 
 }
 
