@@ -31,28 +31,62 @@
 
 <p> Local notes - <a href="index.html">back to index</a></p>
     <textarea id=code name=code>
+    
 <!doctype html>
 <html>
   <head>
     <meta charset=utf-8>
-    <title>HTML5 canvas demo</title>
+    <title>RetroShare Test</title>
     <style>p {font-family: monospace;}</style>
   </head>
   <body>
-    <p>Canvas pane goes here:</p>
-    <canvas id=pane width=300 height=200></canvas>
+    
+Enter code on the left<br>
+The snippet from index below shows packets from friends running this plugin<br>
+Compatable Peers:
+<p id="peerlistplain"></p>
+Last packet from peers
+<p id="peerlist"></p>
+    
     <script>
-      var canvas = document.getElementById('pane');
-      var context = canvas.getContext('2d');
+      setTimeout(tick,100);
+     
+      var peers = {}
+      bridge.msgPush.connect(incomingMsg);
+      function incomingMsg(message){
+        //msg = JSON.parse(message.message);
+        id = message.peerID;
+        name = message.peerName;
+      
+      //make peer if missing
+        if(!(id in peers)){
+            peers[id] = {"name":name}
+            peerPanel = "<p id='"+id+"'>"+peers[id].name+"</p>";
+            document.getElementById("peerlist").innerHTML+=peerPanel;
+      
+            peerPanel =peers[id].name+" <a href=directchat.html?peerid="+id+">chat</a><br/>";
+            document.getElementById("peerlistplain").innerHTML+=peerPanel;
+      
+         }
+      
+         //show peers last  message
+         peerPanel = peers[id].name+"<br/>Last message="+message.message;
+         document.getElementById(id).innerHTML = peerPanel
+      
+      }
+            
+      //send a message to everyone each second, so they know we are alive
+      function tick(){
+          var packetdata = {"type":"liveping","msg":"Well, Hello!"};
+          bridge.broadcastMessage(JSON.stringify(packetdata));
+          setTimeout(tick,1000);
+      }
 
-      context.fillStyle = 'rgb(250,0,0)';
-      context.fillRect(10, 10, 55, 50);
-
-      context.fillStyle = 'rgba(0, 0, 250, 0.5)';
-      context.fillRect(30, 30, 55, 50);
     </script>
   </body>
-</html></textarea>
+</html>
+
+</textarea>
     <iframe id=preview></iframe>
     <script>
       var delay;
@@ -83,6 +117,8 @@
         preview.write(editor.getValue());
         preview.close();
         localStorage.rspreview = editor.getValue();
+        
+        document.title = "CodeMirror: "+previewFrame.contentDocument.title;
       }
       setTimeout(updatePreview, 300);
     </script>
