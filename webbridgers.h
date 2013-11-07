@@ -5,6 +5,7 @@
 #include <QStringList>
 #include<QVariantMap>
 
+class p3JsonRS;
 
 class WebBridgeRS : public QObject
 {
@@ -12,6 +13,7 @@ class WebBridgeRS : public QObject
 public:
     explicit WebBridgeRS(QObject *parent = 0);
     void pushMsgToJs(QVariantMap message);
+    p3JsonRS *p3service;
 
 public slots:
     QVariantList getChannelList();
@@ -22,6 +24,10 @@ public slots:
     QVariantList searchKeywords(const QString& keywords, QVariantMap searchOptions);
     //QString processLink(QString url);
     void processLinks(QStringList urls);
+
+    void broadcastMessage(QString msg);
+    void sendMessage(QString peer, QString msg);
+    QVariantMap getPeers();
 signals:
     void msgPush(QVariantMap message);
 

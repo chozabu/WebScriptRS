@@ -119,7 +119,7 @@
                                 
                                 var pos = [mouse.x,mouse.y];
                                 var packetdata = {"type":"mousepos","pos":pos};
-                                bridgeWV.broadcastMessage(JSON.stringify(packetdata));
+                                bridge.broadcastMessage(JSON.stringify(packetdata));
                                 makeParticleXY(mouse.x,mouse.y);
 
                         }
@@ -146,8 +146,6 @@
                         function onDocumentMouseDown( event ) {
 
                                 event.preventDefault();
-
-                                //bridgeWV.go2page('index2.html')
 
                         }
 

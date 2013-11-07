@@ -238,3 +238,32 @@ QString WebBridgeRS::getDownloadDirectory()
 {
     return QString(rsFiles->getDownloadDirectory().c_str());
 }
+
+void WebBridgeRS::broadcastMessage(QString msg)
+{
+    QMapIterator<QString, QString> mi(p3service->compatablePeers);
+    //std::cout << "boardcasting\n";
+    while ( mi.hasNext() ) {
+      mi.next();
+      //std::cout << "to: " << mi.key().toStdString() << std::endl;
+      //qDebug() << mi.key() << ":" << mi.value().surname() << mi.value().forename();
+      p3service->msgPeer(mi.key().toStdString(),msg.toStdString());
+  }
+}
+void WebBridgeRS::sendMessage(QString peer, QString msg)
+{
+    p3service->msgPeer(peer.toStdString(),msg.toStdString());
+}
+
+
+QVariantMap WebBridgeRS::getPeers()
+{
+    QVariantMap qm;
+    QMapIterator<QString, QString> mi(p3service->compatablePeers);
+    while ( mi.hasNext() ) {
+      mi.next();
+      qm.insert(mi.key(),mi.value());
+    }
+    //QVariantMap qm = p3service->compatablePeers;
+    return qm;
+}

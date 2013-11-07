@@ -38,12 +38,12 @@ Build and install the plugin as usual.<br>
 currently you can send a message like this: <br>
 <code>
 var packetdata = {"type":"chatmessage","pos":"thiscouldbeanything"}; <br>
-bridgeWV.broadcastMessage(JSON.stringify(packetdata)); <br>
+bridge.broadcastMessage(JSON.stringify(packetdata)); <br>
 </code>
 
 or directly like this: <br>
 <code>
-bridgeWV.sendMessage(peer_id_as_string, JSON.stringify(packetdata)); <br>
+bridge.sendMessage(peer_id_as_string, JSON.stringify(packetdata)); <br>
 </code>
 And get one like this: <br>
 <code>

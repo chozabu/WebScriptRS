@@ -30,7 +30,7 @@ tick();
 //send a message to everyone each second, so they know we are alive
 function tick(){
     var packetdata = {"type":"indexping","msg":"hi there"};
-    bridgeWV.broadcastMessage(JSON.stringify(packetdata));
+    bridge.broadcastMessage(JSON.stringify(packetdata));
     setTimeout(tick,1000);
 }
 
@@ -60,9 +60,9 @@ function tick(){
 <br>
 <button onclick="myFunction()">Click me</button>
 <button onclick="testecho()">test echo</button>
-<button onclick="bridgeWV.go2index2()">barefunc</button>
-<button onclick="bridgeWV.go2page('index2.html')">richfunk</button>
-<button onclick="bridgeWV.go2page('tindex.html')">to tindex</button>-->
+<button onclick="bridge.go2index2()">barefunc</button>
+<button onclick="bridge.go2page('index2.html')">richfunk</button>
+<button onclick="bridge.go2page('tindex.html')">to tindex</button>-->
 
 <p id="demo"></p>
 Compatable Peers:

@@ -13,7 +13,7 @@
   {
     var input = document.getElementById('chatInput');
     var packetdata = {"type":"chat","msg":input.value};
-    bridgeWV.broadcastMessage(JSON.stringify(packetdata));
+    bridge.broadcastMessage(JSON.stringify(packetdata));
     document.getElementById("chatout").innerHTML+="you say:<br/>"+input.value+"<br/>";
     input.value = "";
   }

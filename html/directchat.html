@@ -28,9 +28,9 @@
           msg = input.value;
     //document.getElementById("chatout").innerHTML+="2";
     var packetdata = {"type":"chat","msg":msg};
-    //bridgeWV.broadcastMessage(JSON.stringify(packetdata));
+    //bridge.broadcastMessage(JSON.stringify(packetdata));
     //void sendMessage(QString peer, QString msg);
-    bridgeWV.sendMessage(peerID, JSON.stringify(packetdata));
+    bridge.sendMessage(peerID, JSON.stringify(packetdata));
     //document.getElementById("chatout").innerHTML+="3";
     document.getElementById("chatout").innerHTML+="you say:<br/>"+msg+"<br/>";
     input.value = "";

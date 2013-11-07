@@ -62,6 +62,7 @@ void WebScriptDialog::setP3service(p3JsonRS *p3servicein)
     //webview->setP3service(p3servicein);
     p3service = p3servicein;
     p3service->bridge = bridge;
+    bridge->p3service = p3service;
     std::cerr << "bridge on set: " << p3service->bridge << std::endl;
     addTab();
 }
@@ -74,5 +75,7 @@ void WebScriptDialog::addTab()
 }
 void WebScriptDialog::removeTab()
 {
+    WebTabContents * wtc = qobject_cast<WebTabContents *>(ui->webTabs->currentWidget());
     ui->webTabs->removeTab(ui->webTabs->currentIndex());
+    delete(wtc);
 }
