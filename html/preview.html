@@ -72,6 +72,11 @@
       
       function updatePreview() {
         var previewFrame = document.getElementById('preview');
+        var id = previewFrame.contentWindow.setTimeout(function() {}, 0);
+
+        while (id--) {
+            previewFrame.contentWindow.clearTimeout(id); // will do nothing if no timeout with id is present
+        }
         previewFrame.contentWindow.bridge = bridge;
         var preview =  previewFrame.contentDocument ||  previewFrame.contentWindow.document;
         preview.open();
