@@ -34,6 +34,27 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
 
 }
 
+QVariantList WebBridgeRS::getPublicChatQueue()
+{
+    std::list<ChatInfo> newchat;
+    QVariantList qResults;
+    if (!rsMsgs->getPublicChatQueue(newchat)){
+
+        std::list<ChatInfo>::iterator it;
+        for(it = newchat.begin(); it != newchat.end(); it++) {
+            ChatInfo dd;
+            dd = *it;
+            QVariantMap qdd;
+            qdd.insert("chatflags",dd.chatflags);
+            qdd.insert("msg",QString::fromStdWString(dd.msg));
+            qdd.insert("peer_nickname",QString::fromStdString(dd.peer_nickname));
+            qdd.insert("recvTime",dd.recvTime);
+            qdd.insert("rsid",QString::fromStdString(dd.rsid));
+            qdd.insert("sendTime",dd.sendTime);
+        }
+    }
+    return qResults;
+}
 
 void WebBridgeRS::broadcastToRS(QString msg)
 {

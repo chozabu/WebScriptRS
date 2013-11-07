@@ -31,6 +31,7 @@ public slots:
     void downloadFile(QString qname, QString qhash, int qsize);
     void downloadURL(QString url);
     void broadcastToRS(QString msg);
+    QVariantList getPublicChatQueue();
 private slots:
     void onUrlDownloaded();
 signals:
