@@ -12,7 +12,6 @@ WebViewRS::WebViewRS(QWidget *parent) :
     //this->acceptDrops()
     //connect(this->page()->mainFrame(), SIGNAL (javaS))
     connect( this->page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()),    this,   SLOT(onJavaScriptWindowObjectCleared()) );
-    bridge = new WebBridgeRS();
     this->page()->setLinkDelegationPolicy(QWebPage::DelegateExternalLinks);
     connect( this->page(), SIGNAL(linkClicked(const QUrl & )),    this,   SLOT(onLinkClicked(const QUrl & )) );
     settings()->enablePersistentStorage();
@@ -39,7 +38,8 @@ void WebViewRS::onJavaScriptWindowObjectCleared()
     QWebFrame *frame = this->page()->mainFrame();
     //frame->setZoomFactor(4);
     frame->addToJavaScriptWindowObject("bridgeWV", this);
-    frame->addToJavaScriptWindowObject("bridge", bridge);
+    std::cerr << "bridge on clear: " << p3service->bridge << std::endl;
+    frame->addToJavaScriptWindowObject("bridge", p3service->bridge);
  //   QString script = "console.log('init!');";
     //   this->page()->mainFrame()->evaluateJavaScript( script );
 }
@@ -47,7 +47,6 @@ void WebViewRS::onJavaScriptWindowObjectCleared()
 void WebViewRS::setP3service(p3JsonRS *p3servicein)
 {
     p3service = p3servicein;
-    p3service->bridge = bridge;
 }
 void WebViewRS::broadcastMessage(QString msg)
 {

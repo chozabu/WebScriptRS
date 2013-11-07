@@ -8,16 +8,19 @@ SOURCES = WebScriptRSPlugin.cpp \
     p3JsonRS.cpp \
     webviewrs.cpp \
     msgQue.cpp \
-    webbridgers.cpp
+    webbridgers.cpp \
+    webtabcontents.cpp
 HEADERS = WebScriptRSPlugin.h \
     topjcdialog.h \
     RSJsonItems.h \
     p3JsonRS.h \
     msgQue.h \
     webviewrs.h \
-    webbridgers.h
+    webbridgers.h \
+    webtabcontents.h
 FORMS   = \
-    topjcdialog.ui
+    topjcdialog.ui \
+    webtabcontents.ui
 
 TARGET = WebScriptRS
 

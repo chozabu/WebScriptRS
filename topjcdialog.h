@@ -26,6 +26,10 @@ public:
     ~WebScriptDialog();
     void setP3service(p3JsonRS *p3servicein);
     p3JsonRS *p3service;
+    WebBridgeRS *bridge;
+public slots:
+    void addTab();
+    void removeTab();
 
 protected slots:
     void adjustLocation();
@@ -35,7 +39,7 @@ protected:
     void javaScriptConsoleMessage(const QString& message, int lineNumber, const QString& sourceID);
 private:
     Ui::WebScriptDialog *ui;
-    WebViewRS* webview;
+    //WebViewRS* webview;
     //QTextBrowser* jslog;
 };
 

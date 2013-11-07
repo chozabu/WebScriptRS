@@ -13,7 +13,6 @@ public:
     explicit WebViewRS(QWidget *parent = 0);
     void setP3service(p3JsonRS *p3servicein);
     p3JsonRS *p3service;
-    WebBridgeRS *bridge;
 
 signals:
 

@@ -14,22 +14,36 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="0">
+   <item row="1" column="0">
+    <widget class="QTabWidget" name="webTabs">
+     <property name="tabPosition">
+      <enum>QTabWidget::North</enum>
+     </property>
+     <property name="currentIndex">
+      <number>-1</number>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" rowspan="2">
+    <layout class="QVBoxLayout" name="verticalLayout"/>
+   </item>
+   <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLineEdit" name="lineEdit"/>
+      <widget class="QPushButton" name="newTabBtn">
+       <property name="text">
+        <string>New Tab</string>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="testButton">
+      <widget class="QPushButton" name="closeTabBtn">
        <property name="text">
-        <string>Go</string>
+        <string>Close Tab</string>
        </property>
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="3" column="0" rowspan="2">
-    <layout class="QVBoxLayout" name="verticalLayout" stretch=""/>
    </item>
   </layout>
  </widget>
