@@ -30,6 +30,7 @@ public slots:
     QVariantMap getPeers();
     void downloadFile(QString qname, QString qhash, int qsize);
     void downloadURL(QString url);
+    void broadcastToRS(QString msg);
 private slots:
     void onUrlDownloaded();
 signals:

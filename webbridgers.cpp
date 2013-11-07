@@ -5,7 +5,7 @@
 #include <retroshare/rsexpr.h>
 #include "gui/RetroShareLink.h"
 
-//#include "retroshare/rsmsgs.h"
+#include "retroshare/rsmsgs.h"
 //#include "retroshare/rspeers.h"
 //#include "retroshare/rsnotify.h"
 #include "retroshare/rsforums.h"
@@ -31,6 +31,13 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
     //nt64_t size, const std::string& dest, TransferRequestFlags flags, const std::list<std::string>& srcIds) = 0;
     //rsFiles->getSharedDirectories();
 
+
+}
+
+
+void WebBridgeRS::broadcastToRS(QString msg)
+{
+    rsMsgs->sendPublicChat(msg.toStdWString());
 }
 
 void WebBridgeRS::downloadURL(QString url){
