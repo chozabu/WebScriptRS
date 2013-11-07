@@ -1,0 +1,41 @@
+<html><head><title>Download Test</title>
+
+
+</head><body>
+
+<a href="index.html">back to index</a> <br/>
+<input name="searchInput" value="http://chozabu.net/stuff/minihi5.png" id="searchInput" type="text" onkeypress="return searchKeyDown(event)" ></input> 
+<button onclick="testSearch()">test download</button>
+<p id="searchresults"></p>
+  
+<script>
+
+  var input = document.getElementById('searchInput');
+  var resultspanel =document.getElementById('searchresults');
+  bridge.urlDownloaded.connect(downloadComplete);
+  function testSearch(){
+      
+    resultspanel.innerHTML = "downloading: "+input.value + "<br> wait for it... <br>";
+    bridge.downloadURL(input.value);
+    
+      
+  }
+  function downloadComplete(path,url){
+    //console.log(path);
+    //console.log(url);
+    if (path.substr(-4,4) == ".png")
+      resultspanel.innerHTML += "<img src='"+path+"' /><br>";
+    resultspanel.innerHTML += path+"<br>";
+  }
+
+
+   function searchKeyDown(e) {
+       if (e.keyCode == 13) {
+            testSearch();
+           return false;
+       }
+   }
+</script>
+  
+</body>
+</html>
