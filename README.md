@@ -1,6 +1,6 @@
 #Webkit Plugin for Retroshare
 
-This embeds webkit in a plugin page, along with the startings of a javascript bridge<br>
+This embeds a set of webkit tabs in a plugin page, along with the startings of a javascript bridge<br>
 Still some way to go to be handy, So far it can:<br>
 -broadcast to compatable peers<br>
 -send targeted messages<br>
