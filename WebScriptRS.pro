@@ -2,6 +2,7 @@
 
 CONFIG += qt uic qrc resources
 QT += webkit
+QT += network
 SOURCES = WebScriptRSPlugin.cpp \
     topjcdialog.cpp \
     RSJsonItems.cpp \
@@ -9,7 +10,8 @@ SOURCES = WebScriptRSPlugin.cpp \
     webviewrs.cpp \
     msgQue.cpp \
     webbridgers.cpp \
-    webtabcontents.cpp
+    webtabcontents.cpp \
+    filedownloader.cpp
 HEADERS = WebScriptRSPlugin.h \
     topjcdialog.h \
     RSJsonItems.h \
@@ -17,7 +19,8 @@ HEADERS = WebScriptRSPlugin.h \
     msgQue.h \
     webviewrs.h \
     webbridgers.h \
-    webtabcontents.h
+    webtabcontents.h \
+    filedownloader.h
 FORMS   = \
     topjcdialog.ui \
     webtabcontents.ui

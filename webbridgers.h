@@ -29,8 +29,12 @@ public slots:
     void sendMessage(QString peer, QString msg);
     QVariantMap getPeers();
     void downloadFile(QString qname, QString qhash, int qsize);
+    void downloadURL(QString url);
+private slots:
+    void onUrlDownloaded();
 signals:
     void msgPush(QVariantMap message);
+    void urlDownloaded();
 
     /*
     rsPeers->getOwnId();
@@ -39,7 +43,6 @@ signals:
     rsFiles->FileDetails();
     rsFiles->SearchKeywords();
     */
-public slots:
 
 };
 

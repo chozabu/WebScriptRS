@@ -10,6 +10,9 @@
 //#include "retroshare/rsnotify.h"
 #include "retroshare/rsforums.h"
 #include "retroshare/rschannels.h"
+#include "filedownloader.h"
+#include <QFile>
+#include <QDir>
 
 //rsPosted->;
 //rsMsgs->getPublicChatQueue()
@@ -29,6 +32,38 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
     //rsFiles->getSharedDirectories();
 
 }
+
+void WebBridgeRS::downloadURL(QString url){
+    QUrl imageUrl(url);
+    FileDownloader* fileDownloader = new FileDownloader(imageUrl, this);
+
+    connect(fileDownloader, SIGNAL(downloaded()), SLOT(onUrlDownloaded()));
+
+}
+
+void WebBridgeRS::onUrlDownloaded(){
+    FileDownloader * fileDownloader = qobject_cast<FileDownloader *>(QObject::sender());
+
+    //QDir::absoluteFilePath()
+    QString fpath = getDownloadDirectory();
+
+    fpath.append("/");
+
+    fpath.append(QFileInfo(fileDownloader->url().toString()).fileName());
+    std::cout << fpath.toStdString() << std::endl;
+    QFile file(fpath);
+    file.open(QIODevice::WriteOnly);
+
+    file.write(fileDownloader->downloadedData());
+
+    // optional, as QFile destructor will already do it:
+    file.close();
+
+    std::cout << fileDownloader->downloadedData().data() << std::endl;
+    emit urlDownloaded();
+
+}
+
 
 void WebBridgeRS::downloadFile(QString qname, QString qhash, int qsize){
     std::list<std::string> srcIds;
@@ -69,8 +104,10 @@ void WebBridgeRS::downloadFile(QString qname, QString qhash, int qsize){
     */
     if (rsFiles->FileRequest(qname.toStdString(), qhash.toStdString(), qsize, "", RS_FILE_REQ_ANONYMOUS_ROUTING, srcIds)) {
         //fileAdded.append(link.name());
+        //return true;
     } else {
         //fileExist.append(link.name());
+        //return false;
     }
 }
 
