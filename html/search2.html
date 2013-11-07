@@ -21,9 +21,10 @@ function testSearch(){
     if (frange>limit)frange=limit;
     var forumcount = 0;
     var forumHTML = "";
+    searchTerms = searchTerms.toLowerCase();
     for (var i = 0;i<frange;i++){
         var forum = forums[i];
-        if (forum.forumName.search(searchTerms)>-1){
+        if (forum.forumName.toLowerCase().search(searchTerms)>-1){
           forumcount+=1;
           //retroshare://forum?name=HyperBunny's%20Film%20Collection&id=c685b97170ec4608b79ee68d92939aba
           var rslink = " <a href='retroshare://forum?name="+forum.forumName+"&id="+forum.forumId+"'>"+forum.forumName+"</a>";
@@ -40,7 +41,7 @@ function testSearch(){
     var channelHTML = "";
     for (var i = 0;i<crange;i++){
         var channel = channels[i];
-        if (channel.channelName.search(searchTerms)>-1){
+        if (channel.channelName.toLowerCase().search(searchTerms)>-1){
           channelcount+=1;
           //retroshare://channel?name=HyperBunny's%20Film%20Collection&id=c685b97170ec4608b79ee68d92939aba
           var rslink = " <a href='retroshare://channel?name="+channel.channelName+"&id="+channel.channelId+"'>"+channel.channelName+"</a>";
