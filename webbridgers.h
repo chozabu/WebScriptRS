@@ -28,7 +28,7 @@ public slots:
     void broadcastMessage(QString msg);
     void sendMessage(QString peer, QString msg);
     QVariantMap getPeers();
-    void downloadFile(QString qname, QString qhash, int qsize);
+    QVariantMap downloadFile(QString qname, QString qhash, int qsize);
     void downloadURL(QString url);
     void broadcastToRS(QString msg);
     QVariantList getPublicChatQueue();

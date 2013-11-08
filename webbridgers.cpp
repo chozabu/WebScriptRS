@@ -101,24 +101,28 @@ void WebBridgeRS::onUrlDownloaded(){
 }
 
 
-void WebBridgeRS::downloadFile(QString qname, QString qhash, int qsize){
-    std::list<std::string> srcIds;
+QVariantMap WebBridgeRS::downloadFile(QString qname, QString qhash, int qsize){
 
-    // Add the link built-in source. This is needed for EXTRA files, where the source is specified in the link.
+    QVariantMap qdd;
 
-    /*if(link.type() == TYPE_EXTRAFILE)
-    {
-    #ifdef DEBUG_RSLINK
-        std::cerr << " RetroShareLink::process Adding built-in source " << link.SSLId().toStdString() << std::endl;
-    #endif
-        srcIds.push_back(link.SSLId().toStdString()) ;
-    }*/
+    FileInfo fi;
+
+    /* look up path */
+    if (rsFiles->alreadyHaveFile(qhash.toStdString(), fi)){
+        qdd.insert("status","downloaded");
+        qdd.insert("path",QString::fromStdString(fi.path));
+        qdd.insert("hash",QString::fromStdString(fi.hash));
+        qdd.insert("fname",QString::fromStdString(fi.fname));
+        qdd.insert("size",QString::number(fi.size));
+        return qdd;
+    }
 
     // Get a list of available direct sources, in case the file is browsable only.
     //
     FileInfo finfo ;
     rsFiles->FileDetails(qhash.toStdString(), RS_FILE_HINTS_REMOTE, finfo) ;
 
+    std::list<std::string> srcIds;
     for(std::list<TransferInfo>::const_iterator it(finfo.peers.begin());it!=finfo.peers.end();++it)
     {
     #ifdef DEBUG_RSLINK
@@ -141,10 +145,13 @@ void WebBridgeRS::downloadFile(QString qname, QString qhash, int qsize){
     if (rsFiles->FileRequest(qname.toStdString(), qhash.toStdString(), qsize, "", RS_FILE_REQ_ANONYMOUS_ROUTING, srcIds)) {
         //fileAdded.append(link.name());
         //return true;
+        qdd.insert("status","starting");
     } else {
         //fileExist.append(link.name());
         //return false;
+        qdd.insert("status","downloading");
     }
+    return qdd;
 }
 
 QVariantList WebBridgeRS::getChannelList(){
