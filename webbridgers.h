@@ -34,9 +34,11 @@ public slots:
     QVariantList getPublicChatQueue();
 private slots:
     void onUrlDownloaded();
+    void onDownloadComplete(QString hash);
 signals:
     void msgPush(QVariantMap message);
-    void urlDownloaded(QString, QString);
+    void urlDownloaded(QString path, QString url);
+    void rsDownloaded(QString);
 
     /*
     rsPeers->getOwnId();

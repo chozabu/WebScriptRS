@@ -10,6 +10,8 @@
 //#include "retroshare/rsnotify.h"
 #include "retroshare/rsforums.h"
 #include "retroshare/rschannels.h"
+//#include "retroshare/rsnotify.h"
+#include "gui/notifyqt.h"
 #include "filedownloader.h"
 #include <QFile>
 #include <QDir>
@@ -31,7 +33,13 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
     //nt64_t size, const std::string& dest, TransferRequestFlags flags, const std::list<std::string>& srcIds) = 0;
     //rsFiles->getSharedDirectories();
 
+    connect(NotifyQt::getInstance(), SIGNAL(downloadComplete(QString)), this, SLOT(onDownloadComplete(QString)));
 
+}
+
+void WebBridgeRS::onDownloadComplete(QString hash)
+{
+    emit rsDownloaded(hash);
 }
 
 QVariantList WebBridgeRS::getPublicChatQueue()
