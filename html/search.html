@@ -1,5 +1,11 @@
 <html><head><title>Search Files</title>
 
+<style type="text/css" media="screen">
+    img { 
+max-height:200px;
+    }
+</style>
+
 <script>
 
 function testSearch(){
@@ -20,34 +26,35 @@ function testSearch(){
     if (range>limit)range=limit;
     resultspanel.innerHTML += "" + results.length+ " files:<br/>";
     var actualpath;
+    //for each result
     for (var i = 0;i<range;i++){
-      var a = results[i].srname;
-      var ext = a.slice(a.length-3,a.length);
-      console.log(ext);
-      actualpath = results[i].fullpath+results[i].srname;
+    
+      var rslink = " <a href='retroshare://file?name="+results[i].srname+"&size="+results[i].size+"&hash="+results[i].hash+"'>RS link</a>";
+      resultspanel.innerHTML+=results[i].srname+rslink+" or ";
+      
+      var rn = "'"+results[i].srname+"'";
+      var rh = "'"+results[i].hash+"'";
+      var rs = "'"+results[i].size+"'";
+      var instantlink = '<a id="myLink" href="#" onclick="loadRSLink('+rn+', '+rh+', '+rs+');return false;">Load in webkit</a><br>';
+      resultspanel.innerHTML+=instantlink;
+      
+      //if is a local file//todo better method
       if ((results[i].fullpath!="" && results[i].fullpath!=undefined)){
-        if((ext == "png" || ext == "jpg")){
+        actualpath = results[i].fullpath+results[i].srname;
+        var httplink = " <a href='"+actualpath+"'>direct link</a>";
+        resultspanel.innerHTML+=results[i].srname+httplink+"<br/>";
+        
+        //display image if png/jpg/gif
+        var ext = results[i].srname.slice(results[i].srname.length-4,results[i].srname.length);
+        if((ext == ".png" || ext == ".jpg" || ext == ".gif")){
           console.log(results[i].fullpath)
           console.log(results[i].srname)
             
-          var imgele = "<img src='"+actualpath+"'></img>";
+          var imgele = "<img src='"+actualpath+"'></img><br>";
           resultspanel.innerHTML+=imgele;
-        }else{
-          var httplink = " <a href='"+actualpath+"'>direct link</a>";
-          //var rslink = " <a href='retroshare://file?name="+results[i].srname+"&size="+results[i].size+"&hash="+results[i].hash+"'>RS link</a>";
-          resultspanel.innerHTML+=results[i].srname+httplink+"<br/>";
         }
-      }else{
-        //var rsopenbutton = 
-        var rslink = " <a href='retroshare://file?name="+results[i].srname+"&size="+results[i].size+"&hash="+results[i].hash+"'>RS link</a>";
-        resultspanel.innerHTML+=results[i].srname+rslink+" or ";
-        
-        var rn = "'"+results[i].srname+"'";
-        var rh = "'"+results[i].hash+"'";
-        var rs = "'"+results[i].size+"'";
-        var instantlink = '<a id="myLink" href="#" onclick="loadRSLink('+rn+', '+rh+', '+rs+');return false;">Load in webkit</a><br>';
-        resultspanel.innerHTML+=instantlink;
       }
+      
       
     }
     
