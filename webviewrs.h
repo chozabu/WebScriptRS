@@ -18,11 +18,15 @@ public:
 public slots:
     void onJavaScriptWindowObjectCleared();
     void onLinkClicked(const QUrl & url);
+    void onDownloadComplete(QString hash);
+    void loadRSFile(QString qname, QString qhash, int qsize);
 
 
 
     void go2page(QString url);
     void onChange();
+private:
+    QString hashque;
 
 };
 
