@@ -34,6 +34,7 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
     //rsFiles->getSharedDirectories();
 
     connect(NotifyQt::getInstance(), SIGNAL(downloadComplete(QString)), this, SLOT(onDownloadComplete(QString)));
+    //connect(NotifyQt::getInstance(), SIGNAL(gotTurtleSearchResult(qulonglong,FileDetail)), this, SLOT()));
 
 }
 

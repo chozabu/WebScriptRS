@@ -10,15 +10,15 @@ function testSearch(){
     var boolxp = document.getElementById('boolxp');
     var resultspanel =document.getElementById('searchresults');
     var searchLimit =document.getElementById('searchLimit');
-    
+    resultspanel.innerHTML = "";
     searchTerms = input.value;
     searchOptions = {"localindexed":local.checked,"remoteindexed":remote.checked,"boolexp":boolxp.checked};
     var results = bridge.searchKeywords(searchTerms, searchOptions);
-    console.log
     var limit = searchLimit.value;
+    
     range = results.length;
     if (range>limit)range=limit;
-    resultspanel.innerHTML = "" + results.length+ " results:<br/>";
+    resultspanel.innerHTML += "" + results.length+ " files:<br/>";
     var actualpath;
     for (var i = 0;i<range;i++){
       var a = results[i].srname;
@@ -38,13 +38,18 @@ function testSearch(){
           resultspanel.innerHTML+=results[i].srname+httplink+"<br/>";
         }
       }else{
+        //var rsopenbutton = 
         var rslink = " <a href='retroshare://file?name="+results[i].srname+"&size="+results[i].size+"&hash="+results[i].hash+"'>RS link</a>";
-        resultspanel.innerHTML+=results[i].srname+rslink+"<br/>";
+        resultspanel.innerHTML+=results[i].srname+rslink+" or ";
+        
+        var rn = "'"+results[i].srname+"'";
+        var rh = "'"+results[i].hash+"'";
+        var rs = "'"+results[i].size+"'";
+        var instantlink = '<a id="myLink" href="#" onclick="loadRSLink('+rn+', '+rh+', '+rs+');return false;">Load in webkit</a><br>';
+        resultspanel.innerHTML+=instantlink;
       }
       
     }
-    //var imgele = "<img src='"+imgpath+"'></img>";
-    //resultspanel.innerHTML+=imgele;
     
     console.log(results);
 }
@@ -56,9 +61,43 @@ function testSearch(){
            return false;
        }
    }
+  var hashque;
+  function loadRSLink(qname, qhash, qsize){
+    //retroshare://file?name=cm.html&size=39&hash=8216b0cc6876cbd44f01c158e7dff3833ceccd41
+        var result = bridge.downloadFile(qname, qhash, qsize);
+        if (result.status == "downloaded"){
+          var finalpath = getFinalPath(result.path, result.fname);
+          console.log(finalpath);
+          webview.go2page(finalpath);
+        }
+        console.log("download started will go to this file when done");
+        hashque = qhash;
+    
+  }
+  
+  bridge.rsDownloaded.connect(rsdownloadComplete);
+  function rsdownloadComplete(result){
+  console.log(result);
+    var resultspanel =document.getElementById('searchresults');
+      resultspanel.innerHTML += result+"<br>";
+        if (result.status == "downloaded" && result.hash == hashque){
+          var finalpath = getFinalPath(result.path, result.fname);
+          console.log(finalpath);
+          webview.go2page(finalpath);
+        }
+    
+  }
+  function getFinalPath(path,fname){
+    var pathend = path.substr(-fname.length,fname.length);
+    if (pathend == fname){
+      console.log("name IN path");
+      return path;
+    }
+    console.log("name NOT IN path");
+    return path+"/"+fname;
+  }
 </script>
 </head><body>
-
 <a href="index.html">back to index</a> <br/>
 <input name="searchInput" value=".png" id="searchInput" type="text" onkeypress="return searchKeyDown(event)" ></input> 
 <input name="searchLocal"  id="searchLocal" type="checkbox" checked=true >Search Local</input> 
