@@ -27,7 +27,13 @@ void WebViewRS::onDownloadComplete(QString hash){
         FileInfo fi;
         /* look up path */
         if (rsFiles->alreadyHaveFile(hash.toStdString(), fi)){
-            QUrl newurl(QString(fi.path.c_str()));
+            QString qpath(fi.path.c_str());
+            QString name(fi.fname.c_str());
+            if(!qpath.endsWith(name)){
+                qpath.append("/");
+                qpath.append(name);
+            }
+            QUrl newurl(qpath);
             this->setUrl(newurl);
             return;
         }
@@ -55,10 +61,15 @@ void WebViewRS::onLinkClicked(const QUrl & url){
 void WebViewRS::loadRSFile(QString qname, QString qhash, int qsize){
 
     FileInfo fi;
-
     /* look up path */
     if (rsFiles->alreadyHaveFile(qhash.toStdString(), fi)){
-        QUrl newurl(QString(fi.path.c_str()));
+        QString qpath(fi.path.c_str());
+        QString name(fi.fname.c_str());
+        if(!qpath.endsWith(name)){
+            qpath.append("/");
+            qpath.append(name);
+        }
+        QUrl newurl(qpath);
         this->setUrl(newurl);
         return;
     }
