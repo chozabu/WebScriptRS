@@ -39,7 +39,19 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
 
 void WebBridgeRS::onDownloadComplete(QString hash)
 {
-    emit rsDownloaded(hash);
+    QVariantMap qdd;
+
+    FileInfo fi;
+
+    /* look up path */
+    if (rsFiles->alreadyHaveFile(hash.toStdString(), fi)){
+        qdd.insert("status","downloaded");
+        qdd.insert("path",QString::fromStdString(fi.path));
+        qdd.insert("hash",QString::fromStdString(fi.hash));
+        qdd.insert("fname",QString::fromStdString(fi.fname));
+        qdd.insert("size",QString::number(fi.size));
+        emit rsDownloaded(qdd);
+    }
 }
 
 QVariantList WebBridgeRS::getPublicChatQueue()

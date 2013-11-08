@@ -38,7 +38,7 @@ private slots:
 signals:
     void msgPush(QVariantMap message);
     void urlDownloaded(QString path, QString url);
-    void rsDownloaded(QString);
+    void rsDownloaded(QVariantMap);
 
     /*
     rsPeers->getOwnId();
