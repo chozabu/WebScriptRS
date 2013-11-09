@@ -35,8 +35,8 @@ function testSearch(){
       var rn = "'"+results[i].srname+"'";
       var rh = "'"+results[i].hash+"'";
       var rs = "'"+results[i].size+"'";
-      var instantlink = '<a id="myLink" href="#" onclick="loadRSLink('+rn+', '+rh+', '+rs+');return false;">Load in webkit</a><br>';
-      resultspanel.innerHTML+=instantlink;
+      //var instantlink = '<a id="myLink" href="#" onclick="loadRSLink('+rn+', '+rh+', '+rs+');return false;">Load in webkit</a><br>';
+      //resultspanel.innerHTML+=instantlink;
       
       //if is a local file//todo better method
       if ((results[i].fullpath!="" && results[i].fullpath!=undefined)){
@@ -69,7 +69,7 @@ function testSearch(){
        }
    }
   var hashque;
-  function loadRSLink(qname, qhash, qsize){
+  /*function loadRSLink(qname, qhash, qsize){
     //retroshare://file?name=cm.html&size=39&hash=8216b0cc6876cbd44f01c158e7dff3833ceccd41
         var result = bridge.downloadFile(qname, qhash, qsize);
         if (result.status == "downloaded"){
@@ -93,7 +93,7 @@ function testSearch(){
           webview.go2page(finalpath);
         }
     
-  }
+  }*/
   function getFinalPath(path,fname){
     var pathend = path.substr(-fname.length,fname.length);
     if (pathend == fname){
