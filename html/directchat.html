@@ -1,6 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <link rel="stylesheet" href="ct.css" type="text/css">
@@ -17,23 +14,20 @@
       var packetdata = JSON.parse(packet.message);
       if (packetdata["type"] == "chat"){
         var text = packetdata["msg"];
-        document.getElementById("chatout").innerHTML+=packet.peerName+" says:<br/>"+text+"<br/>";
+        var newPanel=packet.peerName+" says:<br/>"+text+"<br/>";
+        newPanel="<p class='PIPanel'>"+newPanel+"</p>";
+        document.getElementById("chatout").innerHTML+= newPanel;
        }
   }
   function submitChat()
   {
-    //return;
-    //document.getElementById("demo").innerHTML="<p>Hello World<\/p>";
-    //document.getElementById("chatout").innerHTML+="1";
       var input = document.getElementById('chatInput'),
           msg = input.value;
-    //document.getElementById("chatout").innerHTML+="2";
     var packetdata = {"type":"chat","msg":msg};
-    //bridge.broadcastMessage(JSON.stringify(packetdata));
-    //void sendMessage(QString peer, QString msg);
     bridge.sendMessage(peerID, JSON.stringify(packetdata));
-    //document.getElementById("chatout").innerHTML+="3";
-    document.getElementById("chatout").innerHTML+="you say:<br/>"+msg+"<br/>";
+    var newPanel="You say:<br/>"+msg+"<br/>";
+    newPanel="<p class='PIPanelOdd'>"+newPanel+"</p>";
+    document.getElementById("chatout").innerHTML+= newPanel;
     input.value = "";
   }
   bridge.msgPush.connect(incomingMsg);

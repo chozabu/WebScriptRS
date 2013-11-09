@@ -15,7 +15,7 @@
     var packetdata = {"type":"chat","msg":input.value};
     bridge.broadcastMessage(JSON.stringify(packetdata));
     var newPanel = "you say:<br/>"+input.value+"<br/>";
-    newPanel="<p class='PIPanel'>"+newPanel+"</p>";
+    newPanel="<p class='PIPanelOdd'>"+newPanel+"</p>";
     document.getElementById("chatout").innerHTML+= newPanel;
     input.value = "";
   }
