@@ -31,7 +31,7 @@ public slots:
     QVariantMap downloadFile(QString qname, QString qhash, int qsize);
     void downloadURL(QString url);
     void broadcastToRS(QString msg);
-    QVariantList getPublicChatQueue();
+    //QVariantList getPublicChatQueue();
 private slots:
     void onUrlDownloaded();
     void onDownloadComplete(QString hash);

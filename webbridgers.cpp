@@ -55,7 +55,7 @@ void WebBridgeRS::onDownloadComplete(QString hash)
     }
 }
 
-QVariantList WebBridgeRS::getPublicChatQueue()
+/*QVariantList WebBridgeRS::getPublicChatQueue()
 {
     std::list<ChatInfo> newchat;
     QVariantList qResults;
@@ -75,7 +75,7 @@ QVariantList WebBridgeRS::getPublicChatQueue()
         }
     }
     return qResults;
-}
+}*/
 
 void WebBridgeRS::broadcastToRS(QString msg)
 {
