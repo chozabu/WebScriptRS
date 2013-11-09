@@ -72,7 +72,7 @@ bool RsJsonItem::serialise(void *data, uint32_t& pktsize)
 
         bool ok = true;
 
-        ok &= setRsItemHeader(data, tlvsize, PacketId(), tlvsize);
+        ok &= setRsItemHeader(data, tlvsize, this->PacketId(), tlvsize);
 
         uint32_t offset = 8;  // skip header
 

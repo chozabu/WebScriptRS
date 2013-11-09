@@ -1,19 +1,15 @@
 <html><head><title>Multi-Search</title>
 
+<link rel="stylesheet" href="ct.css" type="text/css">
 <script>
 
 function testSearch(){
 
     var input = document.getElementById('searchInput');
-    var local = document.getElementById('searchLocal');
-    var remote = document.getElementById('searchRemote');
-    var boolxp = document.getElementById('boolxp');
     var resultspanel =document.getElementById('searchresults');
     var searchLimit =document.getElementById('searchLimit');
     resultspanel.innerHTML = "";
     searchTerms = input.value;
-    searchOptions = {"localindexed":local.checked,"remoteindexed":remote.checked,"boolexp":boolxp.checked};
-    var results = bridge.searchKeywords(searchTerms, searchOptions);
     var limit = searchLimit.value;
     
     var forums = bridge.getForums();
@@ -28,7 +24,7 @@ function testSearch(){
           forumcount+=1;
           //retroshare://forum?name=HyperBunny's%20Film%20Collection&id=c685b97170ec4608b79ee68d92939aba
           var rslink = " <a href='retroshare://forum?name="+forum.forumName+"&id="+forum.forumId+"'>"+forum.forumName+"</a>";
-          forumHTML+=rslink+"<br/>";
+          forumHTML+="<p class='PIPanel'>"+rslink+"</p>";
         }
     }
     resultspanel.innerHTML += "" + forumcount+ " forums found:<br/>";
@@ -45,44 +41,11 @@ function testSearch(){
           channelcount+=1;
           //retroshare://channel?name=HyperBunny's%20Film%20Collection&id=c685b97170ec4608b79ee68d92939aba
           var rslink = " <a href='retroshare://channel?name="+channel.channelName+"&id="+channel.channelId+"'>"+channel.channelName+"</a>";
-          channelHTML+=rslink+"<br/>";
+          channelHTML+="<p class='PIPanel'>"+rslink+"</p>";;
         }
     }
     resultspanel.innerHTML += "" + channelcount+ " channels found:<br/>";
     resultspanel.innerHTML += channelHTML;
-    
-    
-    
-    
-    range = results.length;
-    if (range>limit)range=limit;
-    resultspanel.innerHTML += "" + results.length+ " files:<br/>";
-    var actualpath;
-    for (var i = 0;i<range;i++){
-      var a = results[i].srname;
-      var ext = a.slice(a.length-3,a.length);
-      console.log(ext);
-      actualpath = results[i].fullpath+results[i].srname;
-      if ((results[i].fullpath!="" && results[i].fullpath!=undefined)){
-        if((ext == "png" || ext == "jpg")){
-          console.log(results[i].fullpath)
-          console.log(results[i].srname)
-            
-          var imgele = "<img src='"+actualpath+"'></img>";
-          resultspanel.innerHTML+=imgele;
-        }else{
-          var httplink = " <a href='"+actualpath+"'>direct link</a>";
-          //var rslink = " <a href='retroshare://file?name="+results[i].srname+"&size="+results[i].size+"&hash="+results[i].hash+"'>RS link</a>";
-          resultspanel.innerHTML+=results[i].srname+httplink+"<br/>";
-        }
-      }else{
-        var rslink = " <a href='retroshare://file?name="+results[i].srname+"&size="+results[i].size+"&hash="+results[i].hash+"'>RS link</a>";
-        resultspanel.innerHTML+=results[i].srname+rslink+"<br/>";
-      }
-      
-    }
-    //var imgele = "<img src='"+imgpath+"'></img>";
-    //resultspanel.innerHTML+=imgele;
     
     console.log(results);
 }
@@ -98,10 +61,7 @@ function testSearch(){
 </head><body>
 
 <a href="index.html">back to index</a> <br/>
-<input name="searchInput" value=".png" id="searchInput" type="text" onkeypress="return searchKeyDown(event)" ></input> 
-<input name="searchLocal"  id="searchLocal" type="checkbox" checked=true >Search Local</input> 
-<input name="searchRemote" id="searchRemote" type="checkbox" >Search Remote</input> 
-<input name="boolxp" checked=true id="boolxp" type="checkbox" >boolexp</input> 
+<input name="searchInput" value="retro" id="searchInput" type="text" onkeypress="return searchKeyDown(event)" ></input> 
 <button onclick="testSearch()">test search</button>
 <input name="searchLimit" value="40" id="searchLimit" type="number" >searchLimit</input> 
 <p id="searchresults"></p>

@@ -1,5 +1,6 @@
 <html><head><title>Index</title>
 
+<link rel="stylesheet" href="ct.css" type="text/css">
 <script>
 var peers = {}
 bridge.msgPush.connect(incomingMsg);
@@ -11,7 +12,7 @@ function incomingMsg(message){
 //make peer if missing
   if(!(id in peers)){
       peers[id] = {"name":name}
-      peerPanel = "<p id='"+id+"'>"+peers[id].name+"</p>";
+      peerPanel = "<p class='PIPanel' id='"+id+"'>"+peers[id].name+"</p>";
       document.getElementById("peerlist").innerHTML+=peerPanel;
 
       peerPanel =peers[id].name+" <a href=directchat.html?peerid="+id+">chat</a><br/>";
@@ -44,14 +45,20 @@ function tick(){
 </head><body>
 
 <p> try these pages</p>
-<a href="search.html">Search/download</a> local and remote indexed files<br/>
-<a href="search2.html">Search/channels/forums</a> as above, but also searches channel/forums titles<br/>
+Search:<br/>
+<a href="search.html">Search Files</a> local and remote indexed files<br/>
+<a href="search2.html">Search channels/forums</a> searches channel/forums titles - not posts<br/>
+<br/>
 <a href="broadcastchat.html">Broadcast Chat</a> - low data<br/>
+<br/>
+WebGL:<br/>
 <a href="interactiveparticles.html">Broadcast Particles</a> - medium data - paints lots of circles with three.js<br/>
 <a href="phystest.html">p2p Averaging Physics Test</a> - all clients control all objects<br/>
 <a href="phystest2.html">p2p owned-objects Physics Test</a> - clients control their own objects<br/>
 <a href="ivank/kevents.html">Ivank simple drivable car</a> - clients control their own object<br/>
 <a href="chattest.html">3d chat tree test</a> basic message+parent data is sent over the network, local 3d display<br/>
+<br/>
+Other:<br/>
 <a href="localstorage.html">Local Storage</a> no RS networking - just testing out html5 local storage<br/>
 <a href="preview.html">Local Storage 2</a> added localstorage to a codemirror demo<br/>
 <a href="downloadurl.html">download URL</a> demos downloading http:/ links to downloads folder<br/>

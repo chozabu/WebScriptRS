@@ -1,8 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<link rel="stylesheet" href="ct.css" type="text/css">
   <meta name="generator" content=
   "HTML Tidy for Linux/x86 (vers 25 March 2009), see www.w3.org" />
 
@@ -14,7 +14,9 @@
     var input = document.getElementById('chatInput');
     var packetdata = {"type":"chat","msg":input.value};
     bridge.broadcastMessage(JSON.stringify(packetdata));
-    document.getElementById("chatout").innerHTML+="you say:<br/>"+input.value+"<br/>";
+    var newPanel = "you say:<br/>"+input.value+"<br/>";
+    newPanel="<p class='PIPanel'>"+newPanel+"</p>";
+    document.getElementById("chatout").innerHTML+= newPanel;
     input.value = "";
   }
   //bridge is defined in c++
@@ -23,7 +25,9 @@
       var packetdata = JSON.parse(packet.message);
       if (packetdata["type"] == "chat"){
         var text = packetdata["msg"];
-        document.getElementById("chatout").innerHTML+=packet.peerName+" says:<br/>"+text+"<br/>";
+        var newPanel=packet.peerName+" says:<br/>"+text+"<br/>";
+        newPanel="<p class='PIPanel'>"+newPanel+"</p>";
+        document.getElementById("chatout").innerHTML+= newPanel;
       }
    }
    function chatKeyDown(e) {
@@ -39,7 +43,7 @@
   <p><a href="index.html">Back to index</a></p>
   <p id="demo"></p>
   Chat:
-  <p id="chatout"></p>
+  <div id="chatout"></div>
     <input name="chatInput" id="chatInput" type="text" onkeypress="return chatKeyDown(event)" /> <button onclick=
     "submitChat()">Submit Message</button>
 

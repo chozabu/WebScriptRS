@@ -1,5 +1,6 @@
 <html><head><title>Search Files</title>
 
+<link rel="stylesheet" href="ct.css" type="text/css">
 <style type="text/css" media="screen">
     img { 
 max-height:200px;
@@ -28,21 +29,22 @@ function testSearch(){
     var actualpath;
     //for each result
     for (var i = 0;i<range;i++){
-    
+      
+      var resultPanel = "<p class='PIPanel'>";
       var rslink = " <a href='retroshare://file?name="+results[i].srname+"&size="+results[i].size+"&hash="+results[i].hash+"'>RS link</a>";
-      resultspanel.innerHTML+=results[i].srname+rslink+" or ";
+      resultPanel+=results[i].srname+rslink+" or ";
       
       var rn = "'"+results[i].srname+"'";
       var rh = "'"+results[i].hash+"'";
       var rs = "'"+results[i].size+"'";
       //var instantlink = '<a id="myLink" href="#" onclick="loadRSLink('+rn+', '+rh+', '+rs+');return false;">Load in webkit</a><br>';
-      //resultspanel.innerHTML+=instantlink;
+      //resultPanel+=instantlink;
       
       //if is a local file//todo better method
       if ((results[i].fullpath!="" && results[i].fullpath!=undefined)){
         actualpath = results[i].fullpath+results[i].srname;
         var httplink = " <a href='"+actualpath+"'>direct link</a>";
-        resultspanel.innerHTML+=results[i].srname+httplink+"<br/>";
+        resultPanel+=results[i].srname+httplink+"<br/>";
         
         //display image if png/jpg/gif
         var ext = results[i].srname.slice(results[i].srname.length-4,results[i].srname.length);
@@ -51,8 +53,9 @@ function testSearch(){
           console.log(results[i].srname)
             
           var imgele = "<img src='"+actualpath+"'></img><br>";
-          resultspanel.innerHTML+=imgele;
+          resultPanel+=imgele;
         }
+        resultspanel.innerHTML += resultPanel+"</p>"
       }
       
       
@@ -106,6 +109,7 @@ function testSearch(){
 </script>
 </head><body>
 <a href="index.html">back to index</a> <br/>
+<div width="50%">
 <input name="searchInput" value=".png" id="searchInput" type="text" onkeypress="return searchKeyDown(event)" ></input> 
 <input name="searchLocal"  id="searchLocal" type="checkbox" checked=true >Search Local</input> 
 <input name="searchRemote" id="searchRemote" type="checkbox" >Search Remote</input> 
@@ -113,5 +117,6 @@ function testSearch(){
 <button onclick="testSearch()">test search</button>
 <input name="searchLimit" value="40" id="searchLimit" type="number" >searchLimit</input> 
 <p id="searchresults"></p>
+</div>
 </body>
 </html>
