@@ -22,10 +22,10 @@ public slots:
     void onDownloadComplete(QString hash);
     void loadRSFile(QString qname, QString qhash, int qsize);
 
-
-
     void go2page(QString url);
     void onChange();
+signals:
+    void onNewTabUrl(QString url);
 private:
     QString hashque;
 

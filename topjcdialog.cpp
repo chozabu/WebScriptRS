@@ -18,6 +18,7 @@ WebScriptDialog::WebScriptDialog(QWidget *parent) :
     bridge = new WebBridgeRS();
     connect(ui->newTabBtn, SIGNAL(clicked()), this, SLOT(addTab()));
     connect(ui->closeTabBtn, SIGNAL(clicked()), this, SLOT(removeTab()));
+    connect( bridge, SIGNAL(newTabUrl(QString)),    this,   SLOT(onNewTabUrl(QString)) );
     /*webview = new WebViewRS();
     this->ui->verticalLayout->addWidget(webview,1);
     webview->show();
@@ -66,9 +67,14 @@ void WebScriptDialog::setP3service(p3JsonRS *p3servicein)
     std::cerr << "bridge on set: " << p3service->bridge << std::endl;
     addTab();
 }
-void WebScriptDialog::addTab()
+void WebScriptDialog::addTab(){
+    onNewTabUrl("html/index.html");
+}
+
+void WebScriptDialog::onNewTabUrl(QString url)
 {
     WebTabContents * wtc = new WebTabContents(this);
+    wtc->getWebView()->setUrl(QUrl(url));
     wtc->setP3service(p3service);
     ui->webTabs->addTab(wtc,QString("hi"));
     connect( wtc->getWebView(), SIGNAL(titleChanged(QString)),    this,   SLOT(onTitleChanged(QString)) );

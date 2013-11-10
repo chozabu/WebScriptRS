@@ -17,8 +17,6 @@ public:
     ~WebTabContents();
     void setP3service(p3JsonRS *p3servicein);
     WebViewRS *getWebView();
-//public signals:
-//    void titleChanged(QString title, WebTabContents call);
 
 protected slots:
     void adjustLocation();

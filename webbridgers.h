@@ -36,6 +36,7 @@ public slots:
     //QVariantList getPublicChatQueue();
 
     QVariantMap fileDetails(QString qhash);
+    void newTabAt(QString url);
 #ifdef BRIDGEGXS
     QVariantList getPostedList();
 #endif
@@ -46,7 +47,7 @@ signals:
     void msgPush(QVariantMap message);
     void urlDownloaded(QString path, QString url);
     void rsDownloaded(QVariantMap);
-
+    void newTabUrl(QString url);
     /*
     rsPeers->getOwnId();
     rsPeers->getOnlineList();

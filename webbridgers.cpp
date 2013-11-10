@@ -38,6 +38,10 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
 
 }
 
+void WebBridgeRS::newTabAt(QString url){
+    emit newTabUrl(url);
+}
+
 #ifdef BRIDGEGXS
 QVariantList WebBridgeRS::getPostedList(){
     u_int32_t token;

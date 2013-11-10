@@ -29,6 +29,7 @@ public:
     WebBridgeRS *bridge;
 public slots:
     void addTab();
+    void onNewTabUrl(QString url);
     void removeTab();
     void onTitleChanged(QString title);
 

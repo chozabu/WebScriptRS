@@ -12,10 +12,10 @@ WebTabContents::WebTabContents(QWidget *parent) :
     //QTextBrowser
     this->ui->verticalLayout->addWidget(webview,1);
     webview->show();
-    QString loadfirst = "";//QDir::homePath();
+    //QString loadfirst = "";//QDir::homePath();
 
-    loadfirst.append("html/index.html");
-    webview->setUrl(QUrl(loadfirst));
+    //loadfirst.append("html/index.html");
+    //webview->setUrl(QUrl(loadfirst));
 
 
     //jslog = new QTextBrowser();
@@ -57,7 +57,3 @@ WebViewRS *WebTabContents::getWebView()
 {
     return webview;
 }
-/*void*WebTabContents::onTitleChanged()
-{
-
-}*/
