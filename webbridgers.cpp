@@ -38,6 +38,60 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
 
 }
 
+#ifdef BRIDGEGXS
+QVariantList WebBridgeRS::getPostedList(){
+    u_int32_t token;
+    std::list<RsGxsGroupId> groupList;
+    rsPosted->getGroupList(token, groupList);
+
+    QVariantList qResults;
+    std::list<RsGxsGroupId>::iterator it;
+    for(it = groupList.begin(); it != groupList.end(); it++) {
+        RsGxsGroupId dd;
+        dd = *it;
+        std::cout << dd << std::endl;
+        /*QVariantMap qdd;
+        qdd.insert("autoDownload",dd.);
+        qdd.insert("channelDesc",QString::fromStdWString(dd.channelDesc));
+        qdd.insert("channelFlags",dd.channelFlags);
+        qdd.insert("channelId",QString::fromStdString(dd.channelId));
+        qdd.insert("channelName",QString::fromStdWString(dd.channelName));
+        qdd.insert("destination_directory",QString::fromStdString(dd.destination_directory));
+        qdd.insert("lastPost",QString::number(dd.lastPost));
+        //qdd.insert("pngChanImage",QString::fromStdWString(dd.pngChanImage));
+        //qdd.insert("pngImageLen",QString::fromStdWString(dd.pngImageLen));
+        qdd.insert("pop",dd.pop);
+
+        qResults.append(qdd);*/
+    }
+
+    return qResults;
+}
+#endif
+
+QVariantMap WebBridgeRS::fileDetails(QString qhash)
+{
+    QVariantMap qdd;
+
+    FileInfo finfo;
+
+    /* look up path */
+    if (rsFiles->FileDetails(qhash.toStdString(), RS_FILE_HINTS_EXTRA | RS_FILE_HINTS_DOWNLOAD, finfo)){
+        qdd.insert("status","found");
+        qdd.insert("path",QString::fromStdString(finfo.path));
+        qdd.insert("hash",QString::fromStdString(finfo.hash));
+        qdd.insert("fname",QString::fromStdString(finfo.fname));
+        qdd.insert("size",QString::number(finfo.size));
+        qdd.insert("avail",QString::number(finfo.avail));
+        qdd.insert("downloadStatus",QString::number(finfo.downloadStatus));
+        qdd.insert("tfRate",QString::number(finfo.tfRate));
+        qdd.insert("transfered",QString::number(finfo.transfered));
+    } else {
+        qdd.insert("status","notfound");
+    }
+    return qdd;
+}
+
 void WebBridgeRS::onDownloadComplete(QString hash)
 {
     QVariantMap qdd;

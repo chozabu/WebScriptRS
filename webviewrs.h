@@ -6,6 +6,7 @@
 #include <QStringList>
 #include "p3JsonRS.h"
 
+/*this class along with webbridgers is passed to the browser as a JS object.*/
 class WebViewRS : public QWebView
 {
     Q_OBJECT

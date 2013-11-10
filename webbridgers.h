@@ -7,6 +7,7 @@
 
 class p3JsonRS;
 
+/*this class is passed to JS as "bridge"*/
 class WebBridgeRS : public QObject
 {
     Q_OBJECT
@@ -15,6 +16,7 @@ public:
     void pushMsgToJs(QVariantMap message);
     p3JsonRS *p3service;
 
+//the public slots are exposed to JS
 public slots:
     QVariantList getChannelList();
     QVariantList getForumInfo(QString flid);
@@ -32,6 +34,11 @@ public slots:
     void downloadURL(QString url);
     void broadcastToRS(QString msg);
     //QVariantList getPublicChatQueue();
+
+    QVariantMap fileDetails(QString qhash);
+#ifdef BRIDGEGXS
+    QVariantList getPostedList();
+#endif
 private slots:
     void onUrlDownloaded();
     void onDownloadComplete(QString hash);
