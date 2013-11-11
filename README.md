@@ -5,7 +5,7 @@ Still some way to go to be handy, So far it can:<br>
 -broadcast to compatable peers<br>
 -send targeted messages<br>
 -search indexed files<br>
--handle retroshare:// links<br>
+-handle retroshare:// links (if the link is not downloaded, it opens in a tab)<br>
 <br>
 implemented tests include<br>
 -file search<br>
