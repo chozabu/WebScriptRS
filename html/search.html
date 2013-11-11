@@ -29,6 +29,7 @@ function testSearch(){
     var actualpath;
     //for each result
     for (var i = 0;i<range;i++){
+      console.log(i);
       
       var resultPanel = "<p class='PIPanel'>";
       var rslink = " <a href='retroshare://file?name="+results[i].srname+"&size="+results[i].size+"&hash="+results[i].hash+"'>RS link</a>";
@@ -55,8 +56,8 @@ function testSearch(){
           var imgele = "<img src='"+actualpath+"'></img><br>";
           resultPanel+=imgele;
         }
-        resultspanel.innerHTML += resultPanel+"</p>"
       }
+      resultspanel.innerHTML += resultPanel+"</p>"
       
       
     }
