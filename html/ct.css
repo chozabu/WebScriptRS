@@ -273,14 +273,13 @@ a:hover { background: #5b80b2; color:white; }
 }
 .PIPanelOdd {
   background-color: rgba(245, 240, 240, 1);
-  padding: 0.3em;
+  padding: 0.1em;
   padding-left: 1em;
   padding-right: 0.2em;
   border-radius: .3em;
   border: #cdc8c2 1px solid;
   text-align: center;
   margin-left: 0.4em;
-  width: 100%;
   box-shadow: -3px 3px 5px rgba(50, 50, 50, 0.2);
 }
 .PIPanelOdd:hover {
