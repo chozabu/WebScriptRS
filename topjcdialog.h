@@ -32,6 +32,7 @@ public slots:
     void onNewTabUrl(QString url);
     void removeTab();
     void onTitleChanged(QString title);
+    void onNewRsTab(QString hash);
 
 protected slots:
     void adjustLocation();

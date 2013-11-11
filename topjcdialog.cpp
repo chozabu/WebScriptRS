@@ -78,6 +78,14 @@ void WebScriptDialog::onNewTabUrl(QString url)
     wtc->setP3service(p3service);
     ui->webTabs->addTab(wtc,QString("hi"));
     connect( wtc->getWebView(), SIGNAL(titleChanged(QString)),    this,   SLOT(onTitleChanged(QString)) );
+    connect( wtc->getWebView(), SIGNAL(requestTabForHash(QString)),    this,   SLOT(onNewRsTab(QString)) );
+}
+void WebScriptDialog::onNewRsTab(QString hash){
+    onNewTabUrl("html/loading.html?hash="+hash);
+    WebTabContents * wtc = qobject_cast<WebTabContents *>(ui->webTabs->widget(ui->webTabs->count()-1));
+    wtc->getWebView()->setHashQue(hash);
+    //ui->webTabs->currentIndex();
+    //ui->webTabs->currentWidget();
 }
 void WebScriptDialog::onTitleChanged(QString title){
     WebTabContents * wtc = qobject_cast<WebTabContents *>(QObject::sender()->parent());

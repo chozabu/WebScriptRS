@@ -73,7 +73,8 @@ void WebViewRS::loadRSFile(QString qname, QString qhash, int qsize){
         this->setUrl(newurl);
         return;
     }
-    hashque = qhash;
+    //hashque = qhash;
+    emit requestTabForHash(qhash);
     // Get a list of available direct sources, in case the file is browsable only.
     //
     FileInfo finfo ;
@@ -128,4 +129,9 @@ void WebViewRS::onChange()
 {
     this->setUrl(QUrl("canvas_interactive_particles.html"));// << "Browser::onChange()";
     qDebug() << "Browser::onChange()";
+}
+
+void WebViewRS::setHashQue(QString hash)
+{
+    hashque = hash;
 }

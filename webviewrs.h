@@ -24,8 +24,10 @@ public slots:
 
     void go2page(QString url);
     void onChange();
+    void setHashQue(QString hash);
 signals:
     void onNewTabUrl(QString url);
+    void requestTabForHash(QString url);
 private:
     QString hashque;
 
