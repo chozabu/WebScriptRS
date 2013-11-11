@@ -40,6 +40,8 @@ public slots:
 #ifdef BRIDGEGXS
     QVariantList getPostedList();
 #endif
+    QStringList getFriendList();
+    QStringList getOnlineList();
 private slots:
     void onUrlDownloaded();
     void onDownloadComplete(QString hash);

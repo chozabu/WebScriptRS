@@ -24,10 +24,6 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
     QObject(parent)
 {
 
-    /*
-    rsPeers->getOnlineList();
-    rsPeers->getFriendList();
-    */
     //rsFiles->FileRequest();
     //virtual bool FileRequest(const std::string& fname, const std::string& hash,
     //nt64_t size, const std::string& dest, TransferRequestFlags flags, const std::list<std::string>& srcIds) = 0;
@@ -37,7 +33,31 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
     //connect(NotifyQt::getInstance(), SIGNAL(gotTurtleSearchResult(qulonglong,FileDetail)), this, SLOT()));
 
 }
+QStringList strListToQStrList(std::list<std::string> in){
 
+    QStringList qResults;
+    std::list<std::string>::iterator it;
+    for(it = in.begin(); it != in.end(); it++) {
+        std::string dd;
+        dd = *it;
+        qResults.append(dd.c_str());
+    }
+    return qResults;
+}
+
+QStringList WebBridgeRS::getFriendList(){
+    std::list<std::string> ssl_ids;
+    rsPeers->getFriendList(ssl_ids);
+    std::cout << "\n\n" << ssl_ids.size() << "\n\n";
+
+    return strListToQStrList(ssl_ids);
+}
+QStringList WebBridgeRS::getOnlineList(){
+    std::list<std::string> ssl_ids;
+    rsPeers->getOnlineList(ssl_ids);
+
+    return strListToQStrList(ssl_ids);
+}
 void WebBridgeRS::newTabAt(QString url){
     emit newTabUrl(url);
 }
