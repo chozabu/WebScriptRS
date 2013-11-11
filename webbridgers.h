@@ -42,6 +42,8 @@ public slots:
 #endif
     QStringList getFriendList();
     QStringList getOnlineList();
+    QVariantMap getPeerDetails(QString ssl_id);
+    QString getPeerName(QString ssl_id);
 private slots:
     void onUrlDownloaded();
     void onDownloadComplete(QString hash);

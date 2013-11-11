@@ -33,6 +33,34 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
     //connect(NotifyQt::getInstance(), SIGNAL(gotTurtleSearchResult(qulonglong,FileDetail)), this, SLOT()));
 
 }
+//const std::string &ssl_or_gpg_id, RsPeerDetails &d
+QVariantMap WebBridgeRS::getPeerDetails(QString ssl_id){
+    RsPeerDetails d;
+    rsPeers->getPeerDetails(ssl_id.toStdString(),d);
+    QVariantMap qdd;
+    qdd.insert("trustLvl",d.trustLvl);
+    qdd.insert("connectPeriod",d.connectPeriod);
+    qdd.insert("connectState",d.connectState);
+    qdd.insert("connectStateString",QString::fromStdString(d.connectStateString));
+    qdd.insert("hasSignedMe",d.hasSignedMe);
+    //qdd.insert("gpgSigners",d.gpgSigners);
+    qdd.insert("extAddr",QString::fromStdString(d.extAddr));
+    qdd.insert("extPort",d.extPort);
+    qdd.insert("email",QString::fromStdString(d.email));
+    qdd.insert("id",QString::fromStdString(d.id));
+    //qdd.insert("ipAddressList",d.ipAddressList);
+    qdd.insert("localAddr",QString::fromStdString(d.localAddr));
+    qdd.insert("localPort",d.localPort);
+    qdd.insert("location",QString::fromStdString(d.location));
+    qdd.insert("name",QString::fromStdString(d.name));
+    qdd.insert("validLvl",d.validLvl);
+    qdd.insert("visState",d.visState);
+    return qdd;
+}
+QString WebBridgeRS::getPeerName(QString ssl_id){
+    std::list<std::string> ssl_ids;
+    return QString(rsPeers->getPeerName(ssl_id.toStdString()).c_str());
+}
 QStringList strListToQStrList(std::list<std::string> in){
 
     QStringList qResults;
@@ -48,14 +76,11 @@ QStringList strListToQStrList(std::list<std::string> in){
 QStringList WebBridgeRS::getFriendList(){
     std::list<std::string> ssl_ids;
     rsPeers->getFriendList(ssl_ids);
-    std::cout << "\n\n" << ssl_ids.size() << "\n\n";
-
     return strListToQStrList(ssl_ids);
 }
 QStringList WebBridgeRS::getOnlineList(){
     std::list<std::string> ssl_ids;
     rsPeers->getOnlineList(ssl_ids);
-
     return strListToQStrList(ssl_ids);
 }
 void WebBridgeRS::newTabAt(QString url){
