@@ -1,0 +1,80 @@
+<html><head><title>Index</title>
+
+<link rel="stylesheet" href="ct.css" type="text/css">
+</head><body>
+
+<a href="index.html">Back to Index</a><br/>
+
+All Friends:
+<p id="peerlist"></p>
+
+
+<script>
+var peers = {}
+var peerList = document.getElementById("peerlist");
+var fl = bridge.getFriendList();
+for (var f in fl){
+  var id = fl[f];
+  var pd = bridge.getPeerDetails(id);
+  peers[id] = pd;
+  peerPanel = "<p class='PIPanel' id='"+id+"'>"+
+    peers[id].name+"<br>"+
+    
+    "id: "+pd.id+" "+
+    "<br>"+
+    "connectPeriod: "+pd.connectPeriod+" "+
+    "connectState: "+pd.connectState+" "+
+    "connectStateString: "+pd.connectStateString+" "+
+    "<br>"+
+    //"email: "+pd.email+" "+
+    "hasSignedMe: "+pd.hasSignedMe+" "+
+    "<br>"+
+    "trustLvl: "+pd.trustLvl+" "+
+    "validLvl: "+pd.validLvl+" "+
+    "visState: "+pd.visState+" "+
+    "<br>"+
+    "location: "+pd.location+" "+
+    "<br>"+
+    "extAddr: "+pd.extAddr+" "+
+    "extPort: "+pd.extPort+" "+
+    "localAddr: "+pd.localAddr+" "+
+    "localPort: "+pd.localPort+" "+
+    +"</p>";
+  peerList.innerHTML+=peerPanel;
+  
+}
+/*bridge.msgPush.connect(incomingMsg);
+function incomingMsg(message){
+  //msg = JSON.parse(message.message);
+  id = message.peerID;
+  name = message.peerName;
+//make peer if missing
+  if(!(id in peers)){
+      peers[id] = {"name":name}
+      peerPanel = "<p class='PIPanel' id='"+id+"'>"+peers[id].name+"</p>";
+      document.getElementById("peerlist").innerHTML+=peerPanel;
+
+      peerPanel =peers[id].name+" <a href=directchat.html?peerid="+id+">chat</a><br/>";
+      document.getElementById("peerlistplain").innerHTML+=peerPanel;
+   }
+   //show peers last  message
+   peerPanel = peers[id].name+"<br/>Last message="+message.message;
+   document.getElementById(id).innerHTML = peerPanel
+}
+tick();
+//send a message to everyone each second, so they know we are alive
+function tick(){
+    var packetdata = {"type":"indexping","msg":"hi there"};
+    bridge.broadcastMessage(JSON.stringify(packetdata));
+    setTimeout(tick,1000);
+}
+
+   function searchKeyDown(e) {
+       if (e.keyCode == 13) {
+            testSearch();
+           return false;
+       }
+   }*/
+</script>
+</body>
+</html>
