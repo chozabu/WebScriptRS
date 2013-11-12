@@ -47,7 +47,7 @@ Feed:
   var mypeer = peers[bridge.getOwnId()];
   
   //send message announcing with postcount
-  var packetdata = {"type":"MicroBlogHi"};//,"postcount":mypeer.postids.length};
+  var packetdata = {"type":"MicroBlogHi","SenderPostCount":mypeer.postids.length};
   bridge.broadcastMessage(JSON.stringify(packetdata));
 
   
@@ -164,6 +164,7 @@ Feed:
         addPostToFeedData(post);
       }else if (packetdata["type"] == "MicroBlogHi"){
         checkOrMakePeer(packet.peerID);
+        if (packetdata.SenderPostCount  == 0)peers[packet.peerID].postids=[]//Assume peer has reset data
         var newpacketdata = {"type":"MicroBlogHiGot","postcount":peers[packet.peerID].postids.length};
         bridge.sendMessage(packet.peerID, JSON.stringify(newpacketdata));
         //checkPostCount(packetdata.postcount, packet.peerID)
