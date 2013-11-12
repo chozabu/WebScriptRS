@@ -79,7 +79,7 @@ Feed:
             console.log(chatBox.value);
             var parentPost=feedData[chatBox.parentElement.parentElement.id];
             var rootPeerID = parentPost.peerID;
-            if (parentPost.hasOwnProperty('rootPeerID'))parentPost.rootPeerID;
+            if (parentPost.hasOwnProperty('rootPeerID'))rootPeerID = parentPost.rootPeerID;
             submitReply(chatBox.value, chatBox.parentElement.parentElement.id, rootPeerID);
             chatBox.value = "";
            return false;
@@ -96,10 +96,11 @@ Feed:
                 "time":Date.now()
                 }
     console.log("parentid:"+post['parentID']);
+    console.log("rootPeerID:"+rootPeerID);
     var packetdata = {"type":"MicroBlogReply","msg":post};
-    bridge.sendMessage(feedData[parentID].peerID, JSON.stringify(packetdata));
+    bridge.sendMessage(rootPeerID, JSON.stringify(packetdata));
     addPostToFeedPanel(post);
-    addPostToFeedData(post, post.rootPeerID);
+    addPostToFeedData(post);
     
   }
   function submitChatPress(){
@@ -120,9 +121,12 @@ Feed:
     addPostToFeedData(post);
     
   }
-  function addPostToFeedData(post, addToPeer){
-  var addToPeer = addToPeer = post.peerID;;
-  if (post.hasOwnProperty('rootPeerID'))addToPeer = post.rootPeerID
+  function addPostToFeedData(post){
+    var addToPeer = addToPeer = post.peerID;
+    console.log('addToPeer '+addToPeer);
+    if (post.hasOwnProperty('rootPeerID'))addToPeer = post.rootPeerID;
+    checkOrMakePeer(addToPeer);
+    console.log('oddToPeer '+addToPeer);
     //if (typeof(addToPeer) === "undefined")addToPeer = post.peerID;
     feedData[post.postid]=post;
     localStorage.microblogfeed = JSON.stringify(feedData);
@@ -214,15 +218,18 @@ Feed:
         console.log(post);
         addPostToFeedPanel(post);
         addPostToFeedData(post);
-      }else if (packetdata["type"] == "MicroBlogReply"){
+      }else if (packetdata["type"] == "MicroBlogReply" || packetdata["type"] == "MicroBlogReplyBroadcast"){
         audioPop.play();;
         checkOrMakePeer(packet.peerID);
+        checkOrMakePeer(packet.rootPeerID);
         var post = packetdata["msg"];
         console.log(post);
         addPostToFeedPanel(post);
-        addPostToFeedData(post, bridge.getOwnId());
-        var newpacketdata = {"type":"MicroBlog","msg":post};
-        bridge.broadcastMessage(JSON.stringify(newpacketdata));
+        addPostToFeedData(post);
+        if(packetdata["type"] == "MicroBlogReply"){
+          var newpacketdata = {"type":"MicroBlogReplyBroadcast","msg":post};
+          bridge.broadcastMessage(JSON.stringify(newpacketdata));
+        }
       }else if (packetdata["type"] == "MicroBlogHi"){
         checkOrMakePeer(packet.peerID);
         if (packetdata.SenderPostCount  == 0)peers[packet.peerID].postids=[]//Assume peer has reset data
@@ -249,8 +256,10 @@ Feed:
       console.log(mypeer.postids.length);
       for (var pc = postcount;pc<mypeer.postids.length;pc++){
           var pid = mypeer.postids[pc];
-          console.log(pid)
-          var packetdata = {"type":"MicroBlog","msg":feedData[pid]};
+          console.log(pid);
+          var mType = "MicroBlog"
+          if(feedData[pid].hasOwnProperty("rootPeerID")) mType = "MicroBlogReplyBroadcast";
+          var packetdata = {"type":mType,"msg":feedData[pid]};
           console.log(packetdata)
           bridge.sendMessage(peerID, JSON.stringify(packetdata));
       }
