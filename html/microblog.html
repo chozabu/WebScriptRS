@@ -171,7 +171,7 @@ Feed:
     replyBox.name="replyInput";
     replyBox.id="replyInput";
     replyBox.type="text";
-    replyBox.onkeypress="return replyKeyDown(event)";
+    replyBox.onkeypress=replyKeyDown;//"return replyKeyDown(event)";
     replyBox.onclick=replyClicked;
     
     var replysListpanel = document.createElement("div");
