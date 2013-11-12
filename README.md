@@ -5,7 +5,12 @@ Still some way to go to be handy, So far it can:<br>
 -broadcast to compatable peers<br>
 -send targeted messages<br>
 -search indexed files<br>
+-download from hash+size+name
 -handle retroshare:// links (if the link is not downloaded, it opens in a tab)<br>
+-get Peer/online/channel/forumList<br>
+-peer details/avatar<br>
+-download any url<br>
+-open new tabs<br>
 <br>
 implemented tests include<br>
 -file search<br>
@@ -18,10 +23,16 @@ implemented tests include<br>
 -car driving test - ported from ivanks keyboard demo, players broadcast positions<br/>
 -3d broadcast/wall chat - draggable text nodes. Shift+mouse moves camera<br/>
 -local storage notepad - uses html5 persistant storage and editable tags (plus a source editor)<br/>
+-Live MicroBlogging. only Friends see your messages, and friends of a friend whose message you comment on(buggy)<br/>
 
 
 
 #### Warning Included tests do not sanitise HTML. The JS has not been written with security in mind.
+index12nov2013.png  microblog12nov2013.png  search12nov2013.png
+
+![My image](http://chozabu.net/stuff/microblog12nov2013.png)
+![My image](http://chozabu.net/stuff/search12nov2013.png)
+![My image](http://chozabu.net/stuff/index12nov2013.png)
 ![My image](http://chozabu.net/stuff/WebScriptRS.png)
 ![My image](http://chozabu.net/stuff/WebScriptRS1.png)
 ![My image](http://chozabu.net/stuff/WebScriptRS2.png)
