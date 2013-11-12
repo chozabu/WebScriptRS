@@ -42,76 +42,7 @@ body {
   text-align: center;
   /*margin: 1em;*/
 }
-.mainContentPanel{
-  width: 80%;
-  margin: 0 auto;
-}
-.mainPropContainer {
-  padding: 1em;
-  /*background-color: #ede8e2;*/
-  width: 100%;
-  margin-top: 50px;
-}
-.propCommentsContainer{
-  padding: 1em;
-  /*background-color: #e9f5f1;*/
-  width: 100%;
-}
-.homeTopContainer {
-  padding: 1em;
-  /*background-color: #ede8e2;*/
-  width: 100%;
-}
-.homeBottomContainer{
-  padding: 1em;
-  /*background-color: #e9f5f1;*/
-  width: 100%;
-}
-.groupTopContainer {
-  padding: 1em;
-  /*background-color: #ede8e2;*/
-  width: 100%;
-}
-.groupBottomContainer{
-  padding: 1em;
-  /*background-color: #e9f5f1;*/
-  width: 100%;
-}
-.topBottomFade{
-    /*
-	height: 1em;
-	width: 100%;
-background: rgb(237,232,226);
-background: -moz-linear-gradient(top,  rgba(237,232,226,1) 0%, rgba(255,249,244,1) 29%, rgba(84,91,78,1) 41%, rgba(138,150,127,1) 54%, rgba(233,245,241,1) 90%, rgba(233,245,241,1) 100%);
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(237,232,226,1)), color-stop(29%,rgba(255,249,244,1)), color-stop(41%,rgba(84,91,78,1)), color-stop(54%,rgba(138,150,127,1)), color-stop(90%,rgba(233,245,241,1)), color-stop(100%,rgba(233,245,241,1)));
-background: -webkit-linear-gradient(top,  rgba(237,232,226,1) 0%,rgba(255,249,244,1) 29%,rgba(84,91,78,1) 41%,rgba(138,150,127,1) 54%,rgba(233,245,241,1) 90%,rgba(233,245,241,1) 100%);
-background: -o-linear-gradient(top,  rgba(237,232,226,1) 0%,rgba(255,249,244,1) 29%,rgba(84,91,78,1) 41%,rgba(138,150,127,1) 54%,rgba(233,245,241,1) 90%,rgba(233,245,241,1) 100%);
-background: -ms-linear-gradient(top,  rgba(237,232,226,1) 0%,rgba(255,249,244,1) 29%,rgba(84,91,78,1) 41%,rgba(138,150,127,1) 54%,rgba(233,245,241,1) 90%,rgba(233,245,241,1) 100%);
-background: linear-gradient(to bottom,  rgba(237,232,226,1) 0%,rgba(255,249,244,1) 29%,rgba(84,91,78,1) 41%,rgba(138,150,127,1) 54%,rgba(233,245,241,1) 90%,rgba(233,245,241,1) 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ede8e2', endColorstr='#e9f5f1',GradientType=0 );
-*/
 
-}
-.tagItem {
-    display: inline-block;
-}
-.tagsPanel{
-    width: "70%";
-    margin: 1em;
-}
-.tagsList{
-    width: "70%";
-}
-a { color:#2773ff; }
-
-a:hover { background: #5b80b2; color:white; }
-
-.officialPanel {
-    margin: 1em   
-}
-.casePanel {
-    margin: 1em   
-}
 .panelHeader {
   font-size:22px;
   text-align: center;
@@ -218,44 +149,7 @@ a:hover { background: #5b80b2; color:white; }
   border: white 1px solid;
   background-color: rgba(210,210,210, .6);
 }
-.gwt-TabBar{
-    margin-left: -4px;
-}
-.gwt-TabBarFirst{
-}
-.gwt-TabBarItem{
-  padding: 0.4em;
-  text-align: center;
-  font-size: 22;
-}
-.gwt-TabBarItem-wrapper{
-  border-top-left-radius: .5em;
-  border-top-right-radius: .5em;
-  background-color: rgba(180,200,200,.7);
-  padding: 0.2em;
-  text-align: center;
-}
-.gwt-TabBarItem-wrapper-selected {
-  border-top-left-radius: 0.5em;
-  border-top-right-radius: 0.5em;
-  width:100%;
-  background-color: rgba(255,255,255,.7);
-  padding: 0.2em;
-  text-align: center;
-}
-.gwt-TabPanel {
-  box-shadow: -4px 4px 5px rgba(50, 50, 50, 0.2);
-}
-.gwt-TabPanelBottom {
-    /*border-top:none;*/
-  border-top-right-radius: .5em;
-  border-bottom-left-radius: .5em;
-  border-bottom-right-radius: .5em;
-  background-color: rgba(180,200,200,.8);
-  padding: 0.2em;
-  #margin-left:0.3em;
-  text-align: center;
-}
+
 .PIPanel {
   background-color: rgba(240, 240, 240, 0.82);
   padding: 0.1em;
@@ -497,32 +391,3 @@ background: rgba(254,255,240,0.45);
   width: 100%;
 }
 
-.gwt-DialogBox {
-  border: 2px outset;
-  background-color: white;
-}
-
-.gwt-DialogBox .Caption {
-  background-color: #C3D9FF;
-  padding: 3px;
-  margin: 2px;
-  font-weight: bold;
-  cursor: default;
-}
-.gwt-Hyperlink {
-    padding-left: 0.1em;
-    padding-right: 0.1em;
-}
-.gwt-Label {
-    padding-left: 0.15em;
-    padding-right: 0.15em;
-}
-.gwt-DialogBox .Contents {
-    padding: 10px;
-}
-
-.gwt-PopupPanelGlass {
-    background-color: #000;
-    opacity: 0.3;
-    filter: alpha(opacity=30);
-}

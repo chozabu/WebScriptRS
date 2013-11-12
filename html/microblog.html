@@ -140,6 +140,12 @@ Feed:
     var childPanel = document.createElement("div");
     childPanel.className = 'PIPanelOdd'
     childPanel.innerHTML = "<div id='"+postid+"replies'></div>"+replyBox;
+    var imgPanel = document.createElement("img");
+    bridge.getAvatarDetails(bridge.getOwnId()).assignTo(imgPanel);
+    imgPanel.width/=3;
+    imgPanel.height/=3;
+    //imgPanel.style.display = "inline";//.float="center";
+    childPanel.insertBefore(imgPanel, childPanel.lastChild);
     return childPanel;
   }
   
