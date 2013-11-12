@@ -33,19 +33,13 @@ function testSearch(){
       
       var resultPanel = "<p class='PIPanel'>";
       var rslink = " <a href='retroshare://file?name="+results[i].srname+"&size="+results[i].size+"&hash="+results[i].hash+"'>RS link</a>";
-      resultPanel+=results[i].srname+rslink+" or ";
-      
-      var rn = "'"+results[i].srname+"'";
-      var rh = "'"+results[i].hash+"'";
-      var rs = "'"+results[i].size+"'";
-      //var instantlink = '<a id="myLink" href="#" onclick="loadRSLink('+rn+', '+rh+', '+rs+');return false;">Load in webkit</a><br>';
-      //resultPanel+=instantlink;
+      resultPanel+="<b>"+results[i].srname+"</b>"+rslink+" or ";
       
       //if is a local file//todo better method
       if ((results[i].fullpath!="" && results[i].fullpath!=undefined)){
         actualpath = results[i].fullpath+results[i].srname;
         var httplink = " <a href='"+actualpath+"'>direct link</a>";
-        resultPanel+=results[i].srname+httplink+"<br/>";
+        resultPanel+=httplink+"<br/>";
         
         //display image if png/jpg/gif
         var ext = results[i].srname.slice(results[i].srname.length-4,results[i].srname.length);
