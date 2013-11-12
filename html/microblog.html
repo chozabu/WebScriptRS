@@ -111,9 +111,16 @@ Feed:
         addPostToFeedData(post);
       }else if (packetdata["type"] == "microbloghi"){
         checkOrMakePeer(packet.peerID);
-        var packetdata = {"type":"microblogyourcount","postcount":peers[packet.peerID].postids.length};
+        var packetdata = {"type":"microblogHiGot","postcount":peers[packet.peerID].postids.length};
         bridge.sendMessage(packet.peerID, JSON.stringify(packetdata));
         //checkPostCount(packetdata.postcount, packet.peerID)
+      }else if (packetdata["type"] == "microblogHiGot"){
+        checkOrMakePeer(packet.peerID);
+        console.log("packetdata.postcount: "+packetdata.postcount);
+        console.log("packet.peerName: "+packet.peerName);
+        var packetdata = {"type":"microblogyourcount","postcount":peers[packet.peerID].postids.length};
+        bridge.sendMessage(packet.peerID, JSON.stringify(packetdata));
+        sendPostsFromPos(packetdata.postcount, packet.peerID)
       }else if (packetdata["type"] == "microblogyourcount"){
         console.log("packetdata.postcount: "+packetdata.postcount);
         console.log("packet.peerName: "+packet.peerName);
