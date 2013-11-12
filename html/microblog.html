@@ -91,7 +91,7 @@ Feed:
     localStorage.microblogpeers = JSON.stringify(peers);
   }
   function addPostToFeedPanel(post){
-    var newPanel = post.peerName+": "+post.text+" @"+post.time;
+    var newPanel = post.peerName+": "+post.text+" @"+new Date(post.time);
     newPanel="<p class='PIPanel'>"+newPanel+"</p>";
     chatout.innerHTML= newPanel+chatout.innerHTML;
     chatInput.value = "";
