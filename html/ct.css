@@ -157,8 +157,9 @@ body {
   padding-right: 0.2em;
   border-radius: .3em;
   border: #bdb8b2 1px solid;
-  text-align: center;
+  text-align: left;
   margin-left: 0.4em;
+  margin-bottom: 0.4em;
   box-shadow: -4px 4px 5px rgba(50, 50, 50, 0.2);
 }
 .PIPanel:hover {
@@ -172,7 +173,7 @@ body {
   padding-right: 0.2em;
   border-radius: .3em;
   border: #cdc8c2 1px solid;
-  text-align: center;
+  text-align: left;
   margin-left: 0.4em;
   box-shadow: -3px 3px 5px rgba(50, 50, 50, 0.2);
 }
