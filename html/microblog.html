@@ -1,0 +1,152 @@
+<html><head><title>Index</title>
+
+<link rel="stylesheet" href="ct.css" type="text/css">
+</head><body>
+
+<a href="index.html">Back to Index</a><br/>
+
+
+    <input name="chatInput" id="chatInput" type="text" onkeypress="return chatKeyDown(event)" /> <button onclick=
+    "submitChat()">Submit Message</button>
+    <button onclick= "clearStorage()">Clear Local Storage</button>
+<br>
+Feed:
+<p id="chatout"></p>
+
+
+<script>
+
+  var feedID = [];
+  var feedData = {};
+  //var posts = {};
+  var peers = {};
+  //console.log(localStorage.microblogfeed);
+  if ( localStorage.microblogfeed != "undefined" && localStorage.microblogfeed != undefined && localStorage.microblogfeed != "") feedData = JSON.parse(localStorage.microblogfeed);
+  if ( localStorage.microblogfeed != "undefined" && localStorage.microblogfeedID != undefined && localStorage.microblogfeedID != "") feedID = JSON.parse(localStorage.microblogfeedID);
+  if ( localStorage.microblogpeers != "undefined" && localStorage.microblogpeers != undefined && localStorage.microblogpeers != "") peers = JSON.parse(localStorage.microblogpeers);
+  console.log(peers);
+  function clearStorage(){
+    localStorage.microblogfeed = undefined;
+    localStorage.microblogfeedID = undefined;
+    localStorage.microblogpeers = undefined;
+    feedID = [];
+    feedData = {};
+    peers = {};
+  }
+  
+  //put self in peers
+  checkOrMakePeer(bridge.getOwnId());
+  var mypeer = peers[bridge.getOwnId()]
+  
+  //send message announcing with postcount
+  var packetdata = {"type":"microbloghi","postcount":mypeer.postids.length};
+  bridge.broadcastMessage(JSON.stringify(packetdata));
+  
+  
+  for (var p in peers){
+        var packetdata = {"type":"microblogyourcount","postcount":peers[p].postids.length};
+        bridge.sendMessage(p, JSON.stringify(packetdata));
+  }
+
+  var chatout = document.getElementById("chatout");
+  
+  for (f in feedID){
+    feedid = feedID[f]
+    //console.log(feedID[f]);
+    //console.log(feedData[feedid]);
+    addPostToFeedPanel(feedData[feedid]);
+    }
+
+   function chatKeyDown(e) {
+       if (e.keyCode == 13) {
+            submitChat();
+           return false;
+       }
+   }
+  function submitChat()
+  {
+    var post = {"postid":Math.random(),
+                "text":chatInput.value,
+                "peerID":bridge.getOwnId(),
+                "peerName":bridge.getPeerName(bridge.getOwnId()),
+                "time":Date.now()
+                }
+    //console.log( localStorage.microblogfeed);
+    var packetdata = {"type":"microblog","msg":post};
+    bridge.broadcastMessage(JSON.stringify(packetdata));
+    addPostToFeedPanel(post);
+    addPostToFeedData(post);
+    
+  }
+  function addPostToFeedData(post){
+    feedData[post.postid]=post;
+    localStorage.microblogfeed = JSON.stringify(feedData);
+    
+    feedID.push(post.postid);
+    localStorage.microblogfeedID = JSON.stringify(feedID);
+    
+    console.log("added post from: "+post.peerName)
+    console.log( peers[post.peerID])
+    peers[post.peerID].postids.push(post.postid);
+    localStorage.microblogpeers = JSON.stringify(peers);
+  }
+  function addPostToFeedPanel(post){
+    var newPanel = post.peerName+": "+post.text+" @"+post.time;
+    newPanel="<p class='PIPanel'>"+newPanel+"</p>";
+    chatout.innerHTML= newPanel+chatout.innerHTML;
+    chatInput.value = "";
+  }
+  
+  
+  bridge.msgPush.connect(incomingMsg);
+  //INCOMING
+  function incomingMsg(packet){
+      var packetdata = JSON.parse(packet.message);
+      console.log("got: "+packetdata["type"]);
+      if (packetdata["type"] == "microblog"){
+        checkOrMakePeer(packet.peerID);
+        var post = packetdata["msg"];
+        addPostToFeedPanel(post);
+        addPostToFeedData(post);
+      }else if (packetdata["type"] == "microbloghi"){
+        checkOrMakePeer(packet.peerID);
+        var packetdata = {"type":"microblogyourcount","postcount":peers[packet.peerID].postids.length};
+        bridge.sendMessage(packet.peerID, JSON.stringify(packetdata));
+        //checkPostCount(packetdata.postcount, packet.peerID)
+      }else if (packetdata["type"] == "microblogyourcount"){
+        console.log("packetdata.postcount: "+packetdata.postcount);
+        console.log("packet.peerName: "+packet.peerName);
+        checkOrMakePeer(packet.peerID);
+        sendPostsFromPos(packetdata.postcount, packet.peerID)
+      }/*else if (packetdata["type"] == "microblogreq"){
+        console.log("got: "+packetdata["type"]);
+        checkOrMakePeer(packet.peerID);
+        sendPostsFromPos(packetdata.frompost, packet.peerID)
+      }*/
+   }
+   function sendPostsFromPos(postcount, peerID){
+      for (var pc = postcount;pc<mypeer.postids.length;pc++){
+          var pid = mypeer.postids[pc];
+          var packetdata = {"type":"microblog","msg":feedData[pid]};
+          bridge.sendMessage(peerID, JSON.stringify(packetdata));
+      }
+   }
+   /*function checkPostCount(postcount, peerID){
+      var peer = peers[peerID];
+      console.log("comparing"+peer.postids.length +"<"+  postcount);
+      if(postcount < peer.postids.length){
+        console.log("-true");
+        var packetdata = {"type":"microblogreq","frompost":peer.postids.length};
+        console.log("sending req to: "+peerID);
+        bridge.sendMessage(peerID, JSON.stringify(packetdata));
+      }
+   }*/
+   function checkOrMakePeer(peerID){
+    if (peers.hasOwnProperty(peerID))return;
+    peers[peerID] = {"postids":[]}
+    localStorage.peers = JSON.stringify(peers);
+   }
+
+</script>
+</body>
+</html>
