@@ -131,7 +131,7 @@ Feed:
   }
   function addPostToFeedPanel(post){
     if (document.getElementById(post.postid))return false;
-    var newPanel = post.peerName+": "+post.text+" <br><font size='1em'> @"+new Date(post.time)+"</font>" ;
+    var newPanel = "<b>"+post.peerName+"</b>: "+post.text+" <br><font size='1em'> @"+new Date(post.time)+"</font>" ;
 
     var finalPanel = document.createElement("div");
     finalPanel.className = 'PIPanel';
@@ -143,11 +143,14 @@ Feed:
     finalPanel.insertBefore(imgPanel, finalPanel.firstChild);
     if(post.hasOwnProperty("parentID")){
       var replypanel = document.getElementById(post.parentID+"replies");
+      imgPanel.style.float="left";
       replypanel.insertBefore(finalPanel, replypanel.firstChild);
       imgPanel.width/=3;
       imgPanel.height/=3;
     }else{
       chatout.insertBefore(finalPanel, chatout.firstChild);
+      //if (finalPanel.height < imgPanel.height)
+      finalPanel.height=100;//imgPanel.height;
     }
     return true;
   }
@@ -158,9 +161,10 @@ Feed:
     childPanel.innerHTML = "<div id='"+postid+"replies'></div>"+replyBox;
     var imgPanel = document.createElement("img");
     bridge.getAvatarDetails(bridge.getOwnId()).assignTo(imgPanel);
-    imgPanel.width/=3;
-    imgPanel.height/=3;
-    //imgPanel.style.display = "inline";//.float="center";
+    imgPanel.width/=4;
+    imgPanel.height/=4;
+    imgPanel.style.float="left";
+    imgPanel.style.opacity=0.5;
     childPanel.insertBefore(imgPanel, childPanel.lastChild);
     return childPanel;
   }
