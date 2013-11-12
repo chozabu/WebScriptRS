@@ -7,7 +7,7 @@
 
 
     <input name="chatInput" id="chatInput" type="text" onkeypress="return chatKeyDown(event)" /> <button onclick=
-    "submitChat()">Submit Message</button>
+    "submitChatPress()">Submit Message</button>
     <button onclick= "clearStorage()">Clear Local Storage</button>
 <br>
 Feed:
@@ -17,6 +17,7 @@ Feed:
 <script>
 
   var chatout = document.getElementById("chatout");
+  var chatInput = document.getElementById("chatInput");
   var feedID = [];
   var feedData = {};
   //var posts = {};
@@ -59,18 +60,42 @@ Feed:
 
    function chatKeyDown(e) {
        if (e.keyCode == 13) {
-            submitChat();
+            submitChatPress();
+          chatInput.value = "";
            return false;
        }
    }
-  function submitChat()
+   function replyKeyDown(e) {
+       if (e.keyCode == 13) {
+          var chatBox = e.srcElement;
+          //chatBox.parentElement.id="asdasd";
+          console.log(chatBox);
+          console.log(chatBox.parentElement);
+          console.log(chatBox.parentElement.parentElement);
+          console.log(chatBox.parentElement.parentElement.id);
+          //console.log(chatBox.parentElement.getElementById("replies"));
+          var replybox = chatBox.parentElement.firstChild;//getElementById("replies");
+            //replybox.innerHTML = chatBox.value;
+            console.log(chatBox.value);
+            submitChat(chatBox.value, chatBox.parentElement.parentElement.id);
+            chatBox.value = "";
+           return false;
+       }
+   }
+  function submitChatPress(){
+    submitChat(chatInput.value)
+    chatInput.value="";
+    }
+  function submitChat(message, parentID)
   {
     var post = {"postid":Math.random(),
-                "text":chatInput.value,
+                "text":message,
                 "peerID":bridge.getOwnId(),
                 "peerName":bridge.getPeerName(bridge.getOwnId()),
                 "time":Date.now()
                 }
+    if(typeof(parentID)!='undefined')post['parentID']=parentID;
+    console.log("parentid:"+post['parentID']);
     //console.log( localStorage.microblogfeed);
     var packetdata = {"type":"MicroBlog","msg":post};
     bridge.broadcastMessage(JSON.stringify(packetdata));
@@ -85,16 +110,33 @@ Feed:
     feedID.push(post.postid);
     localStorage.microblogfeedID = JSON.stringify(feedID);
     
-    console.log("added post from: "+post.peerName + " " + post.peerID)
+    console.log("added post from: "+post.peerName + " " + post.peerID + " " + post.text)
     console.log( peers[post.peerID])
     peers[post.peerID].postids.push(post.postid);
     localStorage.microblogpeers = JSON.stringify(peers);
   }
   function addPostToFeedPanel(post){
     var newPanel = post.peerName+": "+post.text+" @"+new Date(post.time);
-    newPanel="<div class='PIPanel'>"+newPanel+"</div>";
-    chatout.innerHTML= newPanel+chatout.innerHTML;
-    chatInput.value = "";
+
+    var finalPanel = document.createElement("div");
+    finalPanel.className = 'PIPanel';
+    finalPanel.innerHTML = newPanel;
+    finalPanel.id = post.postid;
+    finalPanel.appendChild(makeReplyPanel(post.postid));
+    if(post.hasOwnProperty("parentID")){
+      //chatout.insertBefore(finalPanel, chatout.firstChild);
+      var replypanel = document.getElementById(post.parentID+"replies");
+      replypanel.insertBefore(finalPanel, replypanel.firstChild);
+    }else{
+      chatout.insertBefore(finalPanel, chatout.firstChild);
+    }
+  }
+  function makeReplyPanel(postid){
+      var replyBox = '<input name="replyInput" id="replyInput" type="text" onkeypress="return replyKeyDown(event)" />'
+    var childPanel = document.createElement("div");
+    childPanel.className = 'PIPanelOdd'
+    childPanel.innerHTML = "<div id='"+postid+"replies'></div>"+replyBox;
+    return childPanel;
   }
   
   
@@ -127,11 +169,7 @@ Feed:
         console.log("packetdata.postcount: "+packetdata.postcount);
         console.log("packet.peerName: "+packet.peerName);
         sendPostsFromPos(packetdata.postcount, packet.peerID)
-      }/*else if (packetdata["type"] == "microblogreq"){
-        console.log("got: "+packetdata["type"]);
-        checkOrMakePeer(packet.peerID);
-        sendPostsFromPos(packetdata.frompost, packet.peerID)
-      }*/
+      }
    }
    function sendPostsFromPos(postcount, peerID){
       console.log("sendPostsFromPos: postcount to mypeer.postids.length");
@@ -145,16 +183,6 @@ Feed:
           bridge.sendMessage(peerID, JSON.stringify(packetdata));
       }
    }
-   /*function checkPostCount(postcount, peerID){
-      var peer = peers[peerID];
-      console.log("comparing"+peer.postids.length +"<"+  postcount);
-      if(postcount < peer.postids.length){
-        console.log("-true");
-        var packetdata = {"type":"microblogreq","frompost":peer.postids.length};
-        console.log("sending req to: "+peerID);
-        bridge.sendMessage(peerID, JSON.stringify(packetdata));
-      }
-   }*/
    function checkOrMakePeer(peerID){
     if (peers.hasOwnProperty(peerID))return;
     peers[peerID] = {"postids":[]}
