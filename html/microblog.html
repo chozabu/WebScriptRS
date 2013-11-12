@@ -16,22 +16,24 @@ Feed:
 
 <script>
 
+  var chatout = document.getElementById("chatout");
   var feedID = [];
   var feedData = {};
   //var posts = {};
   var peers = {};
   //console.log(localStorage.microblogfeed);
-  if ( localStorage.microblogfeed != "undefined" && localStorage.microblogfeed != undefined && localStorage.microblogfeed != "") feedData = JSON.parse(localStorage.microblogfeed);
-  if ( localStorage.microblogfeed != "undefined" && localStorage.microblogfeedID != undefined && localStorage.microblogfeedID != "") feedID = JSON.parse(localStorage.microblogfeedID);
-  if ( localStorage.microblogpeers != "undefined" && localStorage.microblogpeers != undefined && localStorage.microblogpeers != "") peers = JSON.parse(localStorage.microblogpeers);
+  if ( localStorage.getItem("microblogfeed") != null) feedData = JSON.parse(localStorage.microblogfeed);
+  if ( localStorage.getItem("microblogfeedID") != null) feedID = JSON.parse(localStorage.microblogfeedID);
+  if ( localStorage.getItem("microblogpeers") != null) peers = JSON.parse(localStorage.microblogpeers);
   console.log(peers);
   function clearStorage(){
-    localStorage.microblogfeed = undefined;
-    localStorage.microblogfeedID = undefined;
-    localStorage.microblogpeers = undefined;
+    localStorage.removeItem("microblogfeed");
+    localStorage.removeItem("microblogfeedID");
+    localStorage.removeItem("microblogpeers");
     feedID = [];
     feedData = {};
     peers = {};
+    chatout.innerHTML = ""
   }
   
   //put self in peers
@@ -48,7 +50,6 @@ Feed:
         bridge.sendMessage(p, JSON.stringify(packetdata));
   }
 
-  var chatout = document.getElementById("chatout");
   
   for (f in feedID){
     feedid = feedID[f]
