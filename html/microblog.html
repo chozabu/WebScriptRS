@@ -41,14 +41,8 @@ Feed:
   var mypeer = peers[bridge.getOwnId()]
   
   //send message announcing with postcount
-  var packetdata = {"type":"microbloghi","postcount":mypeer.postids.length};
+  var packetdata = {"type":"MicroBlogHi"};//,"postcount":mypeer.postids.length};
   bridge.broadcastMessage(JSON.stringify(packetdata));
-  
-  
-  for (var p in peers){
-        var packetdata = {"type":"microblogyourcount","postcount":peers[p].postids.length};
-        bridge.sendMessage(p, JSON.stringify(packetdata));
-  }
 
   
   for (f in feedID){
@@ -73,7 +67,7 @@ Feed:
                 "time":Date.now()
                 }
     //console.log( localStorage.microblogfeed);
-    var packetdata = {"type":"microblog","msg":post};
+    var packetdata = {"type":"MicroBlog","msg":post};
     bridge.broadcastMessage(JSON.stringify(packetdata));
     addPostToFeedPanel(post);
     addPostToFeedData(post);
@@ -104,27 +98,28 @@ Feed:
   function incomingMsg(packet){
       var packetdata = JSON.parse(packet.message);
       console.log("got: "+packetdata["type"]);
-      if (packetdata["type"] == "microblog"){
+      console.log("from: "+packet.peerName);
+      if (packetdata["type"] == "MicroBlog"){
         checkOrMakePeer(packet.peerID);
         var post = packetdata["msg"];
         addPostToFeedPanel(post);
         addPostToFeedData(post);
-      }else if (packetdata["type"] == "microbloghi"){
+      }else if (packetdata["type"] == "MicroBlogHi"){
         checkOrMakePeer(packet.peerID);
-        var packetdata = {"type":"microblogHiGot","postcount":peers[packet.peerID].postids.length};
-        bridge.sendMessage(packet.peerID, JSON.stringify(packetdata));
+        var newpacketdata = {"type":"MicroBlogHiGot","postcount":peers[packet.peerID].postids.length};
+        bridge.sendMessage(packet.peerID, JSON.stringify(newpacketdata));
         //checkPostCount(packetdata.postcount, packet.peerID)
-      }else if (packetdata["type"] == "microblogHiGot"){
+      }else if (packetdata["type"] == "MicroBlogHiGot"){
         checkOrMakePeer(packet.peerID);
         console.log("packetdata.postcount: "+packetdata.postcount);
         console.log("packet.peerName: "+packet.peerName);
-        var packetdata = {"type":"microblogyourcount","postcount":peers[packet.peerID].postids.length};
-        bridge.sendMessage(packet.peerID, JSON.stringify(packetdata));
+        var newpacketdata = {"type":"MicroBlogYourCount","postcount":peers[packet.peerID].postids.length};
+        bridge.sendMessage(packet.peerID, JSON.stringify(newpacketdata));
         sendPostsFromPos(packetdata.postcount, packet.peerID)
-      }else if (packetdata["type"] == "microblogyourcount"){
+      }else if (packetdata["type"] == "MicroBlogYourCount"){
+        checkOrMakePeer(packet.peerID);
         console.log("packetdata.postcount: "+packetdata.postcount);
         console.log("packet.peerName: "+packet.peerName);
-        checkOrMakePeer(packet.peerID);
         sendPostsFromPos(packetdata.postcount, packet.peerID)
       }/*else if (packetdata["type"] == "microblogreq"){
         console.log("got: "+packetdata["type"]);
@@ -135,7 +130,7 @@ Feed:
    function sendPostsFromPos(postcount, peerID){
       for (var pc = postcount;pc<mypeer.postids.length;pc++){
           var pid = mypeer.postids[pc];
-          var packetdata = {"type":"microblog","msg":feedData[pid]};
+          var packetdata = {"type":"MicroBlog","msg":feedData[pid]};
           bridge.sendMessage(peerID, JSON.stringify(packetdata));
       }
    }
