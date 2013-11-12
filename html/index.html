@@ -5,6 +5,7 @@
 var peers = {}
 bridge.msgPush.connect(incomingMsg);
 function incomingMsg(message){
+  //console.log(message)
   //msg = JSON.parse(message.message);
   id = message.peerID;
   name = message.peerName;
@@ -12,11 +13,22 @@ function incomingMsg(message){
 //make peer if missing
   if(!(id in peers)){
       peers[id] = {"name":name}
-      peerPanel = "<p class='PIPanel' id='"+id+"'>"+peers[id].name+"</p>";
-      document.getElementById("peerlist").innerHTML+=peerPanel;
+      var peerPanel = document.createElement("div");
+      peerPanel.className = 'PIPanel';
+      peerPanel.innerHTML = peers[id].name;
+      peerPanel.id = id;
+      
+      var imgPanel = document.createElement("img");
+      bridge.getAvatarDetails(id).assignTo(imgPanel);
+      //peerPanel.insertBefore(imgPanel, peerPanel.firstChild);
+      //peerPanel = "<p class='PIPanel' id='"+id+"'>"+peers[id].name+"</p>";
+      document.getElementById("peerlist").appendChild(peerPanel);//innerHTML+=peerPanel;
 
-      peerPanel =peers[id].name+" <a href=directchat.html?peerid="+id+">chat</a><br/>";
-      document.getElementById("peerlistplain").innerHTML+=peerPanel;
+      var peerPanel = document.createElement("div");
+      peerPanel.className = 'PIPanel';
+      peerPanel.innerHTML = peers[id].name+" <a href=directchat.html?peerid="+id+">chat</a><br/>";
+      peerPanel.insertBefore(imgPanel, peerPanel.firstChild);
+      document.getElementById("peerlistplain").appendChild(peerPanel);
 
    }
 
@@ -75,10 +87,10 @@ Other:<br/>
 <button onclick="bridge.go2page('index2.html')">richfunk</button>
 <button onclick="bridge.go2page('tindex.html')">to tindex</button>-->
 
-<p id="demo"></p>
+<div id="demo"></div>
 Compatable Peers:
-<p id="peerlistplain"></p>
+<div id="peerlistplain"></div>
 Last packet from peers
-<p id="peerlist"></p>
+<div id="peerlist"></div>
 </body>
 </html>
