@@ -27,18 +27,23 @@ Feed:
   if ( localStorage.getItem("microblogpeers") != null) peers = JSON.parse(localStorage.microblogpeers);
   console.log(peers);
   function clearStorage(){
-    localStorage.removeItem("microblogfeed");
-    localStorage.removeItem("microblogfeedID");
-    localStorage.removeItem("microblogpeers");
+    //localStorage.removeItem("microblogfeed");
+    //localStorage.removeItem("microblogfeedID");
+    //localStorage.removeItem("microblogpeers");
     feedID = [];
     feedData = {};
     peers = {};
+    localStorage.microblogfeed = JSON.stringify(feedData);
+    localStorage.microblogfeedID = JSON.stringify(feedID);
+    localStorage.microblogpeers = JSON.stringify(peers);
+    checkOrMakePeer(bridge.getOwnId());
+    mypeer = peers[bridge.getOwnId()];
     chatout.innerHTML = ""
   }
   
   //put self in peers
   checkOrMakePeer(bridge.getOwnId());
-  var mypeer = peers[bridge.getOwnId()]
+  var mypeer = peers[bridge.getOwnId()];
   
   //send message announcing with postcount
   var packetdata = {"type":"MicroBlogHi"};//,"postcount":mypeer.postids.length};
@@ -80,7 +85,7 @@ Feed:
     feedID.push(post.postid);
     localStorage.microblogfeedID = JSON.stringify(feedID);
     
-    console.log("added post from: "+post.peerName)
+    console.log("added post from: "+post.peerName + " " + post.peerID)
     console.log( peers[post.peerID])
     peers[post.peerID].postids.push(post.postid);
     localStorage.microblogpeers = JSON.stringify(peers);
@@ -102,6 +107,7 @@ Feed:
       if (packetdata["type"] == "MicroBlog"){
         checkOrMakePeer(packet.peerID);
         var post = packetdata["msg"];
+        console.log(post);
         addPostToFeedPanel(post);
         addPostToFeedData(post);
       }else if (packetdata["type"] == "MicroBlogHi"){
@@ -128,9 +134,14 @@ Feed:
       }*/
    }
    function sendPostsFromPos(postcount, peerID){
+      console.log("sendPostsFromPos: postcount to mypeer.postids.length");
+      console.log("sendPostsFromPos: "+postcount+" to"+mypeer.postids.length);
+      console.log(mypeer.postids.length);
       for (var pc = postcount;pc<mypeer.postids.length;pc++){
           var pid = mypeer.postids[pc];
+          console.log(pid)
           var packetdata = {"type":"MicroBlog","msg":feedData[pid]};
+          console.log(packetdata)
           bridge.sendMessage(peerID, JSON.stringify(packetdata));
       }
    }
