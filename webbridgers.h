@@ -46,7 +46,7 @@ public slots:
     QStringList getOnlineList();
     QVariantMap getPeerDetails(QString ssl_id);
     QString getPeerName(QString ssl_id);
-    QPixmap getAvatarDetails(QString ssl_id, bool gpg);
+    QPixmap getAvatarDetails(QString ssl_id);
 private slots:
     void onUrlDownloaded();
     void onDownloadComplete(QString hash);

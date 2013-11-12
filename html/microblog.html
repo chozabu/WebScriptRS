@@ -124,8 +124,7 @@ Feed:
     finalPanel.id = post.postid;
     finalPanel.appendChild(makeReplyPanel(post.postid));
     var imgPanel = document.createElement("img");
-    console.log("idforimageis: "+post.peerID);
-    bridge.getAvatarDetails(post.peerID,false).assignTo(imgPanel);
+    bridge.getAvatarDetails(post.peerID).assignTo(imgPanel);
     finalPanel.insertBefore(imgPanel, finalPanel.firstChild);
     if(post.hasOwnProperty("parentID")){
       var replypanel = document.getElementById(post.parentID+"replies");

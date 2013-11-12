@@ -37,7 +37,7 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
 }
 
 //QMap<QString,AvatarWidget> avatarWidgets;
-QPixmap WebBridgeRS::getAvatarDetails(QString ssl_id, bool gpg){
+QPixmap WebBridgeRS::getAvatarDetails(QString ssl_id){
     //AvatarDefs::getAvatarFromGpgId(const std::string& gpgId, QPixmap &avatar, const QString& defaultImage)
     if (!avatars.contains(ssl_id)){
         QPixmap avatar;
@@ -115,19 +115,6 @@ QVariantList WebBridgeRS::getPostedList(){
         RsGxsGroupId dd;
         dd = *it;
         std::cout << dd << std::endl;
-        /*QVariantMap qdd;
-        qdd.insert("autoDownload",dd.);
-        qdd.insert("channelDesc",QString::fromStdWString(dd.channelDesc));
-        qdd.insert("channelFlags",dd.channelFlags);
-        qdd.insert("channelId",QString::fromStdString(dd.channelId));
-        qdd.insert("channelName",QString::fromStdWString(dd.channelName));
-        qdd.insert("destination_directory",QString::fromStdString(dd.destination_directory));
-        qdd.insert("lastPost",QString::number(dd.lastPost));
-        //qdd.insert("pngChanImage",QString::fromStdWString(dd.pngChanImage));
-        //qdd.insert("pngImageLen",QString::fromStdWString(dd.pngImageLen));
-        qdd.insert("pop",dd.pop);
-
-        qResults.append(qdd);*/
     }
 
     return qResults;

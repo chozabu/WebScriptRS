@@ -42,8 +42,6 @@ protected:
     void javaScriptConsoleMessage(const QString& message, int lineNumber, const QString& sourceID);
 private:
     Ui::WebScriptDialog *ui;
-    //WebViewRS* webview;
-    //QTextBrowser* jslog;
 };
 
 #endif // TOPJCDIALOG_H
