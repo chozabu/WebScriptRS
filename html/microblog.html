@@ -145,6 +145,7 @@ Feed:
       var replypanel = document.getElementById(post.parentID+"replies");
       imgPanel.style.float="left";
       replypanel.insertBefore(finalPanel, replypanel.firstChild);
+      //replypanel.appendChild(finalPanel);
       imgPanel.width/=3;
       imgPanel.height/=3;
     }else{
@@ -154,15 +155,39 @@ Feed:
     }
     return true;
   }
+  function replyClicked(e){
+  console.log("replyClicked");
+    var replyBox = e.srcElement;
+    if (replyBox.style.opacity=="0.5"){
+      replyBox.style.opacity="1.0";
+      //replyBox.style.height="4em";
+      //replyBox.style.width=2;
+      }
+  }
   function makeReplyPanel(postid){
-      var replyBox = '<input name="replyInput" id="replyInput" type="text" onkeypress="return replyKeyDown(event)" />'
+    var replyBox = document.createElement("input");
+    replyBox.style.height="1.2em";
+    replyBox.style.opacity="0.5";
+    replyBox.name="replyInput";
+    replyBox.id="replyInput";
+    replyBox.type="text";
+    replyBox.onkeypress="return replyKeyDown(event)";
+    replyBox.onclick=replyClicked;
+    
+    var replysListpanel = document.createElement("div");
+    replysListpanel.id=postid+"replies";
+    
+    //  var replyBox = '<input style="height:1.2em; opacity:0.5;" name="replyInput" id="replyInput" type="text" onkeypress="return replyKeyDown(event)" />'
     var childPanel = document.createElement("div");
     childPanel.className = 'PIPanelOdd'
-    childPanel.innerHTML = "<div id='"+postid+"replies'></div>"+replyBox;
+    //childPanel.innerHTML = replyBox;//+"<div id='"+postid+"replies'></div>";
+    childPanel.appendChild(replyBox);
+    childPanel.appendChild(replysListpanel)
+    
     var imgPanel = document.createElement("img");
     bridge.getAvatarDetails(bridge.getOwnId()).assignTo(imgPanel);
-    imgPanel.width/=4;
-    imgPanel.height/=4;
+    imgPanel.width/=5.5;
+    imgPanel.height/=5.5;
     imgPanel.style.float="left";
     imgPanel.style.opacity=0.5;
     childPanel.insertBefore(imgPanel, childPanel.lastChild);

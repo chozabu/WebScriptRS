@@ -18,8 +18,8 @@ function incomingMsg(message){
       peerPanel.innerHTML = peers[id].name;
       peerPanel.id = id;
       
-      var imgPanel = document.createElement("img");
-      bridge.getAvatarDetails(id).assignTo(imgPanel);
+      //var imgPanel = document.createElement("img");
+      //bridge.getAvatarDetails(id).assignTo(imgPanel);
       //peerPanel.insertBefore(imgPanel, peerPanel.firstChild);
       //peerPanel = "<p class='PIPanel' id='"+id+"'>"+peers[id].name+"</p>";
       document.getElementById("peerlist").appendChild(peerPanel);//innerHTML+=peerPanel;
