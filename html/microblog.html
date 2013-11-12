@@ -92,7 +92,7 @@ Feed:
   }
   function addPostToFeedPanel(post){
     var newPanel = post.peerName+": "+post.text+" @"+new Date(post.time);
-    newPanel="<p class='PIPanel'>"+newPanel+"</p>";
+    newPanel="<div class='PIPanel'>"+newPanel+"</div>";
     chatout.innerHTML= newPanel+chatout.innerHTML;
     chatInput.value = "";
   }
