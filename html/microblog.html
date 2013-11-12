@@ -77,16 +77,32 @@ Feed:
           var replybox = chatBox.parentElement.firstChild;//getElementById("replies");
             //replybox.innerHTML = chatBox.value;
             console.log(chatBox.value);
-            submitChat(chatBox.value, chatBox.parentElement.parentElement.id);
+            submitReply(chatBox.value, chatBox.parentElement.parentElement.id);
             chatBox.value = "";
            return false;
        }
    }
+  function submitReply(message, parentID)
+  {
+    var post = {"postid":Math.random(),
+                "text":message,
+                "peerID":bridge.getOwnId(),
+                "peerName":bridge.getPeerName(bridge.getOwnId()),
+                "parentID":parentID,
+                "time":Date.now()
+                }
+    console.log("parentid:"+post['parentID']);
+    var packetdata = {"type":"MicroBlogReply","msg":post};
+    bridge.sendMessage(feedData[parentID].peerID, JSON.stringify(packetdata));
+    addPostToFeedPanel(post);
+    addPostToFeedData(post);
+    
+  }
   function submitChatPress(){
     submitChat(chatInput.value)
     chatInput.value="";
     }
-  function submitChat(message, parentID)
+  function submitChat(message)
   {
     var post = {"postid":Math.random(),
                 "text":message,
@@ -94,16 +110,14 @@ Feed:
                 "peerName":bridge.getPeerName(bridge.getOwnId()),
                 "time":Date.now()
                 }
-    if(typeof(parentID)!='undefined')post['parentID']=parentID;
-    console.log("parentid:"+post['parentID']);
-    //console.log( localStorage.microblogfeed);
     var packetdata = {"type":"MicroBlog","msg":post};
     bridge.broadcastMessage(JSON.stringify(packetdata));
     addPostToFeedPanel(post);
     addPostToFeedData(post);
     
   }
-  function addPostToFeedData(post){
+  function addPostToFeedData(post, addToPeer){
+    if (typeof(addToPeer) === "undefined")addToPeer = post.peerID;
     feedData[post.postid]=post;
     localStorage.microblogfeed = JSON.stringify(feedData);
     
@@ -112,11 +126,12 @@ Feed:
     
     console.log("added post from: "+post.peerName + " " + post.peerID + " " + post.text)
     console.log( peers[post.peerID])
-    peers[post.peerID].postids.push(post.postid);
+    peers[addToPeer].postids.push(post.postid);
     localStorage.microblogpeers = JSON.stringify(peers);
   }
   function addPostToFeedPanel(post){
-    var newPanel = post.peerName+": "+post.text+" @"+new Date(post.time);
+    if (document.getElementById(post.postid))return false;
+    var newPanel = post.peerName+": "+post.text+" <br><font size='1em'> @"+new Date(post.time)+"</font>" ;
 
     var finalPanel = document.createElement("div");
     finalPanel.className = 'PIPanel';
@@ -134,6 +149,7 @@ Feed:
     }else{
       chatout.insertBefore(finalPanel, chatout.firstChild);
     }
+    return true;
   }
   function makeReplyPanel(postid){
       var replyBox = '<input name="replyInput" id="replyInput" type="text" onkeypress="return replyKeyDown(event)" />'
@@ -162,6 +178,14 @@ Feed:
         console.log(post);
         addPostToFeedPanel(post);
         addPostToFeedData(post);
+      }else if (packetdata["type"] == "MicroBlogReply"){
+        checkOrMakePeer(packet.peerID);
+        var post = packetdata["msg"];
+        console.log(post);
+        addPostToFeedPanel(post);
+        addPostToFeedData(post, bridge.getOwnId());
+        var newpacketdata = {"type":"MicroBlog","msg":post};
+        bridge.broadcastMessage(JSON.stringify(newpacketdata));
       }else if (packetdata["type"] == "MicroBlogHi"){
         checkOrMakePeer(packet.peerID);
         if (packetdata.SenderPostCount  == 0)peers[packet.peerID].postids=[]//Assume peer has reset data
