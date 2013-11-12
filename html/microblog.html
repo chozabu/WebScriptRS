@@ -123,10 +123,15 @@ Feed:
     finalPanel.innerHTML = newPanel;
     finalPanel.id = post.postid;
     finalPanel.appendChild(makeReplyPanel(post.postid));
+    var imgPanel = document.createElement("img");
+    console.log("idforimageis: "+post.peerID);
+    bridge.getAvatarDetails(post.peerID,false).assignTo(imgPanel);
+    finalPanel.insertBefore(imgPanel, finalPanel.firstChild);
     if(post.hasOwnProperty("parentID")){
-      //chatout.insertBefore(finalPanel, chatout.firstChild);
       var replypanel = document.getElementById(post.parentID+"replies");
       replypanel.insertBefore(finalPanel, replypanel.firstChild);
+      imgPanel.width/=3;
+      imgPanel.height/=3;
     }else{
       chatout.insertBefore(finalPanel, chatout.firstChild);
     }

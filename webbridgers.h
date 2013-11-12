@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QStringList>
 #include<QVariantMap>
+#include <QPixmap>
 
 class p3JsonRS;
 
@@ -15,6 +16,7 @@ public:
     explicit WebBridgeRS(QObject *parent = 0);
     void pushMsgToJs(QVariantMap message);
     p3JsonRS *p3service;
+    QMap<QString,QPixmap> avatars;
 
 //the public slots are exposed to JS
 public slots:
@@ -44,6 +46,7 @@ public slots:
     QStringList getOnlineList();
     QVariantMap getPeerDetails(QString ssl_id);
     QString getPeerName(QString ssl_id);
+    QPixmap getAvatarDetails(QString ssl_id, bool gpg);
 private slots:
     void onUrlDownloaded();
     void onDownloadComplete(QString hash);
@@ -52,13 +55,6 @@ signals:
     void urlDownloaded(QString path, QString url);
     void rsDownloaded(QVariantMap);
     void newTabUrl(QString url);
-    /*
-    rsPeers->getOwnId();
-    rsPeers->getOnlineList();
-    rsPeers->getFriendList();
-    rsFiles->FileDetails();
-    rsFiles->SearchKeywords();
-    */
 
 };
 
