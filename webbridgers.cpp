@@ -17,20 +17,21 @@
 #include <QFile>
 #include <QDir>
 
-//rsPosted->;
-//rsMsgs->getPublicChatQueue()
+//#include "gui/MainWindow.h"
+//#include "gui/ChatLobbyWidget.h"
+//#include "gui/ForumsDialog.h"
 
 #include <QString>
 #include <QWidget>
 WebBridgeRS::WebBridgeRS(QObject *parent) :
     QObject(parent)
 {
-
-    //rsFiles->FileRequest();
-    //virtual bool FileRequest(const std::string& fname, const std::string& hash,
-    //nt64_t size, const std::string& dest, TransferRequestFlags flags, const std::list<std::string>& srcIds) = 0;
     //rsFiles->getSharedDirectories();
 
+    //todo, perhaps - deeper intergration with retroshare-gui
+    //MainWindow *pMainWindow = MainWindow::getInstance();
+    //pMainWindow->forumsDialog->
+    //pMainWindow->chatLobbyDialog->
     connect(NotifyQt::getInstance(), SIGNAL(downloadComplete(QString)), this, SLOT(onDownloadComplete(QString)));
     //connect(NotifyQt::getInstance(), SIGNAL(gotTurtleSearchResult(qulonglong,FileDetail)), this, SLOT()));
 
@@ -38,14 +39,12 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
 
 //QMap<QString,AvatarWidget> avatarWidgets;
 QPixmap WebBridgeRS::getAvatarDetails(QString ssl_id){
-    //AvatarDefs::getAvatarFromGpgId(const std::string& gpgId, QPixmap &avatar, const QString& defaultImage)
     if (!avatars.contains(ssl_id)){
         QPixmap avatar;
         AvatarDefs::getAvatarFromGpgId(rsPeers->getGPGId(ssl_id.toStdString()), avatar);
         avatars.insert(ssl_id,avatar);
         return avatar;
     }
-    //avatarWidgets[ssl_id].setId(ssl_id.toStdString(), false);
     return avatars[ssl_id];
 }
 
