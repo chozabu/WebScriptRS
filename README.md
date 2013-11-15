@@ -1,5 +1,7 @@
 #Webkit Plugin for Retroshare
 
+#####Testing python support ( http://www.henning-schroeder.de/embeddedpyqt )
+
 This embeds a set of webkit tabs in a plugin page, along with the startings of a javascript bridge<br>
 Still some way to go to be handy, So far it can:<br>
 -broadcast to compatable peers<br>

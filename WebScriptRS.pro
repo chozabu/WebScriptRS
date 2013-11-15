@@ -25,6 +25,18 @@ FORMS   = \
     topjcdialog.ui \
     webtabcontents.ui
 
+INCLUDEPATH += -I./embpyqt
+SOURCES += \
+    embpyqt/embeddedpyqt.cpp \
+    embpyqt/pythonize.cpp
+HEADERS += \
+    embpyqt/embeddedpyqt.h \
+    embpyqt/pythonize.h
+# Python
+LIBS        += -lpython2.7 -L/usr/lib/
+INCLUDEPATH += /usr/include/python2.7/
+
+
 TARGET = WebScriptRS
 
 RESOURCES = WebScriptRS_images.qrc lang/WebScriptRS_lang.qrc

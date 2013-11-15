@@ -43,6 +43,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="pythonBtn">
+       <property name="text">
+        <string>Python</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>

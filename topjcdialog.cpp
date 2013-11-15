@@ -18,28 +18,9 @@ WebScriptDialog::WebScriptDialog(QWidget *parent) :
     bridge = new WebBridgeRS();
     connect(ui->newTabBtn, SIGNAL(clicked()), this, SLOT(addTab()));
     connect(ui->closeTabBtn, SIGNAL(clicked()), this, SLOT(removeTab()));
+    connect(ui->pythonBtn, SIGNAL(clicked()), this, SLOT(doPython()));
     connect( bridge, SIGNAL(newTabUrl(QString)),    this,   SLOT(onNewTabUrl(QString)) );
-    /*webview = new WebViewRS();
-    this->ui->verticalLayout->addWidget(webview,1);
-    webview->show();
-    QString loadfirst = "";//QDir::homePath();
-
-    loadfirst.append("html/index.html");
-    webview->setUrl(QUrl(loadfirst));
-
-
-    //jslog = new QTextBrowser();
-    //this->ui->verticalLayout->addWidget(jslog,1);
-    //jslog->show();
-    QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
-
-    //connect(ui->testButton, SIGNAL(clicked()), this->webview, SLOT(reload()));
-    connect(ui->testButton, SIGNAL(clicked()), this, SLOT(changeLocation()));
-
-
-    connect(ui->lineEdit, SIGNAL(returnPressed()), SLOT(changeLocation()));
-    connect(webview, SIGNAL(loadFinished(bool)), SLOT(adjustLocation()));*/
-
+    embpyqt = new EmbeddedPyQt();
 }
 
 WebScriptDialog::~WebScriptDialog()
@@ -66,6 +47,16 @@ void WebScriptDialog::setP3service(p3JsonRS *p3servicein)
     bridge->p3service = p3service;
     std::cerr << "bridge on set: " << p3service->bridge << std::endl;
     addTab();
+}
+
+void WebScriptDialog::doPython()
+{
+    embpyqt->registerObject(*bridge);
+    embpyqt->registerMetaObject(WebBridgeRS::staticMetaObject);
+    embpyqt->registerObject(*this);
+    embpyqt->init("embpyqt/python/initembpyqt.py");
+    embpyqt->execute("embpyqt_console.Visible = True", true);
+
 }
 void WebScriptDialog::addTab(){
     onNewTabUrl("html/index.html");

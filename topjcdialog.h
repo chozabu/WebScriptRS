@@ -13,6 +13,8 @@
 #include "p3JsonRS.h"
 #include "webviewrs.h"
 
+#include "embpyqt/embeddedpyqt.h"
+
 namespace Ui {
 class WebScriptDialog;
 }
@@ -27,7 +29,9 @@ public:
     void setP3service(p3JsonRS *p3servicein);
     p3JsonRS *p3service;
     WebBridgeRS *bridge;
+    EmbeddedPyQt *embpyqt;
 public slots:
+    void doPython();
     void addTab();
     void onNewTabUrl(QString url);
     void removeTab();

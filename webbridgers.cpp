@@ -26,6 +26,7 @@
 WebBridgeRS::WebBridgeRS(QObject *parent) :
     QObject(parent)
 {
+    this->setObjectName("bridge");
     //rsFiles->getSharedDirectories();
 
     //todo, perhaps - deeper intergration with retroshare-gui
