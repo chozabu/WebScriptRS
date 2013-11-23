@@ -48,6 +48,7 @@ Build and install the plugin as usual.<br>
 
 ###JS Bridge
 
+There is not much documentation yet - but there are examples, and you can look at webbridgers.h <br>
 currently you can send a message like this: <br>
 <code>
 var packetdata = {"type":"chatmessage","pos":"thiscouldbeanything"}; <br>
@@ -56,6 +57,7 @@ bridge.broadcastMessage(JSON.stringify(packetdata)); <br>
 
 or directly like this: <br>
 <code>
+var packetdata = {"x":3,"y":5,"name":"Eric"}; <br>
 bridge.sendMessage(peer_id_as_string, JSON.stringify(packetdata)); <br>
 </code>
 And get one like this: <br>
