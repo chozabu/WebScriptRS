@@ -330,6 +330,16 @@ QVariantList WebBridgeRS::getForums(){
         qdd.insert("pop",dd.pop);
         qdd.insert("subscribeFlags",dd.subscribeFlags);
 
+        if (dd.subscribeFlags & RS_DISTRIB_ADMIN) {
+            qdd.insert("forumRelationship","ADMIN");
+        } else if (dd.subscribeFlags & RS_DISTRIB_SUBSCRIBED) {
+            /* subscribed forum */
+            qdd.insert("forumRelationship","SUBSCRIBED");
+        } else {
+            /* rate the others by popularity */
+            qdd.insert("forumRelationship","OTHER");
+        }
+
         qResults.append(qdd);
     }
 
