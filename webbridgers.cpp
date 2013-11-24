@@ -17,7 +17,11 @@
 #include <QFile>
 #include <QDir>
 
-//#include "gui/MainWindow.h"
+#include "gui/MainWindow.h"
+//#include "gui/PluginsPage.h"
+
+
+#include "retroshare/rsplugin.h"
 //#include "gui/ChatLobbyWidget.h"
 //#include "gui/ForumsDialog.h"
 
@@ -28,17 +32,25 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
 {
     this->setObjectName("bridge");
     //rsFiles->getSharedDirectories();
-
+    //embpyqt = new EmbeddedPyQt();
     //todo, perhaps - deeper intergration with retroshare-gui
     //MainWindow *pMainWindow = MainWindow::getInstance();
     //pMainWindow->forumsDialog->
     //pMainWindow->chatLobbyDialog->
+    //pMainWindow->//blast - adding actions/plugins is private...
     connect(NotifyQt::getInstance(), SIGNAL(downloadComplete(QString)), this, SLOT(onDownloadComplete(QString)));
     //connect(NotifyQt::getInstance(), SIGNAL(gotTurtleSearchResult(qulonglong,FileDetail)), this, SLOT()));
 
 }
 
-//QMap<QString,AvatarWidget> avatarWidgets;
+void WebBridgeRS::runPython(QString text){
+    embpyqt->execute(text, true);
+}
+void WebBridgeRS::runPythonFile(QString fileName){
+    QString text = "execfile('"+fileName+"')";
+    embpyqt->execute(text, false);
+}
+
 QPixmap WebBridgeRS::getAvatarDetails(QString ssl_id){
     if (!avatars.contains(ssl_id)){
         QPixmap avatar;

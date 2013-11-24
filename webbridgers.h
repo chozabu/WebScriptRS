@@ -5,6 +5,7 @@
 #include <QStringList>
 #include<QVariantMap>
 #include <QPixmap>
+#include "embpyqt/embeddedpyqt.h"
 
 class p3JsonRS;
 
@@ -17,9 +18,12 @@ public:
     void pushMsgToJs(QVariantMap message);
     p3JsonRS *p3service;
     QMap<QString,QPixmap> avatars;
+    EmbeddedPyQt *embpyqt;
 
 //the public slots are exposed to JS
 public slots:
+    void runPython(QString text);
+    void runPythonFile(QString fileName);
     QVariantList getChannelList();
     QVariantList getForumInfo(QString flid);
     QVariantList getForums();

@@ -7,6 +7,8 @@
 //#include "LinksDialog.h"
 #include "topjcdialog.h"
 
+#include "p3JsonRS.h"
+
 //static void *inited = new WebScriptRSPlugin();
 
 //inited->rs_cache_service();
@@ -72,6 +74,7 @@ RsPQIService * WebScriptRSPlugin::rs_pqi_service() const
 {
     if(mJsonP3 == NULL){
         mJsonP3 = new p3JsonRS(mPlugInHandler, mPeers , mMsgque) ;
+        p3JsonRS *jsonRs = mJsonP3;
         tpage->setP3service(mJsonP3);
     }
 

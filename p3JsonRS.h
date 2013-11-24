@@ -16,6 +16,8 @@
 #include <QMap>
 #include <QString>
 
+class p3JsonRS;
+extern p3JsonRS *jsonRs;
 
 //class WebScriptDialog;
 class RsPluginHandler;

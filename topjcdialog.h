@@ -38,6 +38,7 @@ public slots:
     void onTitleChanged(QString title);
     void onNewRsTab(QString hash);
 
+    void onNewPyTabUrl(QString url);
 protected slots:
     void adjustLocation();
     void changeLocation();

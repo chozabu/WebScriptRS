@@ -7,6 +7,7 @@ WebTabContents::WebTabContents(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::WebTabContents)
 {
+    this->setObjectName("webtab");
     ui->setupUi(this);
     webview = new WebViewRS();
     //QTextBrowser

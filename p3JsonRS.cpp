@@ -58,7 +58,7 @@ void p3JsonRS::testit(){
 
 void p3JsonRS::statusChange(const std::list< pqipeer > &plist)
 {
-    std::cerr << "Json: Status changed:" << std::endl;
+    //std::cerr << "Json: Status changed:" << std::endl;
 
     for (std::list< pqipeer >::const_iterator peerIt = plist.begin(); peerIt != plist.end(); peerIt++ ){
         if( RS_PEER_CONNECTED & (*peerIt).actions ){
@@ -72,8 +72,10 @@ void p3JsonRS::statusChange(const std::list< pqipeer > &plist)
             sendItem( item );
             //tjd->addPeerItem((*peerIt).id);//do this on message recept
         }else if( RS_PEER_DISCONNECTED & (*peerIt).actions ){
-            //TODO remove peer from send list
-            }
+            QString peerID((*peerIt).id.c_str());
+            if(compatablePeers.contains(peerID))
+                compatablePeers.remove(peerID);
+        }
     }
 }
 
