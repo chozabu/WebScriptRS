@@ -14,7 +14,7 @@ def wrap_value(value):
     elif isinstance(value, dict):
         d = {}
         for k, v in value.items():
-            d[unicode(v)] = wrap_value(v)
+            d[unicode(k)] = wrap_value(v)
         return d
     elif isinstance(value, list):
         return [wrap_value(v) for v in value]
