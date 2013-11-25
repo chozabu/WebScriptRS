@@ -25,8 +25,10 @@ public slots:
     void runPython(QString text);
     void runPythonFile(QString fileName);
     QVariantList getChannelList();
-    QVariantList getForumInfo(QString flid);
+    QVariantList getForumThreadList(QString flid);
+    QVariantList getForumThreadMsgList(QString flid, QString msgid);
     QVariantList getForums();
+    QVariantMap getForumMessage(QString flid, QString msgid);
     QString getOwnId();
     QString getDownloadDirectory();
     QVariantList searchKeywords(const QString& keywords, QVariantMap searchOptions);

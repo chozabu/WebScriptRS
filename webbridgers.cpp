@@ -346,7 +346,7 @@ QVariantList WebBridgeRS::getForums(){
     return qResults;
 }
 
-QVariantList WebBridgeRS::getForumInfo(QString flid){
+QVariantList WebBridgeRS::getForumThreadList(QString flid){
     std::list<ThreadInfoSummary> msgs;
     rsForums->getForumThreadList(flid.toStdString(), msgs);
 
@@ -372,6 +372,55 @@ QVariantList WebBridgeRS::getForumInfo(QString flid){
 
     return qResults;
 }
+
+QVariantList WebBridgeRS::getForumThreadMsgList(QString flid, QString msgid){
+    std::list<ThreadInfoSummary> msgs;
+    rsForums->getForumThreadMsgList(flid.toStdString(),msgid.toStdString(), msgs);
+
+    QVariantList qResults;
+    std::list<ThreadInfoSummary>::iterator it;
+    for(it = msgs.begin(); it != msgs.end(); it++) {
+        ThreadInfoSummary dd;
+        dd = *it;
+        QVariantMap qdd;
+        qdd.insert("childTS",QString::number(dd.childTS));
+        qdd.insert("count",QString::number(dd.count));
+        qdd.insert("forumId",QString::fromStdString(dd.forumId));
+        qdd.insert("msg",QString::fromStdWString(dd.msg));
+        qdd.insert("msgflags",QString::number(dd.msgflags));
+        qdd.insert("msgId",QString::fromStdString(dd.msgId));
+        qdd.insert("parentId",QString::fromStdString(dd.parentId));
+        qdd.insert("threadId",QString::fromStdString(dd.threadId));
+        qdd.insert("title",QString::fromStdWString(dd.title));
+        qdd.insert("ts",QString::number(dd.ts));
+
+        qResults.append(qdd);
+    }
+
+    return qResults;
+}
+
+QVariantMap WebBridgeRS::getForumMessage(QString flid, QString msgid){
+    ForumMsgInfo msg;
+    rsForums->getForumMessage(flid.toStdString(),msgid.toStdString(), msg);
+
+        QVariantMap qdd;
+        qdd.insert("childTS",QString::number(msg.childTS));
+        qdd.insert("srcId",QString::fromStdString(msg.srcId));
+        qdd.insert("status",QString::number(msg.status));
+        qdd.insert("forumId",QString::fromStdString(msg.forumId));
+        qdd.insert("msg",QString::fromStdWString(msg.msg));
+        qdd.insert("msgflags",QString::number(msg.msgflags));
+        qdd.insert("msgId",QString::fromStdString(msg.msgId));
+        qdd.insert("parentId",QString::fromStdString(msg.parentId));
+        qdd.insert("threadId",QString::fromStdString(msg.threadId));
+        qdd.insert("title",QString::fromStdWString(msg.title));
+        qdd.insert("ts",QString::number(msg.ts));
+
+
+    return qdd;
+}
+
 void WebBridgeRS::processLinks(QStringList urls){
     RetroShareLink::process(urls, RetroShareLink::TYPE_UNKNOWN, RSLINK_PROCESS_NOTIFY_ALL);
     //rsFiles->FileRequest()
