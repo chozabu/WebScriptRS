@@ -50,6 +50,10 @@ sudo apt-get install python-dev #use this lines instead of above on older system
 sudo apt-get install python-mpltoolkits.basemap python-qt4<br>
 
 ###Build
+you probably want to clone this into the plugins directory of your retroshare source code.<br>
+cd myretrosharesrc/plugins/ <br>
+git clone git@github.com:chozabu/WebScriptRS.git<br>
+cd WebScriptRS<br>
 qmake-qt4; make<br>
 
 ###install/run
