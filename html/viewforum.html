@@ -2,15 +2,10 @@
 
 <link rel="stylesheet" href="ct.css" type="text/css">
 </head><body>
-<audio id="audioPop" src="audio/receive.wav" preload="auto"></audio>
 <a href="index.html">Back to Index</a><br/>
 
-
-    <input name="chatInput" id="chatInput" type="text" onkeypress="return chatKeyDown(event)" /> <button onclick=
-    "submitChatPress()">Submit Message</button>
-    <button onclick= "clearStorage()">Clear Local Storage</button>
 <br>
-Feed:
+Messages:
 <p id="chatout"></p>
 
 <script>
@@ -18,9 +13,6 @@ var bcn = 0;
   var forumID = getUrlVars()["forumID"];
   var threadList = bridge.getForumThreadList(forumID);
     console.log("found threads:"+ threadList.length);
-  //{u'msgflags': u'0', u'count': u'0', u'forumId': u'9ddb70f9277a2efcd8fad7eae9a163ba', u'title': u'FeedReader Broken',
-  //u'msgId': u'00b1ef4254d15b19a47c00aa8dc5523f', u'threadId': u'00b1ef4254d15b19a47c00aa8dc5523f', u'ts': u'1383942223', u'childTS': u'1383942223', u'parentId': u'',
-  //u'msg': u'FeedReader for r6896 is broken - no new feeds coming in 12 hours, whereas normally would have anything up to 30. I have done no editing/changes in FeedReader or the plugins systems.'}
   for (var f in threadList){
     var threadpost = threadList[f];
     console.log("thread")
@@ -49,29 +41,12 @@ var bcn = 0;
   }
   function convertRSPost(fpost){
     fpost = bridge.getForumMessage(forumID, fpost['msgId'])
-    
-    var name;
-    var peerID = fpost['srcId']
-    if(peerID.length>2)
-      name = bridge.getPeerName(peerID)
-    else
-      name="Anon"
-    var post = {"postid":fpost['msgId'],
-            "text":fpost['msg'],
-            "peerID":peerID,
-            "peerName":name,
-            //"parentID":fpost['parentId'],
-            "rootPeerID":fpost['threadId'],
-            "time":fpost['ts']
-            };
-    if (fpost['parentId'].length > 2)
-      post.parentID = fpost['parentId']
-    return post;
+    return fpost;
   }
-    function makeReplyPanel(postid){
+    function makeReplyPanel(msgId){
     
     var replysListpanel = document.createElement("div");
-    replysListpanel.id=postid+"replies";
+    replysListpanel.id=msgId+"replies";
     
     var childPanel = document.createElement("div");
     //childPanel.className = 'PIPanelOdd'
@@ -79,21 +54,28 @@ var bcn = 0;
     
     return childPanel;
   }
+  function getName(personID){
+  if(typeof(personID)=="undefined")return "AC";
+    if(personID.length>2)
+      return bridge.getPeerName(personID)
+    return "Anon"
+   }
   function addPostToFeedPanel(post){
-    if (document.getElementById(post.postid))return false;
-    var newPanel = "<b>"+post.peerName+"</b>: "+post.text+" <br><font size='1em'> @"+new Date(post.time*1000)+"</font>" ;
+    if (document.getElementById(post.msgId))return false;
+    console.log(post.srcId)
+    var newPanel = "<b>"+getName(post.srcId)+"</b>: "+post.msg+" <br><font size='1em'> @"+new Date(post.ts*1000)+"</font>" ;
 
     var finalPanel = document.createElement("div");
     finalPanel.className = 'PIPanel';
     finalPanel.innerHTML = newPanel;
-    finalPanel.id = post.postid;
-    finalPanel.appendChild(makeReplyPanel(post.postid));
+    finalPanel.id = post.msgId;
+    finalPanel.appendChild(makeReplyPanel(post.msgId));
     var imgPanel = document.createElement("img");
-    bridge.getAvatarDetails(post.peerID).assignTo(imgPanel);
+    bridge.getAvatarDetails(post.srcId).assignTo(imgPanel);
     finalPanel.insertBefore(imgPanel, finalPanel.firstChild);
-    if(post.hasOwnProperty("parentID")){
+    if(post.hasOwnProperty("parentId") && post.parentId.length>2){
       console.log("hasparent");
-      var replypanel = document.getElementById(post.parentID+"replies");
+      var replypanel = document.getElementById(post.parentId+"replies");
       //imgPanel.style.float="left";
       replypanel.insertBefore(finalPanel, replypanel.firstChild);
       //replypanel.appendChild(finalPanel);
