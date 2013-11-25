@@ -47,7 +47,11 @@ index12nov2013.png  microblog12nov2013.png  search12nov2013.png
 
 sudo apt-get install libpython-dev libpython-all-dev<br>
 sudo apt-get install python-dev #use this lines instead of above on older systems<br>
-sudo apt-get install python-mpltoolkits.basemap python-qt4<br>
+sudo apt-get install python-qt4<br>
+<br>
+if you want to run the Geo Friend Map Test:<br>
+sudo apt-get install python-mpltoolkits.basemap<br>
+sudo pip install pygeoip<br>
 
 ###Build
 you probably want to clone this into the plugins directory of your retroshare source code.<br>
