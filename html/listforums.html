@@ -1,0 +1,31 @@
+<html><head><title>Index</title>
+
+<link rel="stylesheet" href="ct.css" type="text/css">
+</head><body>
+<audio id="audioPop" src="audio/receive.wav" preload="auto"></audio>
+<a href="index.html">Back to Index</a><br/>
+
+
+    <input name="chatInput" id="chatInput" type="text" onkeypress="return chatKeyDown(event)" /> <button onclick=
+    "submitChatPress()">Submit Message</button>
+    <button onclick= "clearStorage()">Clear Local Storage</button>
+<br>
+Feed:
+<p id="chatout"></p>
+
+
+<script>
+var chatout = document.getElementById("chatout");
+var forums = bridge.getForums();
+for (fkey in forums){
+  f = forums[fkey];
+  if (f['forumRelationship'] == 'SUBSCRIBED'){
+        //console.log( f['forumName']);
+        var id = f['forumId'];
+      chatout.innerHTML += " <a href=viewforum.html?forumID="+id+">"+f['forumName']+"</a><br/>";
+        //chatout.innerHTML += f['forumName']+"<br>";
+  }
+}
+</script>
+</body>
+</html>

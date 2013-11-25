@@ -1,0 +1,119 @@
+<html><head><title>Index</title>
+
+<link rel="stylesheet" href="ct.css" type="text/css">
+</head><body>
+<audio id="audioPop" src="audio/receive.wav" preload="auto"></audio>
+<a href="index.html">Back to Index</a><br/>
+
+
+    <input name="chatInput" id="chatInput" type="text" onkeypress="return chatKeyDown(event)" /> <button onclick=
+    "submitChatPress()">Submit Message</button>
+    <button onclick= "clearStorage()">Clear Local Storage</button>
+<br>
+Feed:
+<p id="chatout"></p>
+
+<script>
+var bcn = 0;
+  var forumID = getUrlVars()["forumID"];
+  var threadList = bridge.getForumThreadList(forumID);
+    console.log("found threads:"+ threadList.length);
+  //{u'msgflags': u'0', u'count': u'0', u'forumId': u'9ddb70f9277a2efcd8fad7eae9a163ba', u'title': u'FeedReader Broken',
+  //u'msgId': u'00b1ef4254d15b19a47c00aa8dc5523f', u'threadId': u'00b1ef4254d15b19a47c00aa8dc5523f', u'ts': u'1383942223', u'childTS': u'1383942223', u'parentId': u'',
+  //u'msg': u'FeedReader for r6896 is broken - no new feeds coming in 12 hours, whereas normally would have anything up to 30. I have done no editing/changes in FeedReader or the plugins systems.'}
+  for (var f in threadList){
+    var threadpost = threadList[f];
+    console.log("thread")
+    var post = convertRSPost(threadpost);
+    addPostToFeedPanel(post)
+    
+    var thread = bridge.getForumThreadMsgList(forumID,threadpost.msgId);
+    console.log("found posts:"+ thread.length);
+    showChildren(thread);
+    
+  }
+  function showChildren(cThread){
+    if (cThread.length == 0) return;
+
+    for (var p in cThread){
+      var cPost = cThread[p];
+
+      var post = convertRSPost(cPost);
+      addPostToFeedPanel(post)
+      bcn+=1;
+      console.log("bcn="+bcn);
+      var newThread = bridge.getForumThreadMsgList(forumID,cPost.msgId);
+      if(bcn<1000)showChildren(newThread);
+      
+    }
+  }
+  function convertRSPost(fpost){
+    fpost = bridge.getForumMessage(forumID, fpost['msgId'])
+    
+    var name;
+    var peerID = fpost['srcId']
+    if(peerID.length>2)
+      name = bridge.getPeerName(peerID)
+    else
+      name="Anon"
+    var post = {"postid":fpost['msgId'],
+            "text":fpost['msg'],
+            "peerID":peerID,
+            "peerName":name,
+            //"parentID":fpost['parentId'],
+            "rootPeerID":fpost['threadId'],
+            "time":fpost['ts']
+            };
+    if (fpost['parentId'].length > 2)
+      post.parentID = fpost['parentId']
+    return post;
+  }
+    function makeReplyPanel(postid){
+    
+    var replysListpanel = document.createElement("div");
+    replysListpanel.id=postid+"replies";
+    
+    var childPanel = document.createElement("div");
+    //childPanel.className = 'PIPanelOdd'
+    childPanel.appendChild(replysListpanel)
+    
+    return childPanel;
+  }
+  function addPostToFeedPanel(post){
+    if (document.getElementById(post.postid))return false;
+    var newPanel = "<b>"+post.peerName+"</b>: "+post.text+" <br><font size='1em'> @"+new Date(post.time*1000)+"</font>" ;
+
+    var finalPanel = document.createElement("div");
+    finalPanel.className = 'PIPanel';
+    finalPanel.innerHTML = newPanel;
+    finalPanel.id = post.postid;
+    finalPanel.appendChild(makeReplyPanel(post.postid));
+    var imgPanel = document.createElement("img");
+    bridge.getAvatarDetails(post.peerID).assignTo(imgPanel);
+    finalPanel.insertBefore(imgPanel, finalPanel.firstChild);
+    if(post.hasOwnProperty("parentID")){
+      console.log("hasparent");
+      var replypanel = document.getElementById(post.parentID+"replies");
+      //imgPanel.style.float="left";
+      replypanel.insertBefore(finalPanel, replypanel.firstChild);
+      //replypanel.appendChild(finalPanel);
+      imgPanel.width/=3;
+      imgPanel.height/=3;
+    }else{
+      chatout.insertBefore(finalPanel, chatout.firstChild);
+      //if (finalPanel.height < imgPanel.height)
+      finalPanel.height=100;//imgPanel.height;
+    }
+    return true;
+  }
+  
+    function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+</script>
+</body>
+</html>
