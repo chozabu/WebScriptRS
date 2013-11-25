@@ -46,7 +46,7 @@ index12nov2013.png  microblog12nov2013.png  search12nov2013.png
 ###PreReq:
 
 sudo apt-get install libpython-dev libpython-all-dev<br>
-#sudo apt-get install python-dev #use this lines instead of above on older systems<br>
+sudo apt-get install python-dev #use this lines instead of above on older systems<br>
 sudo apt-get install python-mpltoolkits.basemap python-qt4<br>
 
 ###Build
