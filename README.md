@@ -53,9 +53,9 @@ sudo apt-get install python-mpltoolkits.basemap python-qt4<br>
 qmake-qt4; make<br>
 
 ###install/run
-copy the .so files to your .retroshare/extensions/ directory
-**run RetroShare from the plugins directory!**
-install/run can be acomplished by running the script ctestit.sh
+copy the .so files to your .retroshare/extensions/ directory<br>
+**run RetroShare from the plugins directory!**<br>
+install/run can be acomplished by running the script ctestit.sh<br>
 
 ###JS Bridge
 
