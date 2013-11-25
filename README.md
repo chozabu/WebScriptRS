@@ -43,8 +43,19 @@ index12nov2013.png  microblog12nov2013.png  search12nov2013.png
 
 ## Usage:
 
-Build and install the plugin as usual.<br>
-**run RetroShare from the directory with the html files**
+###PreReq:
+
+sudo apt-get install libpython-dev libpython-all-dev<br>
+#sudo apt-get install python-dev #use this lines instead of above on older systems<br>
+sudo apt-get install python-mpltoolkits.basemap python-qt4<br>
+
+###Build
+qmake-qt4; make<br>
+
+###install/run
+copy the .so files to your .retroshare/extensions/ directory
+**run RetroShare from the plugins directory!**
+install/run can be acomplished by running the script ctestit.sh
 
 ###JS Bridge
 
