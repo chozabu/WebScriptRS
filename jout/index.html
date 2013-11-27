@@ -1,0 +1,31 @@
+<html><head><title>Index</title>
+
+<link rel="stylesheet" href="ct.css" type="text/css">
+</head><body>
+<a href="index.html">Back to Index</a><br/>
+
+<br>
+Subscribed Forumsa:
+<p id="chatout"></p>
+
+
+<script src="zepto.min.js"></script>
+<script>
+var chatout = document.getElementById("chatout");
+
+$.getJSON('forums.json', handleForums)
+
+function handleForums(forums){
+  for (fkey in forums){
+    f = forums[fkey];
+    if (f['forumRelationship'] == 'SUBSCRIBED'){
+          //console.log( f['forumName']);
+          var id = f['forumId'];
+        chatout.innerHTML += " <a href=viewforum.html?forumID="+id+">"+f['forumName']+"</a><br/>";
+          //chatout.innerHTML += f['forumName']+"<br>";
+    }
+  }
+}
+</script>
+</body>
+</html>

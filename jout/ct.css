@@ -1,0 +1,394 @@
+/* name: ct.css
+ 
+.calendarbox { margin:5px auto; font-size:11px; width:16em; text-align:center; background:white; position:relative; }
+.calendar { margin:0; padding: 0; }
+.calendar table { margin:0; padding:0; border-collapse:collapse; background:white; width:99%; }
+.calendar td { font-size:13px; text-align: center; padding: 0; border-top:1px solid #eee; border-bottom:none; }
+.calendar td.selected a { background: #99DBED; }
+.calendar-day-cell, .calendar-blank-cell { background:#C9DBED; }
+.calendar-cell-today { background:green; }
+.calendar-today-link { display: block; font-size: 10px; font-weight:bold; padding:0px; text-decoration: none; color:#444; }
+.calendar-img { border: 0; }
+
+.calendar td.calendar-day-cell:hover, .calendar-today-link a:hover { background: #5b80b2; color:white; }
+.calendar td.today:hover, .calendar-today-link a:hover , div a:hover { background: #5b80b2; color:white; }
+div.calendar-top-panel a:hover { background: #5b80b2; color:white; }
+.calendar td:active, .calendar-today-link a:active { background: #036; color:white; }
+
+.calendar .calendar-shortcuts { font-weight: bold; font-size:14px; }
+.calendar .calendar-top-panel { font-weight: bold; font-size:14px;}
+.calendar .calendar-center { font-weight: bold; font-size:14px; color:#000; }
+
+.calendar-cancel { margin:0 !important; padding:0; font-size:12px; font-weight: bold; background:#fde; color:#000;  border-top:1px solid #ddd; }
+.calendar-cancel a:hover  { background:#5b80b2; color:white; }
+.calendar-module { margin:0; padding:2px 5px 3px 5px; font-size:11px; text-align:left; font-weight:bold; background:#bcd; color:#fff; }
+.calendar td.calendar-header { margin: 0; background:#ccffee; font-weight: bold; font-size:12px; text-align:center; border-top:1px solid #ddd; border-bottom:1px solid #ddd }
+*/
+ 
+body {
+  background-color: e9f5f1;
+  /*background-image: url('ivank/asphalt.jpg');*/
+  background-repeat:no-repeat;
+  background-attachment:fixed;
+  background-size: cover;
+  color: #222222; 
+  text-shadow: rgba(250,250,255, .4) 0em 0em 4px;
+
+  font-family: Ubuntu, Verdana, Arial, Helvetica, sans-serif;
+  font-family: Ubuntu; 
+  /*font-weight:bold;*/
+  /*font-size: smaller;*/
+  margin: 0px 0px 0px 0px;
+  text-align: center;
+  /*margin: 1em;*/
+}
+
+.panelHeader {
+  font-size:22px;
+  text-align: center;
+  color:#222222;
+  text-shadow: rgba(200,200,200, .8) 0em 0em 5px,
+  rgba(255,255,255, 1) 0em 0em 1px;
+  padding-left: .4em;
+}
+.panelSubHeader {
+  font-size:20px;
+  text-align: center;
+  color:#222222;
+      text-shadow: rgba(200,200,200, .8) 0em 0em 3px,
+  rgba(255,255,255, 1) 0em 0em 1px;
+}
+.propTitleAndImg{
+  font-size:22px;
+  text-align: center;
+  color:#333333;
+}
+.panelHeaderImg {
+	max-width: 250px;
+	min-width:250px;
+}
+.propMiddlePanel{
+  background-color: rgba(240, 240, 240, .9);
+  border-radius:5px;
+  font-size:15px;
+  max-width: 700px;
+  margin-top: 10px;
+  padding-top: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
+  box-shadow: inset 0px 0px 80px rgba(255, 255, 255, .5), inset 0px 0px 1px rgba(0, 0, 0, 1), inset 0px 0px 6px rgba(0, 0, 0, .4);
+}
+.hListHeader {
+  font-size:22px;
+  margin: 7px;
+  margin-bottom: 10px;
+  text-align: center;
+  color:#333333;
+}
+.featuredTitle {
+  font-size:22px;
+  text-align: center;
+  color:#333333;
+  margin: .3em; 
+}
+.squarePropBox {
+  padding-top: 3px;
+  border: rgba(255,255,255,.0) 6px solid;
+  text-align: center;
+  margin: 0.00em;
+  width: 100%;
+  border-radius: .2em;
+  box-shadow: inset 0 0 2px white, inset 0 0 28px rgba(250, 250, 250, 0.4);
+}
+.squarePropBox:Hover {
+  border: rgba(255,255,255,.7) 6px solid;
+  box-shadow: inset 0 0 50px rgba(255, 250, 255, .5);
+}
+.propHeader {
+  background-color: rgba(255,255,255, .85);
+  padding: 0.4em;
+  padding-left: 1.2em;
+  border-radius: .2em;
+  border: #bdb8b2 1px solid;
+  text-align: center;
+  margin: 0.1em;
+  width: 915px;
+  box-shadow: -4px 4px 5px rgba(50, 50, 50, 0.2);
+}
+.dropDownSearch .propHeader {
+  background-color: rgba(255,255,255, .7);
+  padding: 0.4em;
+  padding-left: 1.2em;
+  border-radius: .2em;
+  border: #bdb8b2 1px solid;
+  text-align: center;
+  margin: 0.1em;
+  width: 100%;
+}
+.propHeaderImage {
+    width: 300px
+}
+.dropDownSearch .propHeaderImage {
+    width: 150px
+}
+.homeCountPanel {
+    margin-bottom: 1.5em;
+}
+.propHeader:hover {
+  background-color: rgba(255,255,255, 1);
+  border-radius: 0.3em;
+  border: white 1px solid;
+}
+.tagItem {
+  border-radius: 0.3em;
+  border: rgba(220,220,220, .4) 1px solid;
+  background-color: rgba(210,210,210, .3);
+}
+.tagItem:hover {
+  border-radius: 0.3em;
+  border: white 1px solid;
+  background-color: rgba(210,210,210, .6);
+}
+
+.PIPanel {
+  background-color: rgba(240, 240, 240, 0.82);
+  padding: 0.1em;
+  padding-left: 1em;
+  padding-right: 0.2em;
+  border-radius: .3em;
+  border: #bdb8b2 1px solid;
+  text-align: left;
+  margin-left: 0.4em;
+  margin-bottom: 0.4em;
+  box-shadow: -4px 4px 5px rgba(50, 50, 50, 0.2);
+}
+.PIPanel:hover {
+  border: gray 1px solid;
+  background-color: rgba(250, 250, 250, 0.92);
+}
+.PIPanelOdd {
+  background-color: rgba(245, 240, 240, 1);
+  padding: 0.1em;
+  padding-left: 1em;
+  padding-right: 0.2em;
+  border-radius: .3em;
+  border: #cdc8c2 1px solid;
+  text-align: left;
+  margin-left: 0.4em;
+  box-shadow: -3px 3px 5px rgba(50, 50, 50, 0.2);
+}
+.PIPanelOdd:hover {
+  border: gray 1px solid;
+  background-color: rgba(250, 250, 250, 1);
+}
+.PIPanel:hover > * .treeLinkPanel {
+    display: block;    
+}
+.PIPanelOdd:hover > * .treeLinkPanel {
+   display: block;   
+}
+.forComments {
+    text-shadow: 0 0 6px rgba(100, 255, 100, .2);
+}
+.againstComments {
+    text-shadow: 0 0 6px rgba(255, 100, 180, .2);
+}
+.internalCommentList{
+    width:100%;
+}
+.commentReplysList{
+    width:100%;
+}
+.authorDateTimeContainer{
+}
+.authorDateTime{
+    font-size: 11px;
+    color: rgba(140, 100, 50, 1);    
+}
+.propTextInfo{
+    
+    font-size: 13px;
+}
+.commentDescreption{
+    font-size: 12px;
+    color: rgba(50, 30, 10, 1);
+    margin-right: -2px;
+    padding-right: 20px;
+    margin-bottom: .2em;
+    margin-top: .2em;
+    max-width: 400px;
+    max-height: 400px;
+    width:100%;
+    overflow: auto;
+}
+.relatedPanel {
+    background-color: ;
+    max-width:100px;
+    overflow: auto;
+}
+.treeLinkPanel {
+    position: relative;
+    display: none;
+    font-size: 10;
+    margin-left: 100px;
+}
+.PIPanel .usernameLink{
+    font-size: 14px;
+    color: rgba(140, 100, 50, 1);
+    margin-bottom: .4em;
+    
+}
+.tinyUserThumb{
+    margin:2px;
+    width:32px;
+    float: left;
+}
+.voteCount{
+    font-size: 11px;
+    color: rgba(120, 120, 140, 1);
+    margin-right: 1px;
+    margin-bottom: .5em;
+    margin-top: .2em;
+}
+.commentSortingLinks{
+    font-size: 12px;
+    color: rgba(120, 120, 140, 1);
+    margin-right: 1px;
+    margin-bottom: .5em;
+    margin-top: .2em;
+}
+
+.ctfLogo{
+	width: 227px;
+	height: 39;
+	background:  url(trimlogo.png) no-repeat bottom left;
+}
+.starBox{
+	width: 100px;
+	height: 20px;
+	background: url(emptystars.png) no-repeat bottom left;
+	text-align: left;
+}
+.starBoxFilled{
+	width: 100px;
+	height: 20px;
+	background: url(stars.png) no-repeat bottom left;
+}
+.innerSquareImage { 
+   position: relative; 
+   width:150px;
+   height: 150px;
+   margin: 10px;
+  /* width: 100%; /* for IE 6 */
+}
+.boxStarHolder { 
+   top: 000px; 
+  }
+.innerSquareText { 
+   position: relative; 
+   bottom: 000px; 
+   left: 0; 
+   width: 160px; 
+   height: 3.9em;
+   color: rgba(10, 25, 15, .9);
+   font: 13px Ubuntu; 
+   letter-spacing: -0.7px;  
+   background: rgba(240, 245, 255, 0.9);
+   padding-left: 10px;
+   padding-top: 10px;
+   overflow: hidden; 
+   box-shadow: inset 0px 3px 0px rgba(0, 180, 255, 0.4);
+}
+.againstPanel {
+  font-size:40px;
+  color: rgba(255,255,255, 1); 
+  padding: 0.5em;
+  border-radius: 1em;
+  text-align: center;
+  width: 90%;
+  margin: 1em;
+  text-shadow: 
+}
+.againstHeader {
+text-shadow: rgba(250,0,40, 1) 0em 0em 6px, rgba(0,0,0, .8) 0em 0em 3px;
+}
+.forPanel {
+  font-size:40px;
+	color: rgba(255,255,255, 1); 
+  padding: 0.5em;
+  border-radius: 1em;
+  text-align: center;
+  width: 90%;
+  margin: 1em;
+}
+.forHeader {
+text-shadow: rgba(0,250,50, 1) 0em 0em 8px, rgba(0,0,0, .8) 0em 0em 3px;
+}
+.maxWidth {
+  width: 100%;
+}
+.mainContainer {
+  width: 100%;
+}
+.mainContainer tbody {
+  /*  padding:0.5em;*/
+  width: 100%;
+}
+.maxWidth td {
+  align: center;
+}
+.embeddedImage {
+	max-width:500px;
+	max-height:500px;	
+}
+.dropDownSearch{
+border:rgb(128,128,128) 1px solid;
+    padding:5px;
+    border-bottom-left-radius: 0.5em;
+    border-bottom-right-radius: 0.5em;
+background: rgba(200,210,220,0.97);
+z-index: 6;
+}
+.topBar {
+	top: 0px;
+  border-bottom: gray 1px solid;
+  /*background-color: #DDDDDD;*/
+  align: center;
+  width: 100%;
+  position:fixed;
+  z-index: 150;
+  background: rgb(199,202,207);
+    background: -moz-linear-gradient(top, rgba(199,202,207,1) 5%, rgba(176,174,187,1) 93%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(5%,rgba(199,202,207,1)), color-stop(93%,rgba(176,174,187,1)));
+    background: -webkit-linear-gradient(top, rgba(199,202,207,1) 5%,rgba(176,174,187,1) 93%);
+    background: -o-linear-gradient(top, rgba(199,202,207,1) 5%,rgba(176,174,187,1) 93%);
+    background: -ms-linear-gradient(top, rgba(199,202,207,1) 5%,rgba(176,174,187,1) 93%);
+    background: linear-gradient(to bottom, rgba(199,202,207,1) 5%,rgba(176,174,187,1) 93%);
+}
+
+.topBar .links a{
+border:rgb(128,128,128) 1px solid;
+    padding:5px;
+    border-radius: 0.5em;
+background: rgba(254,255,255,0.5);
+
+
+}
+.topBar .links a:hover{
+border:rgb(0,199,255) 1px solid;
+color:rgb(0,128,255);
+background: rgba(254,255,240,0.45);
+}
+.searchBox{
+    margin-left:4px;
+    margin-right:-3px;
+    height:23;
+}
+
+.propTriPanel {
+  width: 100%;
+}
+.alignCenter {
+  width: 100%;
+}
+
