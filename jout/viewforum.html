@@ -11,10 +11,8 @@ Messages:
 <script src="zepto.min.js"></script>
 <script>
 var chatout = document.getElementById("chatout");
-var bcn = 0;
   var forumID = getUrlVars()["forumID"];
 
-  //var threadList = bridge.getForumThreadList(forumID);
   console.log("requesting "+'forum'+forumID+'.json');
   $.getJSON('forum'+forumID+'.json', handleThreadList);
 function handleThreadList(threadList){
@@ -22,12 +20,6 @@ function handleThreadList(threadList){
   for (var f in threadList){
     var threadpost = threadList[f];
     convertRSPost(threadpost);
-    //addPostToFeedPanel(post)
-    
-    //var thread = bridge.getForumThreadMsgList(forumID,threadpost.msgId);
-    //console.log("found posts:"+ thread.length);
-    //showChildren(thread)
-    //console.log("requesting "+'thread'+threadpost.msgId+'.json');
     $.getJSON('thread'+threadpost.msgId+'.json', showChildren);
     
   }
@@ -38,24 +30,13 @@ function handleThreadList(threadList){
     for (var p in cThread){
       var cPost = cThread[p];
 
-      var post = convertRSPost(cPost);
-      bcn+=1;
-      console.log("bcn="+bcn);
-      //var newThread = bridge.getForumThreadMsgList(forumID,cPost.msgId);
-      if(bcn<30){
-        //console.log("requesting "+'thread'+cPost.msgId+'.json');
-        $.getJSON('thread'+cPost.msgId+'.json', showChildren);//showChildren(newThread);
-        }// else 
-        //console.log("LIMIT EXCEEDED");
+      convertRSPost(cPost);
+      $.getJSON('thread'+cPost.msgId+'.json', showChildren);//showChildren(newThread);
       
     }
   }
   function convertRSPost(fpost){
-    //fpost = bridge.getForumMessage(forumID, fpost['msgId'])
-    console.log("GOTPOST" + fpost['msgId'])
-    //console.log(JSON.stringify(fpost))
     $.getJSON('msg'+fpost['msgId']+'.json', addPostToFeedPanel);//showChildren(newThread);
-    //return fpost;
   }
     function makeReplyPanel(msgId){
     
