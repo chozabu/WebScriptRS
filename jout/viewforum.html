@@ -12,6 +12,7 @@ Messages:
 <script>
 var chatout = document.getElementById("chatout");
   var forumID = getUrlVars()["forumID"];
+  var onlymouseover = getUrlVars()["onlymouseover"];
 
   console.log("requesting "+'forum'+forumID+'.json');
   $.getJSON('forum'+forumID+'.json', handleThreadList);
@@ -21,7 +22,8 @@ function handleThreadList(threadList){
   for (var f in threadList){
     var threadpost = threadList[f];
     convertRSPost(threadpost);
-    $.getJSON('thread'+threadpost.msgId+'.json', showChildren);
+    if(onlymouseover == "false")
+      $.getJSON('thread'+threadpost.msgId+'.json', showChildren);
     
   }
 }
@@ -33,6 +35,7 @@ function handleThreadList(threadList){
       var cPost = cThread[p];
 
       convertRSPost(cPost);
+      if(onlymouseover == "false")
       $.getJSON('thread'+cPost.msgId+'.json', showChildren);//showChildren(newThread);
       
     }
@@ -57,9 +60,19 @@ function handleThreadList(threadList){
       return personID;//bridge.getPeerName(personID)
     return "Anon";
    }
+   function tryLoadChildren(elem){
+      if(elem.target.hasOwnProperty("requestedchildren")){
+        return;
+      }else{
+        elem.target.requestedchildren = true;
+        var jsonfile = 'thread'+elem.target.id+'.json';
+        //console.log(elem.target)
+        console.log(jsonfile);
+        $.getJSON(jsonfile, showChildren);//showChildren(newThread);
+      }
+   }
   function addPostToFeedPanel(post){
     if (document.getElementById(post.msgId))return false;
-    console.log(post.srcId)
     var newPanel = "<b>"+getName(post.srcId)+"</b>: <i>"+post.title+" </i>"+post.msg+" "+post.msgId+" <br><font size='1em'> @"+new Date(post.ts*1000)+"</font>" ;
 
     var finalPanel = document.createElement("div");
@@ -67,11 +80,13 @@ function handleThreadList(threadList){
     finalPanel.innerHTML = newPanel;
     finalPanel.id = post.msgId;
     finalPanel.appendChild(makeReplyPanel(post.msgId));
+    if(onlymouseover == "true")
+      finalPanel.onmouseover = tryLoadChildren;
+    //$.getJSON('thread'+cPost.msgId+'.json', showChildren);//showChildren(newThread);
     //var imgPanel = document.createElement("img");
     //bridge.getAvatarDetails(post.srcId).assignTo(imgPanel);
     //finalPanel.insertBefore(imgPanel, finalPanel.firstChild);
     if(post.hasOwnProperty("parentId") && post.parentId.length>2){
-      console.log("hasparent");
       var replypanel = document.getElementById(post.parentId+"replies");
       //imgPanel.style.float="left";
       replypanel.insertBefore(finalPanel, replypanel.firstChild);

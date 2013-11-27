@@ -21,7 +21,9 @@ function handleForums(forums){
     if (f['forumRelationship'] == 'SUBSCRIBED'){
           //console.log( f['forumName']);
           var id = f['forumId'];
-        chatout.innerHTML += " <a href=viewforum.html?forumID="+id+">"+f['forumName']+"</a><br/>";
+          var forumlink = "<a href=viewforum.html?forumID="+id+"&onlymouseover=true>"+f['forumName']+"</a>"
+          var loadall = "<a href=viewforum.html?forumID="+id+"&onlymouseover=false>loadall</a>"
+        chatout.innerHTML += forumlink+" or "+loadall+" <br/>";
           //chatout.innerHTML += f['forumName']+"<br>";
     }
   }
