@@ -17,6 +17,7 @@ var chatout = document.getElementById("chatout");
   $.getJSON('forum'+forumID+'.json', handleThreadList);
 function handleThreadList(threadList){
     console.log("found threads:"+ threadList.length);
+    threadList.sort(function(a,b){return a.ts-b.ts});
   for (var f in threadList){
     var threadpost = threadList[f];
     convertRSPost(threadpost);
@@ -26,6 +27,7 @@ function handleThreadList(threadList){
 }
   function showChildren(cThread){
     if (cThread.length == 0) return;
+    cThread.sort(function(a,b){return a.ts-b.ts});
     //console.log(JSON.stringify(cThread))
     for (var p in cThread){
       var cPost = cThread[p];
