@@ -42,8 +42,16 @@ Pythonize::Pythonize ()
 
     if (!Py_IsInitialized ())
     {
+        /*int argc;
+        char * argv[1];
+
+        argc = 1;
+        argv[0] = "python/";
+
+        Py_SetProgramName(argv[0]);*/
         PyEval_InitThreads ();
         Py_Initialize ();
+        //PySys_SetArgv(argc, argv);
         if (!Py_IsInitialized ())
         {
             pythonInit = 0;
