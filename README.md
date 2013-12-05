@@ -1,6 +1,7 @@
 #Webkit Plugin for Retroshare
 
 #####Testing python support ( http://www.henning-schroeder.de/embeddedpyqt )
+#####Testing JSON-RPC support ( https://bitbucket.org/devonit/qjsonrpc )
 
 This embeds a set of webkit tabs in a plugin page, along with the startings of a javascript bridge<br>
 Still some way to go to be handy, So far it can:<br>
@@ -13,8 +14,12 @@ Still some way to go to be handy, So far it can:<br>
 -peer details/avatar<br>
 -download any url<br>
 -open new tabs<br>
+-Lots more<br>
 <br>
-implemented tests include<br>
+Examples include<br>
+-geographical peer map (pyqt)<br>
+-global peer map (python dump, d3.js view)<br>
+-external python via JSON-RPC<br>
 -file search<br>
 -packet inspection on index<br>
 -broadcast chat<br>
@@ -26,6 +31,7 @@ implemented tests include<br>
 -3d broadcast/wall chat - draggable text nodes. Shift+mouse moves camera<br/>
 -local storage notepad - uses html5 persistant storage and editable tags (plus a source editor)<br/>
 -Live MicroBlogging. only Friends see your messages, and friends of a friend whose message you comment on(buggy)<br/>
+-Lots more<br/>
 
 
 
