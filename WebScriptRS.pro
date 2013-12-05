@@ -12,8 +12,7 @@ SOURCES = WebScriptRSPlugin.cpp \
     webbridgers.cpp \
     webtabcontents.cpp \
     filedownloader.cpp \
-    pytabcontents.cpp \
-    testservice.cpp
+    pytabcontents.cpp
 HEADERS = WebScriptRSPlugin.h \
     topjcdialog.h \
     RSJsonItems.h \
@@ -23,8 +22,7 @@ HEADERS = WebScriptRSPlugin.h \
     webbridgers.h \
     webtabcontents.h \
     filedownloader.h \
-    pytabcontents.h \
-    testservice.h
+    pytabcontents.h
 FORMS   = topjcdialog.ui \
     webtabcontents.ui
 

@@ -13,7 +13,6 @@
 #include "p3JsonRS.h"
 #include "webviewrs.h"
 
-#include "testservice.h"
 #include "qjsonrpclocalserver.h"
 
 #include "embpyqt/embeddedpyqt.h"
@@ -52,7 +51,6 @@ protected:
 private:
     Ui::WebScriptDialog *ui;
     QJsonRpcLocalServer rpcServer;
-    TestService ts;
 };
 
 #endif // TOPJCDIALOG_H
