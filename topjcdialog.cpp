@@ -63,7 +63,7 @@ void WebScriptDialog::startRPC(){
     }else{
 
         std::cerr << "temp service: "<< serviceName.toStdString().c_str() << "\n";
-        rpcServer.addService(&ts);
+        rpcServer.addService(bridge);
         if (!rpcServer.listen(serviceName)) {
             std::cerr << "could not start server\n: " << rpcServer.errorString().toStdString().c_str() << "\n";
         } else {
