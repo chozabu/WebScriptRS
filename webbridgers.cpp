@@ -28,7 +28,7 @@
 #include <QString>
 #include <QWidget>
 WebBridgeRS::WebBridgeRS(QObject *parent) :
-    QObject(parent)
+    QJsonRpcService(parent)
 {
     this->setObjectName("bridge");
     //rsFiles->getSharedDirectories();

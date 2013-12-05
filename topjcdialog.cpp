@@ -4,6 +4,19 @@
 #include "pytabcontents.h"
 
 #include <QtGui>
+
+
+#include <QLocalServer>
+#include <QFile>
+#include <QDir>
+
+#if QT_VERSION >= 0x050000
+#include <QStandardPaths>
+#else
+#include <QDesktopServices>
+#endif //QT_VERSION >= 0x050000
+
+
 /** Constructor
 LinksDialog::LinksDialog(RsPeers *peers, RsFiles *files, QWidget *parent)
 : MainPage(parent), mPeers(peers), mFiles(files)
@@ -33,6 +46,32 @@ WebScriptDialog::WebScriptDialog(QWidget *parent) :
     connect(ui->closeTabBtn, SIGNAL(clicked()), this, SLOT(removeTab()));
     connect(ui->pythonBtn, SIGNAL(clicked()), this, SLOT(doPython()));
     connect( bridge, SIGNAL(newTabUrl(QString)),    this,   SLOT(onNewTabUrl(QString)) );
+
+#if QT_VERSION >= 0x050000
+    QDir tempDirectory(QStandardPaths::writableLocation(QStandardPaths::TempLocation));
+#else
+    QDir tempDirectory(QDesktopServices::storageLocation(QDesktopServices::TempLocation));
+#endif //QT_VERSION >= 0x050000
+    QString serviceName = tempDirectory.absoluteFilePath("testservice");
+    //serviceName = "testservice";
+    std::cerr << "starting RPC Server CERR\n";
+    if (QFile::exists(serviceName) && !QFile::remove(serviceName)) {
+         qDebug() << "couldn't delete temporary service";
+         std::cerr << "couldn't delete temporary service";
+    }else{
+
+        std::cerr << "temp service: "<< serviceName.toStdString().c_str() << "\n";
+        rpcServer.addService(&ts);
+        if (!rpcServer.listen(serviceName)) {
+            std::cerr << "could not start server: " << rpcServer.errorString().toStdString().c_str() << "\n";
+        } else {
+            std::cerr << "Server Started\n";
+        }
+    }
+    std::cerr << "err\n\n\n\n\n";
+    std::cerr << "errcsover";
+    std::cerr << "err\n\n\n\n\n";
+    std::cerr << "errcsover";
 
 }
 

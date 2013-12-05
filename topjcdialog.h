@@ -13,6 +13,9 @@
 #include "p3JsonRS.h"
 #include "webviewrs.h"
 
+#include "testservice.h"
+#include "qjsonrpclocalserver.h"
+
 #include "embpyqt/embeddedpyqt.h"
 
 namespace Ui {
@@ -47,6 +50,8 @@ protected:
     void javaScriptConsoleMessage(const QString& message, int lineNumber, const QString& sourceID);
 private:
     Ui::WebScriptDialog *ui;
+    QJsonRpcLocalServer rpcServer;
+    TestService ts;
 };
 
 #endif // TOPJCDIALOG_H

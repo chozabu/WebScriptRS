@@ -6,13 +6,16 @@
 #include<QVariantMap>
 #include <QPixmap>
 #include "embpyqt/embeddedpyqt.h"
+#include "qjsonrpc/qjsonrpcservice.h"
 
 class p3JsonRS;
 
 /*this class is passed to JS as "bridge"*/
-class WebBridgeRS : public QObject
+class WebBridgeRS : public QJsonRpcService
 {
+
     Q_OBJECT
+    Q_CLASSINFO("serviceName", "bridge")
 public:
     explicit WebBridgeRS(QObject *parent = 0);
     void pushMsgToJs(QVariantMap message);
@@ -63,5 +66,7 @@ signals:
     void newTabUrl(QString url);
 
 };
+
+extern WebBridgeRS eBridge;
 
 #endif // WEBBRIDGERS_H

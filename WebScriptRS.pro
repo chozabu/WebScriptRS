@@ -12,7 +12,8 @@ SOURCES = WebScriptRSPlugin.cpp \
     webbridgers.cpp \
     webtabcontents.cpp \
     filedownloader.cpp \
-    pytabcontents.cpp
+    pytabcontents.cpp \
+    testservice.cpp
 HEADERS = WebScriptRSPlugin.h \
     topjcdialog.h \
     RSJsonItems.h \
@@ -22,12 +23,15 @@ HEADERS = WebScriptRSPlugin.h \
     webbridgers.h \
     webtabcontents.h \
     filedownloader.h \
-    pytabcontents.h
+    pytabcontents.h \
 FORMS   = \
     topjcdialog.ui \
-    webtabcontents.ui
+    webtabcontents.ui \
+    testservice.h
 
+#embedded pyqt
 INCLUDEPATH += -I./embpyqt
+
 SOURCES += \
     embpyqt/embeddedpyqt.cpp \
     embpyqt/pythonize.cpp
@@ -38,6 +42,12 @@ HEADERS += \
 LIBS        += -lpython2.7 -L/usr/lib/
 INCLUDEPATH += /usr/include/python2.7/
 
+# RPC
+PRE_TARGETDEPS *= ./qjsonrpc/src/libqjsonrpc.a
+
+LIBS += ./qjsonrpc/src/libqjsonrpc.a
+INCLUDEPATH += ./qjsonrpc/src/
+LIBS += -L./qjsonrpc/src/ #-lqjsonrpc
 
 TARGET = WebScriptRS
 
