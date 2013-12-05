@@ -42,6 +42,7 @@ public slots:
     void onNewRsTab(QString hash);
 
     void onNewPyTabUrl(QString url);
+    void startRPC();
 protected slots:
     void adjustLocation();
     void changeLocation();

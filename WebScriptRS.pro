@@ -24,10 +24,9 @@ HEADERS = WebScriptRSPlugin.h \
     webtabcontents.h \
     filedownloader.h \
     pytabcontents.h \
-FORMS   = \
-    topjcdialog.ui \
-    webtabcontents.ui \
     testservice.h
+FORMS   = topjcdialog.ui \
+    webtabcontents.ui
 
 #embedded pyqt
 INCLUDEPATH += -I./embpyqt

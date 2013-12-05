@@ -50,6 +50,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="rpcBtn">
+       <property name="text">
+        <string>Start RPC Server</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>

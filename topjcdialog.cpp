@@ -45,8 +45,11 @@ WebScriptDialog::WebScriptDialog(QWidget *parent) :
     connect(ui->newTabBtn, SIGNAL(clicked()), this, SLOT(addTab()));
     connect(ui->closeTabBtn, SIGNAL(clicked()), this, SLOT(removeTab()));
     connect(ui->pythonBtn, SIGNAL(clicked()), this, SLOT(doPython()));
+    connect(ui->rpcBtn, SIGNAL(clicked()), this, SLOT(startRPC()));
     connect( bridge, SIGNAL(newTabUrl(QString)),    this,   SLOT(onNewTabUrl(QString)) );
+}
 
+void WebScriptDialog::startRPC(){
 #if QT_VERSION >= 0x050000
     QDir tempDirectory(QStandardPaths::writableLocation(QStandardPaths::TempLocation));
 #else
@@ -54,24 +57,19 @@ WebScriptDialog::WebScriptDialog(QWidget *parent) :
 #endif //QT_VERSION >= 0x050000
     QString serviceName = tempDirectory.absoluteFilePath("testservice");
     //serviceName = "testservice";
-    std::cerr << "starting RPC Server CERR\n";
+    std::cerr << "starting RPC Server\n";
     if (QFile::exists(serviceName) && !QFile::remove(serviceName)) {
-         qDebug() << "couldn't delete temporary service";
          std::cerr << "couldn't delete temporary service";
     }else{
 
         std::cerr << "temp service: "<< serviceName.toStdString().c_str() << "\n";
         rpcServer.addService(&ts);
         if (!rpcServer.listen(serviceName)) {
-            std::cerr << "could not start server: " << rpcServer.errorString().toStdString().c_str() << "\n";
+            std::cerr << "could not start server\n: " << rpcServer.errorString().toStdString().c_str() << "\n";
         } else {
             std::cerr << "Server Started\n";
         }
     }
-    std::cerr << "err\n\n\n\n\n";
-    std::cerr << "errcsover";
-    std::cerr << "err\n\n\n\n\n";
-    std::cerr << "errcsover";
 
 }
 
