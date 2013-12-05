@@ -1,0 +1,188 @@
+<html><head><title>Index</title>
+<style>
+
+.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.link {
+  stroke: #999;
+  stroke-opacity: .6;
+}
+
+</style>
+<link rel="stylesheet" href="ct.css" type="text/css">
+</head><body>
+<a href="index.html">Back to Index</a><br/>
+
+<br>
+Peer Map - export
+<button onclick="bridge.runPythonFile('python/dumpanonconnections.py')">dump my peers</button> this will dump your peer fingerprint list to a file in your downloads directory (which is hopefully shared in some way)<br>
+Try refreshing after dumping your peer list - may need to wait/force a RS file check<br>
+<button onclick="downloadMore()">Download Data</button> download friends lists<br>
+<p id="downloadEle"></p>
+
+<script src="zepto.min.js"></script>
+
+<script src="d3.v3.min.js"></script>
+<script src="libsha512.js"></script>
+<script>
+
+var downloadEle = document.getElementById('downloadEle');
+function dsHash(data){
+    var shaObj = new jsSHA(data, "TEXT");
+    return shaObj.getHash("SHA-512", "HEX").substr(0,20);
+    //return hashlib.sha512(data).hexdigest()[0:20]
+}
+function dhHashId(Id){
+    fi=bridge.getPeerDetails(Id);
+    return dsHash(dsHash(fi['id'])+dsHash(fi['name']));
+    }
+var myOwnHash = dhHashId(bridge.getOwnId());
+var friendIds = bridge.getFriendList();
+var friendHashs = {};
+$.each(friendIds, function(key, value){
+friendHashs[dhHashId(value)]=value;
+})
+console.log(myOwnHash)
+var width = 960,
+    height = 500;
+
+var color = d3.scale.category20();
+
+var force = d3.layout.force()
+    .charge(-120)
+    .linkDistance(30)
+    .size([width, height]);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+
+links = [];
+nodes = [];
+nodesDict = {}
+
+searchOptions = {"localindexed":true,"remoteindexed":false,"boolexp":false};
+var results = bridge.searchKeywords("global-peer-map-from", searchOptions);
+console.log(results)
+
+filesList = [
+//bridge.getDownloadDirectory()+"/global-peer-map-from-14758448e1fe21b6ba3d.json",
+//bridge.getDownloadDirectory()+"/global-peer-map-from-58eb72735298614b92e1.json"
+]
+for (r in results){
+filesList.push(results[r].fullpath+results[r].srname);
+}
+var handledCount = 0;
+for (f in filesList){
+  $.getJSON(filesList[f], handleFile)
+}
+function checkAddNode(hash){
+  if (!nodesDict.hasOwnProperty(hash)){
+    var name = hash.substr(0,5);
+    if(hash==myOwnHash)name="ME";
+    if(friendHashs.hasOwnProperty(hash))name=bridge.getPeerName(friendHashs[hash]).substr(0,10);
+    nodes.push({"name":name});
+    nodesDict[hash]=nodes.length-1;
+    }
+  return nodesDict[hash]
+}
+function handleFile(graph){
+console.log(graph)
+graph.links = [];
+var ownindex =checkAddNode(graph.ownHash);
+for (var l = 0;l <graph.contactHashes.length;l++){
+  var otherindex = checkAddNode(graph.contactHashes[l])
+  //console.log(ownindex+" : "+otherindex)
+  if(ownindex!=otherindex)
+  links.push({"source":ownindex,"target":otherindex});
+  }
+  
+  handledCount+=1;
+  if(handledCount>=filesList.length)doGraph();
+}
+function doGraph(){
+
+  force
+      .nodes(nodes)
+      .links(links)
+      .linkStrength(0.09)
+      .charge(-200)
+      .start();
+  
+  var link = svg.selectAll(".link")
+      .data(links)
+    .enter().append("line")
+      .attr("class", "link")
+      .style("stroke-width", function(d) { return 2; });
+
+  /*var node = svg.selectAll(".node")
+      .data(nodes)
+    .enter().append("circle")
+      .attr("class", "node")
+      .attr("r", 6)
+      .style("fill", function(d) { return color(6); })
+      .call(force.drag);*/
+  // Create the groups under svg
+var gnodes = svg.selectAll('g.gnode')
+  .data(nodes)
+  .enter()
+  .append('g')
+  .classed('gnode', true);
+
+// Add one circle in each group
+var node = gnodes.append("circle")
+  .attr("class", "node")
+  .attr("r", 7)
+  .style("fill", function(d) { return color(6); })//d.group
+  .call(force.drag);
+
+// Append the labels to each group
+var labels = gnodes.append("text")
+  .text(function(d) { return d.name; });
+
+  //node.append("title")
+  //  .text(function(d) { return d.name; });
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+  // Translate the groups
+  gnodes.attr("transform", function(d) { 
+    return 'translate(' + [d.x, d.y] + ')'; 
+  });    
+  });
+}
+
+function downloadMore(){
+console.log("yo")
+  searchOptions = {"localindexed":false,"remoteindexed":true,"boolexp":false};
+  var results = bridge.searchKeywords("global-peer-map-from", searchOptions);
+  downloadEle.innerHTML = ""
+  for (var i in results){
+    
+        var qname = results[i].srname;
+        var qsize = results[i].size;
+        var qhash = +results[i].hash;
+    var result = bridge.downloadFile(qname, qhash, qsize);
+    if (result.status != "downloaded"){
+    downloadEle.innerHTML+="Downloading: "+qname+"<br>";
+      //var finalpath = getFinalPath(result.path, result.fname);
+    }
+    
+  }
+  if(downloadEle.innerHTML == "")
+    downloadEle.innerHTML = "No New Peers found"
+  else
+    downloadEle.innerHTML += "Downloading new! please refresh when downloads complete"
+}
+</script>
+
+</body>
+</html>
