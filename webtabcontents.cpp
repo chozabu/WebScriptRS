@@ -48,12 +48,6 @@ void WebTabContents::adjustLocation()
     ui->lineEdit->setText(webview->url().toString());
 }
 
-void WebTabContents::setP3service(p3JsonRS *p3servicein)
-{
-    webview->setP3service(p3servicein);
-    //p3service = p3servicein;
-}
-
 WebViewRS *WebTabContents::getWebView()
 {
     return webview;

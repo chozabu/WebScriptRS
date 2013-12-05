@@ -7,7 +7,7 @@ PyTabContents::PyTabContents(QWidget *parent, p3JsonRS *p3servicein) :
 
     p3service = p3servicein;
     embpyqt = new EmbeddedPyQt();
-    embpyqt->registerObject(*p3service->bridge);
+    embpyqt->registerObject(*eBridge);
     embpyqt->registerMetaObject(WebBridgeRS::staticMetaObject);
     embpyqt->registerObject(*this);
     embpyqt->init("embpyqt/python/initembpyqt.py");

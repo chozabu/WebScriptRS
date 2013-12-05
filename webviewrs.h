@@ -13,8 +13,6 @@ class WebViewRS : public QWebView
 public:
     explicit WebViewRS(QWidget *parent = 0);
     ~WebViewRS();
-    void setP3service(p3JsonRS *p3servicein);
-    p3JsonRS *p3service;
 
 public slots:
     void onJavaScriptWindowObjectCleared();

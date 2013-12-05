@@ -23,7 +23,7 @@ LinksDialog::LinksDialog(RsPeers *peers, RsFiles *files, QWidget *parent)
 {
 
 }**/
-
+WebBridgeRS *eBridge = new WebBridgeRS();
 WebScriptDialog::WebScriptDialog(QWidget *parent) :
     MainPage(parent),
     ui(new Ui::WebScriptDialog)
@@ -32,7 +32,7 @@ WebScriptDialog::WebScriptDialog(QWidget *parent) :
 
     embpyqt = new EmbeddedPyQt();
 
-    bridge = new WebBridgeRS();
+    bridge = eBridge;
     bridge->embpyqt = embpyqt;
 
 
@@ -93,9 +93,9 @@ void WebScriptDialog::setP3service(p3JsonRS *p3servicein)
 {
     //webview->setP3service(p3servicein);
     p3service = p3servicein;
-    p3service->bridge = bridge;
+    //p3service->bridge = bridge;
     bridge->p3service = p3service;
-    std::cerr << "bridge on set: " << p3service->bridge << std::endl;
+    //std::cerr << "bridge on set: " << p3service->bridge << std::endl;
     addTab();
 }
 
@@ -113,8 +113,7 @@ void WebScriptDialog::onNewTabUrl(QString url)
 {
     WebTabContents * wtc = new WebTabContents(this);
     wtc->getWebView()->setUrl(QUrl(url));
-    wtc->setP3service(p3service);
-    ui->webTabs->addTab(wtc,QString("hi"));
+    ui->webTabs->addTab(wtc,QString("WSRS"));
     connect( wtc->getWebView(), SIGNAL(titleChanged(QString)),    this,   SLOT(onTitleChanged(QString)) );
     connect( wtc->getWebView(), SIGNAL(requestTabForHash(QString)),    this,   SLOT(onNewRsTab(QString)) );
 }

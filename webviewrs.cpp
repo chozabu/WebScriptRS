@@ -110,12 +110,7 @@ void WebViewRS::onJavaScriptWindowObjectCleared()
     QWebFrame *frame = this->page()->mainFrame();
     //frame->setZoomFactor(4);
     frame->addToJavaScriptWindowObject("webview", this);
-    frame->addToJavaScriptWindowObject("bridge", p3service->bridge);
-}
-
-void WebViewRS::setP3service(p3JsonRS *p3servicein)
-{
-    p3service = p3servicein;
+    frame->addToJavaScriptWindowObject("bridge", eBridge);
 }
 
 

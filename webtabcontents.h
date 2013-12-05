@@ -15,7 +15,6 @@ class WebTabContents : public QWidget
 public:
     explicit WebTabContents(QWidget *parent = 0);
     ~WebTabContents();
-    void setP3service(p3JsonRS *p3servicein);
     WebViewRS *getWebView();
 
 protected slots:

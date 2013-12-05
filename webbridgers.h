@@ -67,6 +67,6 @@ signals:
 
 };
 
-extern WebBridgeRS eBridge;
+extern WebBridgeRS *eBridge;
 
 #endif // WEBBRIDGERS_H

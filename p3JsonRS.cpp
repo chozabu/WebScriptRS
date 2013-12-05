@@ -115,7 +115,7 @@ void p3JsonRS::handleJsonItem( RsJsonItem * item )
     qMsg.append(QString(item->getMessage().c_str()));
     qMsg.append(QString(item->PeerId().c_str()));
     qMsg.append(QString(rsPeers->getPeerName(item->PeerId()).c_str()));*/
-    bridge->pushMsgToJs(qDict);
+    eBridge->pushMsgToJs(qDict);
     //mMsgque->storeMsg(item);
 }
 
