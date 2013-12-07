@@ -52,8 +52,7 @@ var width = 960,
 var color = d3.scale.category20();
 
 var force = d3.layout.force()
-    .charge(-120)
-    .linkDistance(30)
+    //.charge(30)
     .size([width, height]);
 
 var svg = d3.select("body").append("svg")
@@ -110,8 +109,9 @@ function doGraph(){
   force
       .nodes(nodes)
       .links(links)
-      .linkStrength(0.09)
-      .charge(-200)
+      .linkStrength(0.2)
+      .charge(-600)
+      .linkDistance(80)
       .start();
   
   var link = svg.selectAll(".link")
@@ -162,7 +162,6 @@ var labels = gnodes.append("text")
 }
 
 function downloadMore(){
-console.log("yo")
   searchOptions = {"localindexed":false,"remoteindexed":true,"turtle":true,"boolexp":false};
   var sresult = bridge.searchKeywords("global-peer-map-from", searchOptions);
   var results = sresult.results;
@@ -186,13 +185,10 @@ console.log("yo")
 }
 
 bridge.rsTurtleResult.connect(rsTurtleResult);
-console.log("called connect");
 function rsTurtleResult(result){
-  //if (turtleresultcount > limit)return;
   console.log("running turtleresult");
   console.log(result);
   if (result.name.substr(0,20) == "global-peer-map-from" && result.status =="notdownloaded" ){
-    console.log("GOODUN");
     downloadEle.innerHTML += "Downloading: "+result.name+"<br>"
     var result = bridge.downloadFile(result.name, result.hash, result.size);
   }
