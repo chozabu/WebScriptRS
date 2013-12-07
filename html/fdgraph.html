@@ -66,7 +66,8 @@ nodes = [];
 nodesDict = {}
 
 searchOptions = {"localindexed":true,"remoteindexed":false,"boolexp":false};
-var results = bridge.searchKeywords("global-peer-map-from", searchOptions);
+var sresult = bridge.searchKeywords("global-peer-map-from", searchOptions);
+var results = sresult.results;
 console.log(results)
 
 filesList = [
