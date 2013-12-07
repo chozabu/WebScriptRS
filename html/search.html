@@ -31,6 +31,7 @@ var boolxp = document.getElementById('boolxp');
 var resultspanel =document.getElementById('searchresults');
 var searchLimit =document.getElementById('searchLimit');
 var limit = searchLimit.value;
+var search_id = -1;
 function testSearch(){
 
     limit = searchLimit.value;
@@ -39,6 +40,7 @@ function testSearch(){
     searchOptions = {"localindexed":local.checked,"remoteindexed":remote.checked,"turtle":turtle.checked,"boolexp":boolxp.checked};
     var sresult = bridge.searchKeywords(searchTerms, searchOptions);
     console.log(sresult);
+    search_id = sresult.turtleID;
     var results = sresult.results;
     
     range = results.length;
@@ -115,6 +117,7 @@ function testSearch(){
   var turtleresultcount = 0;
   function rsTurtleResult(result){
   //if (turtleresultcount > limit)return;
+  if(search_id!=result.search_id) return;
   console.log("running turtleresult");
   turtleresultcount+=1;
   console.log(result);
