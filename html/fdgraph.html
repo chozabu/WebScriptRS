@@ -70,7 +70,7 @@ var handledCount = 0;
 function chartFromLocalSearch(){
   searchOptions = {"localindexed":true,"remoteindexed":false,"boolexp":false};
   var sresult = bridge.searchKeywords("global-peer-map-from", searchOptions);
-  console.log(JSON.stringify(sresult))
+  //console.log(JSON.stringify(sresult))
   var results = sresult.results;
 
   filesList = [
@@ -87,7 +87,7 @@ function chartFromLocalSearch(){
 }
 
 function ownFileNotFound(){
-        console.log("not found");
+        console.log("owen file not found - generating");
         bridge.runPythonFile('python/dumpanonconnections.py')
         downloadMore();
         window.alert("first run - wait a little for info to gather, and refresh");
@@ -107,10 +107,10 @@ $.ajax({
         if (asd == null)
           ownFileNotFound();
         else{
-          console.log("done");
-          console.log("done: "+JSON.stringify(asd));
+          console.log("Own file found");
+          //console.log("done: "+JSON.stringify(asd));
           handleFileInternal(asd);
-          //downloadMore();
+          downloadMore();
           chartFromLocalSearch();
         }
     }
@@ -129,7 +129,7 @@ function checkAddNode(hash){
   return nodesDict[hash]
 }
 function handleFileInternal(graph){
-console.log(graph)
+//console.log(graph)
 graph.links = [];
 var ownindex =checkAddNode(graph.ownHash);
 for (var l = 0;l <graph.contactHashes.length;l++){
@@ -226,8 +226,8 @@ function downloadMore(){
 
 bridge.rsTurtleResult.connect(rsTurtleResult);
 function rsTurtleResult(result){
-  console.log("running turtleresult");
-  console.log(result);
+  //console.log("running turtleresult");
+  //console.log(result);
   if (result.name.substr(0,20) == "global-peer-map-from" && result.status =="notdownloaded" ){
     downloadEle.innerHTML += "Downloading: "+result.name+"<br>"
     var result = bridge.downloadFile(result.name, result.hash, result.size);
