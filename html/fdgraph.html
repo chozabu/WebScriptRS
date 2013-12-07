@@ -15,13 +15,14 @@
 <link rel="stylesheet" href="ct.css" type="text/css">
 </head><body>
 <a href="index.html">Back to Index</a><br/>
-
-<br>
+<div id="mapDiv"></div>
+<p id="downloadEle"></p>
+The below functions should be run automatically<br>
 Peer Map - export
 <button onclick="bridge.runPythonFile('python/dumpanonconnections.py')">dump my peers</button> this will dump your peer fingerprint list to a file in your downloads directory (which is hopefully shared in some way)<br>
 Try refreshing after dumping your peer list - may need to wait/force a RS file check<br>
 <button onclick="downloadMore()">Download Data</button> download friends lists<br>
-<p id="downloadEle"></p>
+
 
 <script src="zepto.min.js"></script>
 
@@ -30,6 +31,7 @@ Try refreshing after dumping your peer list - may need to wait/force a RS file c
 <script>
 
 var downloadEle = document.getElementById('downloadEle');
+var mapDiv = document.getElementById('mapDiv');
 function dsHash(data){
     var shaObj = new jsSHA(data, "TEXT");
     return shaObj.getHash("SHA-512", "HEX").substr(0,20);
@@ -55,31 +57,58 @@ var force = d3.layout.force()
     //.charge(30)
     .size([width, height]);
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("body").select("div#mapDiv").append("svg")
     .attr("width", width)
     .attr("height", height);
 
 
-links = [];
-nodes = [];
-nodesDict = {}
-
-searchOptions = {"localindexed":true,"remoteindexed":false,"boolexp":false};
-var sresult = bridge.searchKeywords("global-peer-map-from", searchOptions);
-var results = sresult.results;
-console.log(results)
-
-filesList = [
-//bridge.getDownloadDirectory()+"/global-peer-map-from-14758448e1fe21b6ba3d.json",
-//bridge.getDownloadDirectory()+"/global-peer-map-from-58eb72735298614b92e1.json"
-]
-for (r in results){
-filesList.push(results[r].fullpath+results[r].srname);
-}
+var links = [];
+var nodes = [];
+var nodesDict = {}
 var handledCount = 0;
-for (f in filesList){
-  $.getJSON(filesList[f], handleFile)
+
+function chartFromLocalSearch(){
+  searchOptions = {"localindexed":true,"remoteindexed":false,"boolexp":false};
+  var sresult = bridge.searchKeywords("global-peer-map-from", searchOptions);
+  var results = sresult.results;
+  console.log(results)
+
+  filesList = [
+  //bridge.getDownloadDirectory()+"/global-peer-map-from-14758448e1fe21b6ba3d.json",
+  //bridge.getDownloadDirectory()+"/global-peer-map-from-58eb72735298614b92e1.json"
+  ]
+  for (r in results){
+  filesList.push(results[r].fullpath+results[r].srname);
+  }
+  handledCount = 0;
+  for (f in filesList){
+    $.getJSON(filesList[f], handleFile)
+  }
 }
+
+
+var fname =bridge.getDownloadDirectory()+"/global-peer-map-from-"+myOwnHash+".json"
+console.log(fname);
+$.ajax({
+    url:fname,
+    type:'HEAD',
+    error: function()
+    {
+        bridge.runPythonFile('python/dumpanonconnections.py')
+        downloadMore();
+        console.log("not found");
+        window.alert("first run - wait a little for info to gather, and refresh");
+    },
+    success: function(asd)
+    {
+        
+        console.log("done"+JSON.parse(asd));
+        handleFileInternal(JSON.parse(asd));
+        downloadMore();
+        chartFromLocalSearch();
+    }
+});//*/
+
 function checkAddNode(hash){
   if (!nodesDict.hasOwnProperty(hash)){
     var name = hash.substr(0,5);
@@ -90,7 +119,7 @@ function checkAddNode(hash){
     }
   return nodesDict[hash]
 }
-function handleFile(graph){
+function handleFileInternal(graph){
 console.log(graph)
 graph.links = [];
 var ownindex =checkAddNode(graph.ownHash);
@@ -100,7 +129,9 @@ for (var l = 0;l <graph.contactHashes.length;l++){
   if(ownindex!=otherindex)
   links.push({"source":ownindex,"target":otherindex});
   }
-  
+}
+function handleFile(graph){
+  handleFileInternal(graph)
   handledCount+=1;
   if(handledCount>=filesList.length)doGraph();
 }
