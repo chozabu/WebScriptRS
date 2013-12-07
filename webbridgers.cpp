@@ -39,7 +39,7 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
     //pMainWindow->chatLobbyDialog->
     //pMainWindow->//blast - adding actions/plugins is private...
     connect(NotifyQt::getInstance(), SIGNAL(downloadComplete(QString)), this, SLOT(onDownloadComplete(QString)));
-    //connect(NotifyQt::getInstance(), SIGNAL(gotTurtleSearchResult(qulonglong,FileDetail)), this, SLOT()));
+    connect(NotifyQt::getInstance(), SIGNAL(gotTurtleSearchResult(qulonglong,FileDetail)), this, SLOT(gotTurtleSearchResult(qulonglong,FileDetail)));
 
 }
 
@@ -156,6 +156,27 @@ QVariantMap WebBridgeRS::fileDetails(QString qhash)
     return qdd;
 }
 
+void WebBridgeRS::gotTurtleSearchResult(qulonglong search_id,FileDetail file)
+{
+    QVariantMap qdd;
+
+    std::cerr << "\n\nWSRS: turtle result: " << file.name.c_str() << "\n\n";
+    FileInfo fi;
+    if (rsFiles->alreadyHaveFile(file.hash, fi))
+        qdd.insert("status","downloaded");
+    else
+        qdd.insert("status","notdownloaded");
+    qdd.insert("path",QString::fromStdString(file.path));
+    qdd.insert("hash",QString::fromStdString(file.hash));
+    qdd.insert("age",QString::number(file.age));
+    qdd.insert("id",QString::fromStdString(file.id));
+    qdd.insert("name",QString::fromStdString(file.name));
+    qdd.insert("rank",QString::number(file.rank));
+    qdd.insert("size",QString::number(file.size));
+
+    qdd.insert("search_id",QString::number(search_id));
+    emit rsTurtleResult(qdd);
+}
 void WebBridgeRS::onDownloadComplete(QString hash)
 {
     QVariantMap qdd;
@@ -451,6 +472,19 @@ QVariantList WebBridgeRS::searchKeywords(const QString& keywords, QVariantMap se
     NameExpression exprs(ContainsAllStrings,words,true) ;
     LinearizedExpression lin_exp ;
     exprs.linearize(lin_exp) ;
+
+    TurtleRequestId req_id ;
+
+    if(searchOptions.value("turtle", false).toBool())
+    {
+        if(n==1)
+            req_id = rsTurtle->turtleSearch(words.front()) ;
+        else
+            req_id = rsTurtle->turtleSearch(lin_exp) ;
+    }
+    else
+        req_id = ((((uint32_t)rand()) << 16)^0x1e2fd5e4) + (((uint32_t)rand())^0x1b19acfe) ; // generate a random 32 bits request id
+
 
 
 

@@ -162,7 +162,7 @@ var labels = gnodes.append("text")
 
 function downloadMore(){
 console.log("yo")
-  searchOptions = {"localindexed":false,"remoteindexed":true,"boolexp":false};
+  searchOptions = {"localindexed":false,"remoteindexed":true,"turtle":true,"boolexp":false};
   var results = bridge.searchKeywords("global-peer-map-from", searchOptions);
   downloadEle.innerHTML = ""
   for (var i in results){
@@ -178,9 +178,23 @@ console.log("yo")
     
   }
   if(downloadEle.innerHTML == "")
-    downloadEle.innerHTML = "No New Peers found"
+    downloadEle.innerHTML = "No New Peers found in index - please wait for turtle search<br>"
   else
-    downloadEle.innerHTML += "Downloading new! please refresh when downloads complete"
+    downloadEle.innerHTML += "Downloading new! please refresh when downloads complete<br>"
+}
+
+bridge.rsTurtleResult.connect(rsTurtleResult);
+console.log("called connect");
+function rsTurtleResult(result){
+  //if (turtleresultcount > limit)return;
+  console.log("running turtleresult");
+  console.log(result);
+  if (result.name.substr(0,20) == "global-peer-map-from" && result.status =="notdownloaded" ){
+    console.log("GOODUN");
+    downloadEle.innerHTML += "Downloading: "+result.name+"<br>"
+    var result = bridge.downloadFile(result.name, result.hash, result.size);
+  }
+    
 }
 </script>
 

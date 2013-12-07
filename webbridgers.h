@@ -5,6 +5,7 @@
 #include <QStringList>
 #include<QVariantMap>
 #include <QPixmap>
+#include <retroshare/rsfiles.h>
 #include "embpyqt/embeddedpyqt.h"
 #include "qjsonrpc/qjsonrpcservice.h"
 
@@ -59,10 +60,12 @@ public slots:
 private slots:
     void onUrlDownloaded();
     void onDownloadComplete(QString hash);
+    void gotTurtleSearchResult(qulonglong search_id,FileDetail file);
 signals:
     void msgPush(QVariantMap message);
     void urlDownloaded(QString path, QString url);
     void rsDownloaded(QVariantMap);
+    void rsTurtleResult(QVariantMap);
     void newTabUrl(QString url);
 
 };
