@@ -35,7 +35,7 @@ public slots:
     QVariantMap getForumMessage(QString flid, QString msgid);
     QString getOwnId();
     QString getDownloadDirectory();
-    QVariantList searchKeywords(const QString& keywords, QVariantMap searchOptions);
+    QVariantMap searchKeywords(const QString& keywords, QVariantMap searchOptions);
     //QString processLink(QString url);
     void processLinks(QStringList urls);
 

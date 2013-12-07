@@ -163,7 +163,8 @@ var labels = gnodes.append("text")
 function downloadMore(){
 console.log("yo")
   searchOptions = {"localindexed":false,"remoteindexed":true,"turtle":true,"boolexp":false};
-  var results = bridge.searchKeywords("global-peer-map-from", searchOptions);
+  var sresult = bridge.searchKeywords("global-peer-map-from", searchOptions);
+  var results = sresult.results;
   downloadEle.innerHTML = ""
   for (var i in results){
     

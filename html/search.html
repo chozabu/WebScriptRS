@@ -14,6 +14,7 @@ max-height:200px;
 <input name="searchInput" value=".png" id="searchInput" type="text" onkeypress="return searchKeyDown(event)" ></input> 
 <input name="searchLocal"  id="searchLocal" type="checkbox" checked=true >Search Local</input> 
 <input name="searchRemote" id="searchRemote" type="checkbox" >Search Remote</input> 
+<input name="searchLocal"  id="searchTurtle" type="checkbox" >Search Distant/Turtle</input> 
 <input name="boolxp" checked=true id="boolxp" type="checkbox" >boolexp</input> 
 <button onclick="testSearch()">test search</button>
 <input name="searchLimit" value="40" id="searchLimit" type="number" >searchLimit</input> 
@@ -25,6 +26,7 @@ max-height:200px;
 var input = document.getElementById('searchInput');
 var local = document.getElementById('searchLocal');
 var remote = document.getElementById('searchRemote');
+var turtle = document.getElementById('searchTurtle');
 var boolxp = document.getElementById('boolxp');
 var resultspanel =document.getElementById('searchresults');
 var searchLimit =document.getElementById('searchLimit');
@@ -34,8 +36,10 @@ function testSearch(){
     limit = searchLimit.value;
     resultspanel.innerHTML = "";
     searchTerms = input.value;
-    searchOptions = {"localindexed":local.checked,"remoteindexed":remote.checked,"boolexp":boolxp.checked};
-    var results = bridge.searchKeywords(searchTerms, searchOptions);
+    searchOptions = {"localindexed":local.checked,"remoteindexed":remote.checked,"turtle":turtle.checked,"boolexp":boolxp.checked};
+    var sresult = bridge.searchKeywords(searchTerms, searchOptions);
+    console.log(sresult);
+    var results = sresult.results;
     
     range = results.length;
     if (range>limit)range=limit;

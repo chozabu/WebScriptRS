@@ -447,13 +447,17 @@ void WebBridgeRS::processLinks(QStringList urls){
     //rsFiles->FileRequest()
 }
 
-QVariantList WebBridgeRS::searchKeywords(const QString& keywords, QVariantMap searchOptions)
+QVariantMap WebBridgeRS::searchKeywords(const QString& keywords, QVariantMap searchOptions)
 {
     std::cerr << "webscriptrs: keywords in " << keywords.toStdString().c_str() << std::endl;
+    QVariantMap qReturn;
     QVariantList qResults;
     if (keywords.length() < 3){
         std::cerr << "webscriptrs: not searching due to keywords.length = " << keywords.length() << std::endl;
-        return qResults;
+        qReturn.insert("message","search terms < 3 chars");
+        qReturn.insert("status","fail");
+        qReturn.insert("results",qResults);
+        return qReturn;
     }
 
     QStringList qWords = keywords.split(" ", QString::SkipEmptyParts);
@@ -466,7 +470,10 @@ QVariantList WebBridgeRS::searchKeywords(const QString& keywords, QVariantMap se
 
     if (n < 1){
         std::cerr << "webscriptrs: searching due to words.size() = " << n << std::endl;
-        return qResults;
+        qReturn.insert("message","search terms < 1 word");
+        qReturn.insert("status","fail");
+        qReturn.insert("results",qResults);
+        return qReturn;
     }
 
     NameExpression exprs(ContainsAllStrings,words,true) ;
@@ -481,6 +488,7 @@ QVariantList WebBridgeRS::searchKeywords(const QString& keywords, QVariantMap se
             req_id = rsTurtle->turtleSearch(words.front()) ;
         else
             req_id = rsTurtle->turtleSearch(lin_exp) ;
+        qReturn.insert("turtleID",req_id);
     }
     else
         req_id = ((((uint32_t)rand()) << 16)^0x1e2fd5e4) + (((uint32_t)rand())^0x1b19acfe) ; // generate a random 32 bits request id
@@ -570,7 +578,9 @@ QVariantList WebBridgeRS::searchKeywords(const QString& keywords, QVariantMap se
 
     /* abstraction to allow reusee of tree rendering code */
     //resultsToTree(keywords,req_id, finalResults);
-    return qResults;
+    qReturn.insert("status","sucess");
+    qReturn.insert("results",qResults);
+    return qReturn;
 }
 
 void WebBridgeRS::pushMsgToJs(QVariantMap message)
