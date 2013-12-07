@@ -70,8 +70,8 @@ var handledCount = 0;
 function chartFromLocalSearch(){
   searchOptions = {"localindexed":true,"remoteindexed":false,"boolexp":false};
   var sresult = bridge.searchKeywords("global-peer-map-from", searchOptions);
+  console.log(JSON.stringify(sresult))
   var results = sresult.results;
-  console.log(results)
 
   filesList = [
   //bridge.getDownloadDirectory()+"/global-peer-map-from-14758448e1fe21b6ba3d.json",
@@ -86,28 +86,37 @@ function chartFromLocalSearch(){
   }
 }
 
+function ownFileNotFound(){
+        console.log("not found");
+        bridge.runPythonFile('python/dumpanonconnections.py')
+        downloadMore();
+        window.alert("first run - wait a little for info to gather, and refresh");
+}
 
 var fname =bridge.getDownloadDirectory()+"/global-peer-map-from-"+myOwnHash+".json"
 console.log(fname);
 $.ajax({
     url:fname,
-    type:'HEAD',
-    error: function()
+    dataType: "json",
+    error: function(asd)
     {
-        bridge.runPythonFile('python/dumpanonconnections.py')
-        downloadMore();
-        console.log("not found");
-        window.alert("first run - wait a little for info to gather, and refresh");
+    ownFileNotFound();
     },
     success: function(asd)
     {
-        
-        console.log("done"+JSON.parse(asd));
-        handleFileInternal(JSON.parse(asd));
-        downloadMore();
-        chartFromLocalSearch();
+        if (asd == null)
+          ownFileNotFound();
+        else{
+          console.log("done");
+          console.log("done: "+JSON.stringify(asd));
+          handleFileInternal(asd);
+          //downloadMore();
+          chartFromLocalSearch();
+        }
     }
 });//*/
+
+
 
 function checkAddNode(hash){
   if (!nodesDict.hasOwnProperty(hash)){
