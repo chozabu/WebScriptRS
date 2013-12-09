@@ -1,38 +1,39 @@
-#Webkit Plugin for Retroshare
+Scripting/IPC Plugin for RetroShare
+=========
 
-#####Testing python support ( http://www.henning-schroeder.de/embeddedpyqt )
-#####Testing JSON-RPC support ( https://bitbucket.org/devonit/qjsonrpc )
+###Overview
+This plugin attempts to make it easy to write scripts or external programs than can interact with retroshare-gui by providing a bridge to Retroshare via the following transports:
+- Embedded WebKit Tabs
+- python console+file loading ( http://www.henning-schroeder.de/embeddedpyqt )
+- JSON-RPC Server (no Push) ( https://bitbucket.org/devonit/qjsonrpc )
 
-This embeds a set of webkit tabs in a plugin page, along with the startings of a javascript bridge<br>
-Still some way to go to be handy, So far it can:<br>
--broadcast to compatable peers<br>
--send targeted messages<br>
--search indexed files<br>
--download from hash+size+name
--handle retroshare:// links (if the link is not downloaded, it opens in a tab)<br>
--get Peer/online/channel/forumList<br>
--peer details/avatar<br>
--download any url<br>
--open new tabs<br>
--Lots more<br>
-<br>
-Examples include<br>
--geographical peer map (pyqt)<br>
--global peer map (python dump, d3.js view)<br>
--external python via JSON-RPC<br>
--file search<br>
--packet inspection on index<br>
--broadcast chat<br>
--direct chat<br>
--three.js circle... shared drawing... thing ported from three.js demo<s br>
--simple p2p physics test with "averaging" of pos/vel over network.<br/>
--simple p2p physics test with "ownership" of objects.<br/>
--car driving test - ported from ivanks keyboard demo, players broadcast positions<br/>
--3d broadcast/wall chat - draggable text nodes. Shift+mouse moves camera<br/>
--local storage notepad - uses html5 persistant storage and editable tags (plus a source editor)<br/>
--Live MicroBlogging. only Friends see your messages, and friends of a friend whose message you comment on(buggy)<br/>
--Lots more<br/>
+Some of the functions provided include:
+- broadcast to compatable peers
+- send targeted messages
+- search indexed files
+- turtle file search
+- download from hash+size+name
+- handle retroshare:// links (if the link is not downloaded, it opens in a tab)
+- get Peer/online/channel/forumList
+- peer details/avatar
+- download any url
+- open new tabs
+- Lots more
 
+Examples include:
+- geographical peer map (pyqt)
+- global peer map (python dump, d3.js view)
+- car driving test - ported from ivanks keyboard demo, players broadcast positions<br/>
+- 3d broadcast/wall chat - draggable text nodes. Shift+mouse moves camera<br/>
+- external python via JSON-RPC
+- file search
+- packet inspection on index
+- broadcast chat
+- direct chat
+- simple distributed p2p physics tests
+- local storage notepad - uses html5 persistant storage and editable tags (plus a source editor)
+- Live MicroBlogging. only Friends see your messages, and friends of a friend whose message you comment on(buggy)
+- Lots more
 
 
 #### Warning Included tests do not sanitise HTML. The JS has not been written with security in mind.
