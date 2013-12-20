@@ -65,6 +65,10 @@ you probably want to clone this into the plugins directory of your retroshare so
 cd myretrosharesrc/plugins/ <br>
 git clone git@github.com:chozabu/WebScriptRS.git<br>
 cd WebScriptRS<br>
+  git clone https://bitbucket.org/devonit/qjsonrpc.git<br>
+  cd qjsonrpc/<br>
+  qmake-qt4; make<br>
+  cd ..<br>
 qmake-qt4; make<br>
 
 ###install/run
