@@ -65,11 +65,12 @@ you probably want to clone this into the plugins directory of your retroshare so
 cd myretrosharesrc/plugins/ <br>
 git clone git@github.com:chozabu/WebScriptRS.git<br>
 cd WebScriptRS<br>
+At this point you can run the initalbuild.sh script or:<br>
   git clone https://bitbucket.org/devonit/qjsonrpc.git<br>
-  cd qjsonrpc/<br>
-  qmake-qt4; make<br>
+  cd qjsonrpc/src/<br>
+  qmake-qt4 QJSONRPC_LIBRARY_TYPE=staticlib; make<br>
   cd ..<br>
-qmake-qt4; make<br>
+  qmake-qt4; make<br>
 
 ###install/run
 copy the .so files to your .retroshare/extensions/ directory<br>
