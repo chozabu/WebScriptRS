@@ -216,7 +216,8 @@ function searchFor(inText){
   for (var i in allT){
     var text = allT[i];
     newRad = 5;
-    if (text.textContent.toLowerCase().indexOf(inText) != -1) newRad = 12;
+    if(inText.length == 0)r=7;
+    else if (text.textContent.toLowerCase().indexOf(inText) != -1) newRad = 12;
     allC[i].setAttribute("r",newRad);
   }
 }
