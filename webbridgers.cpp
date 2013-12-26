@@ -75,7 +75,8 @@ QVariantMap WebBridgeRS::getPeerDetails(QString ssl_id){
     qdd.insert("extAddr",QString::fromStdString(d.extAddr));
     qdd.insert("extPort",d.extPort);
     qdd.insert("email",QString::fromStdString(d.email));
-    qdd.insert("id",QString::fromStdString(d.id));
+	qdd.insert("id",QString::fromStdString(d.id));
+	qdd.insert("gpg_id",QString::fromStdString(d.gpg_id));
     //qdd.insert("ipAddressList",d.ipAddressList);
     qdd.insert("localAddr",QString::fromStdString(d.localAddr));
     qdd.insert("localPort",d.localPort);
@@ -105,6 +106,11 @@ QStringList WebBridgeRS::getFriendList(){
     std::list<std::string> ssl_ids;
     rsPeers->getFriendList(ssl_ids);
     return strListToQStrList(ssl_ids);
+}
+QStringList WebBridgeRS::getGPGAllList(){
+    std::list<std::string> gpg_ids;
+    rsPeers->getGPGAllList(gpg_ids);
+    return strListToQStrList(gpg_ids);
 }
 QStringList WebBridgeRS::getOnlineList(){
     std::list<std::string> ssl_ids;

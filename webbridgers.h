@@ -52,7 +52,8 @@ public slots:
 #ifdef BRIDGEGXS
     QVariantList getPostedList();
 #endif
-    QStringList getFriendList();
+	QStringList getFriendList();
+	QStringList getGPGAllList();
     QStringList getOnlineList();
     QVariantMap getPeerDetails(QString ssl_id);
     QString getPeerName(QString ssl_id);
