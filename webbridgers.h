@@ -54,6 +54,7 @@ public slots:
 #endif
 	QStringList getFriendList();
 	QStringList getGPGAllList();
+	QString getGPGId(QString inId);
     QStringList getOnlineList();
     QVariantMap getPeerDetails(QString ssl_id);
     QString getPeerName(QString ssl_id);

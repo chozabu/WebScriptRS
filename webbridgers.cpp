@@ -112,6 +112,10 @@ QStringList WebBridgeRS::getGPGAllList(){
     rsPeers->getGPGAllList(gpg_ids);
     return strListToQStrList(gpg_ids);
 }
+QString WebBridgeRS::getGPGId(QString inId){
+    return QString(rsPeers->getGPGId(inId.toStdString()).c_str());
+}
+
 QStringList WebBridgeRS::getOnlineList(){
     std::list<std::string> ssl_ids;
     rsPeers->getOnlineList(ssl_ids);
