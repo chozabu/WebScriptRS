@@ -16,6 +16,7 @@
 </head><body>
 <a href="index.html">Back to Index</a><br/>
 Filter:<input name="filterInput" id="filterInput" type="text"  onkeyup="return filterKeyUp(event)" />
+<div id="foflink"></div>
 <div id="mapDiv"></div>
 <p id="downloadEle"></p>
 The below functions should be run automatically<br>
@@ -31,7 +32,13 @@ Try refreshing after dumping your peer list - may need to wait/force a RS file c
 <script src="libsha512.js"></script>
 <script>
 
+var showfof = getUrlVars()["showfof"];
 var downloadEle = document.getElementById('downloadEle');
+var foflink = document.getElementById('foflink');
+if (showfof)
+  foflink.innerHTML = "<a href='fdgraph.html'>hide FOF</a>"
+else
+  foflink.innerHTML = "<a href='fdgraph.html?showfof=true'>show FOF</a>"
 var mapDiv = document.getElementById('mapDiv');
 var filterInput = document.getElementById('filterInput')
 function dsHash(data){
@@ -51,8 +58,8 @@ $.each(friendIds, function(key, value){
 })
 
 console.log(myOwnHash)
-var width = 960,
-    height = 500;
+var width = 1360,
+    height = 900;
 
 var color = d3.scale.category20();
 
@@ -97,8 +104,10 @@ function chartFromLocalSearch(){
     todump.ownHash = dhHashId(gpgid);
     todump.contactHashes = dumplist;
     //console.log(todump);
-    //handleFileInternal(todump);//use this for full local map
-    handleFofInternal(todump);
+    if(showfof)
+      handleFileInternal(todump);//use this for full local map
+    else
+      handleFofInternal(todump);
     
   })
 
@@ -111,24 +120,6 @@ function chartFromLocalSearch(){
     $.getJSON(filesList[f], handleFile)
   }
 }
-
-/*
-var directFriendIds = bridge.getFriendList();
-$.each(directFriendIds, function(key, value){
-  var fofs = bridge.getDiscGPGFriends(value);
-  var dumplist=[];
-  $.each(fofs, function(innerkey, innervalue){
-      dumplist.push(dhHashId(innervalue));
-  })
-  //todump['contactHashes']=dumplist;
-  todump = {};
-  todump.ownHash = dhHashId(value);
-  todump.contactHashes = dumplist;
-  console.log(todump);
-  handleFileInternal(todump);
-  //friendHashs[dhHashId(value)]=value;
-  
-})*/
 
 function ownFileNotFound(){
         console.log("owen file not found - generating");
@@ -222,14 +213,6 @@ function doGraph(){
       .attr("class", "link")
       .style("stroke-width", function(d) { return 2; });
 
-  /*var node = svg.selectAll(".node")
-      .data(nodes)
-    .enter().append("circle")
-      .attr("class", "node")
-      .attr("r", 6)
-      .style("fill", function(d) { return color(6); })
-      .call(force.drag);*/
-  // Create the groups under svg
   gnodes = svg.selectAll('g.gnode')
   .data(nodes)
   .enter()
@@ -308,6 +291,15 @@ function rsTurtleResult(result){
     var result = bridge.downloadFile(result.name, result.hash, result.size);
   }
     
+}
+
+
+function getUrlVars() {
+  var vars = {};
+  var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+      vars[key] = value;
+  });
+  return vars;
 }
 </script>
 
