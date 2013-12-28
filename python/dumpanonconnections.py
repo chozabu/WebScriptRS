@@ -6,7 +6,7 @@ def dsHash(data):
     return hashlib.sha512(data).hexdigest()[0:20]
 def dhHashId(Id):
     fi=bridge.getPeerDetails(Id)
-    return dsHash(dsHash(fi['id'])+dsHash(fi['name']))
+    return dsHash(dsHash(fi['gpg_id'])+dsHash(fi['name']))
 
 print ""
 print "starting anon peer connections dump for global peermap"

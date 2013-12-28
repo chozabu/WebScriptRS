@@ -9,6 +9,7 @@
 //#include "retroshare/rspeers.h"
 //#include "retroshare/rsnotify.h"
 #include "retroshare/rsforums.h"
+#include "retroshare/rsdisc.h"
 #include "retroshare/rschannels.h"
 //#include "retroshare/rsnotify.h"
 #include "gui/notifyqt.h"
@@ -120,6 +121,11 @@ QStringList WebBridgeRS::getOnlineList(){
     std::list<std::string> ssl_ids;
     rsPeers->getOnlineList(ssl_ids);
     return strListToQStrList(ssl_ids);
+}
+QStringList WebBridgeRS::getDiscGPGFriends(QString gpg_id){
+	std::list<std::string> friendList;
+	rsDisc->getDiscGPGFriends(gpg_id.toStdString(), friendList);
+    return strListToQStrList(friendList);
 }
 void WebBridgeRS::newTabAt(QString url){
     emit newTabUrl(url);

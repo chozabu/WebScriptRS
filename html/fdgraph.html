@@ -41,14 +41,15 @@ function dsHash(data){
 }
 function dhHashId(Id){
     fi=bridge.getPeerDetails(Id);
-    return dsHash(dsHash(fi['id'])+dsHash(fi['name']));
+    return dsHash(dsHash(fi['gpg_id'])+dsHash(fi['name']));
     }
 var myOwnHash = dhHashId(bridge.getOwnId());
-var friendIds = bridge.getFriendList();
+var friendIds = bridge.getGPGAllList();
 var friendHashs = {};
 $.each(friendIds, function(key, value){
-friendHashs[dhHashId(value)]=value;
+  friendHashs[dhHashId(value)]=value;
 })
+
 console.log(myOwnHash)
 var width = 960,
     height = 500;
@@ -80,19 +81,54 @@ function chartFromLocalSearch(){
   var sresult = bridge.searchKeywords("global-peer-map-from", searchOptions);
   //console.log(JSON.stringify(sresult))
   var results = sresult.results;
+  
+  var directFriendIds = bridge.getFriendList();
+  $.each(directFriendIds, function(key, value){
+    var gpgid = bridge.getGPGId(value);
+    var fofs = bridge.getDiscGPGFriends(gpgid);
+    //console.log(fofs);
+    //friendHashs[dhHashId(value)]=value;
+    var dumplist=[];
+    $.each(fofs, function(innerkey, innervalue){
+        dumplist.push(dhHashId(bridge.getGPGId(innervalue)));
+    })
+    //todump['contactHashes']=dumplist;
+    todump = {};
+    todump.ownHash = dhHashId(gpgid);
+    todump.contactHashes = dumplist;
+    //console.log(todump);
+    //handleFileInternal(todump);//use this for full local map
+    handleFofInternal(todump);
+    
+  })
 
-  filesList = [
-  //bridge.getDownloadDirectory()+"/global-peer-map-from-14758448e1fe21b6ba3d.json",
-  //bridge.getDownloadDirectory()+"/global-peer-map-from-58eb72735298614b92e1.json"
-  ]
+  filesList = []
   for (r in results){
-  filesList.push(results[r].fullpath+results[r].srname);
+    filesList.push(results[r].fullpath+results[r].srname);
   }
   handledCount = 0;
   for (f in filesList){
     $.getJSON(filesList[f], handleFile)
   }
 }
+
+/*
+var directFriendIds = bridge.getFriendList();
+$.each(directFriendIds, function(key, value){
+  var fofs = bridge.getDiscGPGFriends(value);
+  var dumplist=[];
+  $.each(fofs, function(innerkey, innervalue){
+      dumplist.push(dhHashId(innervalue));
+  })
+  //todump['contactHashes']=dumplist;
+  todump = {};
+  todump.ownHash = dhHashId(value);
+  todump.contactHashes = dumplist;
+  console.log(todump);
+  handleFileInternal(todump);
+  //friendHashs[dhHashId(value)]=value;
+  
+})*/
 
 function ownFileNotFound(){
         console.log("owen file not found - generating");
@@ -125,7 +161,6 @@ $.ajax({
 });//*/
 
 
-
 function checkAddNode(hash){
   if (!nodesDict.hasOwnProperty(hash)){
     var name = hash.substr(0,5);
@@ -138,7 +173,7 @@ function checkAddNode(hash){
 }
 function handleFileInternal(graph){
 //console.log(graph)
-graph.links = [];
+//graph.links = [];
 var ownindex =checkAddNode(graph.ownHash);
 for (var l = 0;l <graph.contactHashes.length;l++){
   var otherindex = checkAddNode(graph.contactHashes[l])
@@ -147,6 +182,25 @@ for (var l = 0;l <graph.contactHashes.length;l++){
   links.push({"source":ownindex,"target":otherindex});
   }
 }
+
+
+function checkNode(hash){
+  if (!nodesDict.hasOwnProperty(hash)){
+    return false;
+    }
+  return nodesDict[hash]
+}
+function handleFofInternal(graph){
+var ownindex =checkNode(graph.ownHash);
+if (ownindex == false)return;
+for (var l = 0;l <graph.contactHashes.length;l++){
+  var otherindex = checkNode(graph.contactHashes[l])
+  if (otherindex == false)continue;
+  if(ownindex!=otherindex)
+  links.push({"source":ownindex,"target":otherindex});
+  }
+}
+
 function handleFile(graph){
   handleFileInternal(graph)
   handledCount+=1;
