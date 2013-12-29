@@ -60,7 +60,15 @@ if you want to run the Geo Friend Map Test:<br>
 sudo apt-get install python-mpltoolkits.basemap<br>
 sudo pip install pygeoip<br>
 
-###Build
+###Build/Install
+##PreReq
+You will need a linux machine <br>
+apt-get install python-dev python-qt4 <br>
+is a good start, <br>
+apt-get install python-mpltoolkits.basemap<br>
+Will let you run the geoip peermap demo <br>
+please let me know if you need to install anything else to make it run.
+##compile
 you probably want to clone this into the plugins directory of your retroshare source code.<br>
 cd myretrosharesrc/plugins/ <br>
 git clone git@github.com:chozabu/WebScriptRS.git<br>
