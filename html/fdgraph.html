@@ -17,6 +17,9 @@
 <a href="index.html">Back to Index</a><br/>
 Filter:<input name="filterInput" id="filterInput" type="text"  onkeyup="return filterKeyUp(event)" />
 <div id="foflink"></div>
+linkStrength<input id="linkStrength" type="number" value="0.05" onkeyup="return fNumsKeyUp(event)"></input>
+ charge:<input id="charge" type="number" value="-70" onkeyup="return fNumsKeyUp(event)"></input>
+ linkDistance:<input id="linkDistance" type="number" value="80" onkeyup="return fNumsKeyUp(event)"></input>
 <div id="mapDiv"></div>
 <p id="downloadEle"></p>
 The below functions should be run automatically<br>
@@ -33,6 +36,9 @@ Try refreshing after dumping your peer list - may need to wait/force a RS file c
 <script>
 
 var showfof = getUrlVars()["showfof"];
+var linkStrength = document.getElementById('linkStrength');
+var charge = document.getElementById('charge');
+var linkDistance = document.getElementById('linkDistance');
 var downloadEle = document.getElementById('downloadEle');
 var foflink = document.getElementById('foflink');
 if (showfof)
@@ -79,6 +85,14 @@ var nodes = [];
 var nodesDict = {}
 var handledCount = 0;
 
+function fNumsKeyUp(){
+
+  force
+      .linkStrength(linkStrength.value)
+      .charge(charge.value)
+      .linkDistance(linkDistance.value)
+      .start();
+  }
 function filterKeyUp(){
   searchFor(filterInput.value);
   }
@@ -202,9 +216,9 @@ function doGraph(){
   force
       .nodes(nodes)
       .links(links)
-      .linkStrength(0.2)
-      .charge(-600)
-      .linkDistance(80)
+      .linkStrength(linkStrength.value)
+      .charge(charge.value)
+      .linkDistance(linkDistance.value)
       .start();
   
   var link = svg.selectAll(".link")
