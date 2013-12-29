@@ -17,8 +17,8 @@
 <a href="index.html">Back to Index</a><br/>
 Filter:<input name="filterInput" id="filterInput" type="text"  onkeyup="return filterKeyUp(event)" />
 <div id="foflink"></div>
-linkStrength<input id="linkStrength" type="number" value="0.05" onkeyup="return fNumsKeyUp(event)"></input>
- charge:<input id="charge" type="number" value="-70" onkeyup="return fNumsKeyUp(event)"></input>
+linkStrength<input id="linkStrength" type="number" value="0.1" onkeyup="return fNumsKeyUp(event)"></input>
+ charge:<input id="charge" type="number" value="-100" onkeyup="return fNumsKeyUp(event)"></input>
  linkDistance:<input id="linkDistance" type="number" value="80" onkeyup="return fNumsKeyUp(event)"></input>
 <div id="mapDiv"></div>
 <p id="downloadEle"></p>
@@ -35,6 +35,7 @@ Try refreshing after dumping your peer list - may need to wait/force a RS file c
 <script src="libsha512.js"></script>
 <script>
 
+var color = d3.scale.category20();
 var showfof = getUrlVars()["showfof"];
 var linkStrength = document.getElementById('linkStrength');
 var charge = document.getElementById('charge');
@@ -180,11 +181,13 @@ function handleFileInternal(graph){
 //console.log(graph)
 //graph.links = [];
 var ownindex =checkAddNode(graph.ownHash);
+var lcol = 0;
+if(graph.ownHash==myOwnHash)lcol=1;
 for (var l = 0;l <graph.contactHashes.length;l++){
   var otherindex = checkAddNode(graph.contactHashes[l])
   //console.log(ownindex+" : "+otherindex)
   if(ownindex!=otherindex)
-  links.push({"source":ownindex,"target":otherindex});
+  links.push({"source":ownindex,"target":otherindex, "colour":lcol});
   }
 }
 
@@ -202,7 +205,7 @@ for (var l = 0;l <graph.contactHashes.length;l++){
   var otherindex = checkNode(graph.contactHashes[l])
   if (otherindex == false)continue;
   if(ownindex!=otherindex)
-  links.push({"source":ownindex,"target":otherindex});
+  links.push({"source":ownindex,"target":otherindex, "colour":0});
   }
 }
 
@@ -225,8 +228,9 @@ function doGraph(){
       .data(links)
     .enter().append("line")
       .attr("class", "link")
-      .style("stroke-width", function(d) { return 2; });
-
+      .style("stroke-width", function(d) { return 2-d.colour/10.0; })
+      .style("stroke", function(d) { return color(d.colour); });
+//color(d.group) //style="stroke: black;"
   gnodes = svg.selectAll('g.gnode')
   .data(nodes)
   .enter()
