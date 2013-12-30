@@ -39,6 +39,8 @@ WebScriptDialog::WebScriptDialog(QWidget *parent) :
     embpyqt->init("embpyqt/python/initembpyqt.py");
     embpyqt->execute("from embeddedpyqt import *", true);
 	connect(ui->pythonBtn, SIGNAL(clicked()), this, SLOT(doPython()));
+#else
+	delete ui->pythonBtn;
 #endif
     connect(ui->newTabBtn, SIGNAL(clicked()), this, SLOT(addTab()));
     connect(ui->closeTabBtn, SIGNAL(clicked()), this, SLOT(removeTab()));
