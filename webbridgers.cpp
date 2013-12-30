@@ -90,7 +90,7 @@ QVariantMap WebBridgeRS::getPeerDetails(QString ssl_id){
 }
 QString WebBridgeRS::getPeerName(QString ssl_id){
     std::list<std::string> ssl_ids;
-    return QString(rsPeers->getPeerName(ssl_id.toStdString()).c_str());
+    return QString::fromStdString(rsPeers->getPeerName(ssl_id.toStdString()));
 }
 QStringList strListToQStrList(std::list<std::string> in){
 
@@ -115,7 +115,7 @@ QStringList WebBridgeRS::getGPGAllList(){
     return strListToQStrList(gpg_ids);
 }
 QString WebBridgeRS::getGPGId(QString inId){
-    return QString(rsPeers->getGPGId(inId.toStdString()).c_str());
+    return QString::fromStdString(rsPeers->getGPGId(inId.toStdString()));
 }
 
 QStringList WebBridgeRS::getOnlineList(){
@@ -623,7 +623,7 @@ void WebBridgeRS::pushMsgToJs(QVariantMap message)
 
 QString WebBridgeRS::getOwnId()
 {
-    return QString(rsPeers->getOwnId().c_str());
+    return QString::fromStdString(rsPeers->getOwnId());
 }
 QString WebBridgeRS::getDownloadDirectory()
 {
