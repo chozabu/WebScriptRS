@@ -24,7 +24,7 @@ linkStrength<input id="linkStrength" type="number" value="0.1" onkeyup="return f
 <p id="downloadEle"></p>
 The below functions should be run automatically<br>
 Peer Map - export
-<button onclick="bridge.runPythonFile('python/dumpanonconnections.py')">dump my peers</button> this will dump your peer fingerprint list to a file in your downloads directory (which is hopefully shared in some way)<br>
+<button onclick="return dumpConnections();">dump my peers</button> this will dump your peer fingerprint list to a file in your downloads directory (which is hopefully shared in some way)<br>
 Try refreshing after dumping your peer list - may need to wait/force a RS file check<br>
 <button onclick="downloadMore()">Download Data</button> download friends lists<br>
 
@@ -136,10 +136,31 @@ function chartFromLocalSearch(){
   }
 }
 
+function dumpConnections(){
+    var fl=bridge.getFriendList()
+    var dumplist=[];
+    $.each(fl, function(innerkey, innervalue){
+        dumplist.push(dhHashId(bridge.getGPGId(innervalue)));
+    })
+    //todump['contactHashes']=dumplist;
+    todump = {};
+    todump.ownHash = myOwnHash;
+    todump.contactHashes = dumplist;
+    todump.alias = "anon";//this needs replacing
+
+  var dumpdata = JSON.stringify(todump);
+  console.log("Writing data: "+dumpdata);
+  var outfile = "/global-peer-map-from-"+dhHashId(bridge.getOwnId())+".json";
+  console.log("to: "+outfile);
+  bridge.writeString(outfile, dumpdata);
+  console.log("CALLED writeString");
+}
+
 function ownFileNotFound(){
-        console.log("owen file not found - generating");
-        bridge.runPythonFile('python/dumpanonconnections.py')
-        downloadMore();
+        console.log("own file not found - generating");
+        //bridge.runPythonFile('python/dumpanonconnections.py')
+        dumpConnections();
+        //downloadMore();
         window.alert("first run - wait a little for info to gather, and refresh");
 }
 

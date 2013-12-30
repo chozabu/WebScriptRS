@@ -240,16 +240,20 @@ void WebBridgeRS::broadcastToRS(QString msg)
 
 void WebBridgeRS::writeString(QString fname, QString data){
 
+	std::cerr << "writing file" << std::endl;
     QString fpath = getDownloadDirectory();
 
     fpath.append("/");
     fpath.append(fname);
-    std::cout << fpath.toStdString() << std::endl;
+    std::cerr << fpath.toStdString() << std::endl;
     QFile outfile(fpath);
 
 	if (outfile.open(QFile::WriteOnly | QFile::Truncate)) {
 	    QTextStream out(&outfile);
 	    out << data;
+		std::cerr << "Writing Worked" << std::endl;
+	} else {
+		std::cerr << "WRITING FAILED" << std::endl;
 	}
 
 }
