@@ -17,6 +17,7 @@
 #include "filedownloader.h"
 #include <QFile>
 #include <QDir>
+#include <QTextStream>
 
 #include "gui/MainWindow.h"
 //#include "gui/PluginsPage.h"
@@ -235,6 +236,22 @@ void WebBridgeRS::onDownloadComplete(QString hash)
 void WebBridgeRS::broadcastToRS(QString msg)
 {
     rsMsgs->sendPublicChat(msg.toStdWString());
+}
+
+void WebBridgeRS::writeString(QString fname, QString data){
+
+    QString fpath = getDownloadDirectory();
+
+    fpath.append("/");
+    fpath.append(fname);
+    std::cout << fpath.toStdString() << std::endl;
+    QFile outfile(fpath);
+
+	if (outfile.open(QFile::WriteOnly | QFile::Truncate)) {
+	    QTextStream out(&outfile);
+	    out << data;
+	}
+
 }
 
 void WebBridgeRS::downloadURL(QString url){

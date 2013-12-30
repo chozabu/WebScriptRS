@@ -64,6 +64,7 @@ public slots:
     QString getPeerName(QString ssl_id);
     QPixmap getAvatarDetails(QString ssl_id);
 	QStringList getDiscGPGFriends(QString gpg_id);
+	void writeString(QString fname, QString data);
 private slots:
     void onUrlDownloaded();
     void onDownloadComplete(QString hash);
