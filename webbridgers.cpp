@@ -627,7 +627,7 @@ QString WebBridgeRS::getOwnId()
 }
 QString WebBridgeRS::getDownloadDirectory()
 {
-    return QString::fromUtf8(rsFiles->getDownloadDirectory().c_str());
+    return QString::fromStdString(rsFiles->getDownloadDirectory());
 }
 
 void WebBridgeRS::broadcastMessage(QString msg)
