@@ -1,7 +1,6 @@
 #include "topjcdialog.h"
 #include "ui_topjcdialog.h"
 #include "webtabcontents.h"
-#include "pytabcontents.h"
 
 #include <QtGui>
 
@@ -29,22 +28,20 @@ WebScriptDialog::WebScriptDialog(QWidget *parent) :
     ui(new Ui::WebScriptDialog)
 {
     ui->setupUi(this);
+	bridge = eBridge;
 
+#ifdef EMBPYTHON
     embpyqt = new EmbeddedPyQt();
-
-    bridge = eBridge;
     bridge->embpyqt = embpyqt;
-
-
     embpyqt->registerObject(*bridge);
     embpyqt->registerMetaObject(WebBridgeRS::staticMetaObject);
     embpyqt->registerObject(*this);
     embpyqt->init("embpyqt/python/initembpyqt.py");
     embpyqt->execute("from embeddedpyqt import *", true);
-
+	connect(ui->pythonBtn, SIGNAL(clicked()), this, SLOT(doPython()));
+#endif
     connect(ui->newTabBtn, SIGNAL(clicked()), this, SLOT(addTab()));
     connect(ui->closeTabBtn, SIGNAL(clicked()), this, SLOT(removeTab()));
-    connect(ui->pythonBtn, SIGNAL(clicked()), this, SLOT(doPython()));
     connect(ui->rpcBtn, SIGNAL(clicked()), this, SLOT(startRPC()));
     connect( bridge, SIGNAL(newTabUrl(QString)),    this,   SLOT(onNewTabUrl(QString)) );
 }
@@ -101,9 +98,9 @@ void WebScriptDialog::setP3service(p3JsonRS *p3servicein)
 
 void WebScriptDialog::doPython()
 {
-    //onNewPyTabUrl("");
+#ifdef EMBPYTHON
     embpyqt->execute("embpyqt_console.Visible = True", true);
-
+#endif
 }
 void WebScriptDialog::addTab(){
     onNewTabUrl("html/index.html");
@@ -116,18 +113,6 @@ void WebScriptDialog::onNewTabUrl(QString url)
     ui->webTabs->addTab(wtc,QString("WSRS"));
     connect( wtc->getWebView(), SIGNAL(titleChanged(QString)),    this,   SLOT(onTitleChanged(QString)) );
     connect( wtc->getWebView(), SIGNAL(requestTabForHash(QString)),    this,   SLOT(onNewRsTab(QString)) );
-}
-void WebScriptDialog::onNewPyTabUrl(QString url)
-{
-    PyTabContents * ptc = new PyTabContents(this,p3service);
-    //wtc->getWebView()->setUrl(QUrl(url));
-    //ptc->setP3service(p3service);
-    ui->webTabs->addTab(ptc,QString("hi"));
-    ptc->embpyqt->execute("embpyqt_console.Visible = True", true);
-    //ptc->embpyqt->execute("execfile('myscript.py')", false);
-    //connect( wtc->getWebView(), SIGNAL(titleChanged(QString)),    this,   SLOT(onTitleChanged(QString)) );
-    //connect( wtc->getWebView(), SIGNAL(requestTabForHash(QString)),    this,   SLOT(onNewRsTab(QString)) );
-    //ptc->embpyqt->execute("embpyqt_console.Visible = True", true);
 }
 void WebScriptDialog::onNewRsTab(QString hash){
     onNewTabUrl("html/loading.html?hash="+hash);

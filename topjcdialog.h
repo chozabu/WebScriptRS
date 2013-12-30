@@ -31,16 +31,18 @@ public:
     void setP3service(p3JsonRS *p3servicein);
     p3JsonRS *p3service;
     WebBridgeRS *bridge;
+
+#ifdef EMBPYTHON
     EmbeddedPyQt *embpyqt;
+#endif
 public slots:
-    void doPython();
+	void doPython();
     void addTab();
     void onNewTabUrl(QString url);
     void removeTab();
     void onTitleChanged(QString title);
     void onNewRsTab(QString hash);
 
-    void onNewPyTabUrl(QString url);
     void startRPC();
 protected slots:
     void adjustLocation();

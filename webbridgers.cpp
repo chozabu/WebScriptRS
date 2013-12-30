@@ -45,6 +45,7 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
 
 }
 
+#ifdef EMBPYTHON
 void WebBridgeRS::runPython(QString text){
     embpyqt->execute(text, true);
 }
@@ -52,7 +53,7 @@ void WebBridgeRS::runPythonFile(QString fileName){
     QString text = "execfile('"+fileName+"')";
     embpyqt->execute(text, false);
 }
-
+#endif
 QPixmap WebBridgeRS::getAvatarDetails(QString ssl_id){
     if (!avatars.contains(ssl_id)){
         QPixmap avatar;

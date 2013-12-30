@@ -30,8 +30,11 @@ public:
 
 //the public slots are exposed to JS
 public slots:
+
+#ifdef EMBPYTHON
     void runPython(QString text);
     void runPythonFile(QString fileName);
+#endif
     QVariantList getChannelList();
     QVariantList getForumThreadList(QString flid);
     QVariantList getForumThreadMsgList(QString flid, QString msgid);
