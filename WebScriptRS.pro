@@ -35,16 +35,28 @@ SOURCES += \
 HEADERS += \
     embpyqt/embeddedpyqt.h \
     embpyqt/pythonize.h
+
 # Python
-LIBS        += -lpython2.7 -L/usr/lib/
-INCLUDEPATH += /usr/include/python2.7/
+win32 {
+    LIBS        += -lpython27
+    INCLUDEPATH += ../../../Python27/include
+} else {
+    LIBS        += -lpython2.7 -L/usr/lib/
+    INCLUDEPATH += /usr/include/python2.7/
+}
 
 # RPC
-PRE_TARGETDEPS *= ./qjsonrpc/src/libqjsonrpc.a
+win32 {
+    PRE_TARGETDEPS *= ../../../lib/libqjsonrpc1.a
+    LIBS += -lqjsonrpc1
+    INCLUDEPATH += ../../../qjsonrpc/src/
+} else {
+    PRE_TARGETDEPS *= ./qjsonrpc/src/libqjsonrpc.a
 
-LIBS += ./qjsonrpc/src/libqjsonrpc.a
-INCLUDEPATH += ./qjsonrpc/src/
-LIBS += -L./qjsonrpc/src/ #-lqjsonrpc
+    LIBS += ./qjsonrpc/src/libqjsonrpc.a
+    INCLUDEPATH += ./qjsonrpc/src/
+    LIBS += -L./qjsonrpc/src/ #-lqjsonrpc
+}
 
 TARGET = WebScriptRS
 

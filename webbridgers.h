@@ -7,7 +7,11 @@
 #include <QPixmap>
 #include <retroshare/rsfiles.h>
 #include "embpyqt/embeddedpyqt.h"
+#if defined(WIN32) || defined(MINGW) || defined(__CYGWIN__)
+#include "qjsonrpcservice.h"
+#else
 #include "qjsonrpc/qjsonrpcservice.h"
+#endif
 
 class p3JsonRS;
 

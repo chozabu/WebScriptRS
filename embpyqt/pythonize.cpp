@@ -38,7 +38,11 @@ Pythonize::Pythonize ()
     pythonInit  = 1;
     objects    = NULL;
 
+#if defined(WIN32) || defined(MINGW) || defined(__CYGWIN__)
+    //Windows does not like getpid()
+#else
     if (debug) printf ("\n\nPythonize constructor -- pid = %i\n", getpid ());
+#endif
 
     if (!Py_IsInitialized ())
     {
