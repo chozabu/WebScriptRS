@@ -160,9 +160,9 @@ QVariantMap WebBridgeRS::fileDetails(QString qhash)
     /* look up path */
     if (rsFiles->FileDetails(qhash.toStdString(), RS_FILE_HINTS_EXTRA | RS_FILE_HINTS_DOWNLOAD, finfo)){
         qdd.insert("status","found");
-        qdd.insert("path",QString::fromStdString(finfo.path));
+        qdd.insert("path",QString::fromUtf8(finfo.path.c_str()));
         qdd.insert("hash",QString::fromStdString(finfo.hash));
-        qdd.insert("fname",QString::fromStdString(finfo.fname));
+        qdd.insert("fname",QString::fromUtf8(finfo.fname.c_str()));
         qdd.insert("size",QString::number(finfo.size));
         qdd.insert("avail",QString::number(finfo.avail));
         qdd.insert("downloadStatus",QString::number(finfo.downloadStatus));
@@ -184,11 +184,11 @@ void WebBridgeRS::gotTurtleSearchResult(qulonglong search_id,FileDetail file)
         qdd.insert("status","downloaded");
     else
         qdd.insert("status","notdownloaded");
-    qdd.insert("path",QString::fromStdString(file.path));
+    qdd.insert("path",QString::fromUtf8(file.path.c_str()));
     qdd.insert("hash",QString::fromStdString(file.hash));
     qdd.insert("age",QString::number(file.age));
     qdd.insert("id",QString::fromStdString(file.id));
-    qdd.insert("name",QString::fromStdString(file.name));
+    qdd.insert("name",QString::fromUtf8(file.name.c_str()));
     qdd.insert("rank",QString::number(file.rank));
     qdd.insert("size",QString::number(file.size));
 
@@ -204,9 +204,9 @@ void WebBridgeRS::onDownloadComplete(QString hash)
     /* look up path */
     if (rsFiles->alreadyHaveFile(hash.toStdString(), fi)){
         qdd.insert("status","downloaded");
-        qdd.insert("path",QString::fromStdString(fi.path));
+        qdd.insert("path",QString::fromUtf8(fi.path.c_str()));
         qdd.insert("hash",QString::fromStdString(fi.hash));
-        qdd.insert("fname",QString::fromStdString(fi.fname));
+        qdd.insert("fname",QString::fromUtf8(fi.fname.c_str()));
         qdd.insert("size",QString::number(fi.size));
         emit rsDownloaded(qdd);
     }
@@ -300,7 +300,7 @@ QVariantMap WebBridgeRS::downloadFile(QString qname, QString qhash, int qsize){
     /* look up path */
     if (rsFiles->alreadyHaveFile(qhash.toStdString(), fi)){
         qdd.insert("status","downloaded");
-        qdd.insert("path",QString::fromStdString(fi.path));
+        qdd.insert("path",QString::fromUtf8(fi.path.c_str()));
         qdd.insert("hash",QString::fromStdString(fi.hash));
         qdd.insert("fname",QString::fromUtf8(fi.fname.c_str()));
         qdd.insert("size",QString::number(fi.size));
@@ -594,7 +594,7 @@ QVariantMap WebBridgeRS::searchKeywords(const QString& keywords, QVariantMap sea
             //QFileInfo qinfo;
             std::string path;
             path = info.path.substr(0,info.path.length()-info.fname.length());
-            qdd.insert("fullpath",QString::fromStdString(path));
+            qdd.insert("fullpath",QString::fromUtf8(path.c_str()));
 
             /* open folder with a suitable application */
             /*qinfo.setFile(QString::fromUtf8(path.c_str()));
