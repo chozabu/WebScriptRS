@@ -84,14 +84,14 @@ QVariantMap WebBridgeRS::getPeerDetails(QString ssl_id){
     qdd.insert("localAddr",QString::fromStdString(d.localAddr));
     qdd.insert("localPort",d.localPort);
     qdd.insert("location",QString::fromStdString(d.location));
-    qdd.insert("name",QString::fromStdString(d.name));
+    qdd.insert("name",QString::fromUtf8(d.name.c_str()));
     qdd.insert("validLvl",d.validLvl);
     qdd.insert("visState",d.visState);
     return qdd;
 }
 QString WebBridgeRS::getPeerName(QString ssl_id){
     std::list<std::string> ssl_ids;
-    return QString::fromStdString(rsPeers->getPeerName(ssl_id.toStdString()));
+    return QString::fromUtf8(rsPeers->getPeerName(ssl_id.toStdString()).c_str());
 }
 QStringList strListToQStrList(std::list<std::string> in){
 
@@ -116,7 +116,7 @@ QStringList WebBridgeRS::getGPGAllList(){
     return strListToQStrList(gpg_ids);
 }
 QString WebBridgeRS::getGPGId(QString inId){
-    return QString::fromStdString(rsPeers->getGPGId(inId.toStdString()));
+    return QString::fromUtf8(rsPeers->getGPGId(inId.toStdString()).c_str());
 }
 
 QStringList WebBridgeRS::getOnlineList(){
@@ -302,7 +302,7 @@ QVariantMap WebBridgeRS::downloadFile(QString qname, QString qhash, int qsize){
         qdd.insert("status","downloaded");
         qdd.insert("path",QString::fromStdString(fi.path));
         qdd.insert("hash",QString::fromStdString(fi.hash));
-        qdd.insert("fname",QString::fromStdString(fi.fname));
+        qdd.insert("fname",QString::fromUtf8(fi.fname.c_str()));
         qdd.insert("size",QString::number(fi.size));
         return qdd;
     }
@@ -628,11 +628,11 @@ void WebBridgeRS::pushMsgToJs(QVariantMap message)
 
 QString WebBridgeRS::getOwnId()
 {
-    return QString::fromStdString(rsPeers->getOwnId());
+    return QString::fromUtf8(rsPeers->getOwnId().c_str());
 }
 QString WebBridgeRS::getDownloadDirectory()
 {
-    return QString::fromStdString(rsFiles->getDownloadDirectory());
+    return QString::fromUtf8(rsFiles->getDownloadDirectory().c_str());
 }
 
 void WebBridgeRS::broadcastMessage(QString msg)
