@@ -428,7 +428,7 @@
               }
               if(packetData.originID == ownid){
               console.log("BROADCASTING REPLY MESSAGE");
-            bridgeWV.broadcastMessage(JSON.stringify(packetData));
+            bridge.broadcastMessage(JSON.stringify(packetData));
             }
               //document.getElementById("chatout").innerHTML+=packet.peerName+" says:<br/>"+text+"<br/>";
             }
@@ -453,9 +453,9 @@
             if (originID != ownid){
               //packetData.reBcast = "reply";
               console.log("sending to:"+originID);
-              bridgeWV.sendMessage(selectedConv.originID, JSON.stringify(packetData));
+              bridge.sendMessage(selectedConv.originID, JSON.stringify(packetData));
             } else{
-            bridgeWV.broadcastMessage(JSON.stringify(packetData));
+            bridge.broadcastMessage(JSON.stringify(packetData));
             }
             selectedConv = words;
             input.value = "";
