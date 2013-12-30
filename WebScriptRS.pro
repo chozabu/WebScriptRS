@@ -24,23 +24,28 @@ HEADERS = WebScriptRSPlugin.h \
 FORMS   = topjcdialog.ui \
     webtabcontents.ui
 
-#embedded pyqt
-INCLUDEPATH += -I./embpyqt
 
-SOURCES += \
-    embpyqt/embeddedpyqt.cpp \
-    embpyqt/pythonize.cpp
-HEADERS += \
-    embpyqt/embeddedpyqt.h \
-    embpyqt/pythonize.h
+#CONFIG += use_python
+use_python {
+    #embedded pyqt
+    INCLUDEPATH += -I./embpyqt
 
-# Python
-win32 {
-    LIBS        += -lpython27
-    INCLUDEPATH += ../../../Python27/include
-} else {
-    LIBS        += -lpython2.7 -L/usr/lib/
-    INCLUDEPATH += /usr/include/python2.7/
+    SOURCES += \
+	embpyqt/embeddedpyqt.cpp \
+	embpyqt/pythonize.cpp
+    HEADERS += \
+	embpyqt/embeddedpyqt.h \
+	embpyqt/pythonize.h
+
+    DEFINES += EMBPYTHON
+    # Python
+    win32 {
+	LIBS        += -lpython27
+	INCLUDEPATH += ../../../Python27/include
+    } else {
+	LIBS        += -lpython2.7 -L/usr/lib/
+	INCLUDEPATH += /usr/include/python2.7/
+    }
 }
 
 # RPC

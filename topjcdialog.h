@@ -15,7 +15,9 @@
 
 #include "qjsonrpclocalserver.h"
 
+#ifdef EMBPYTHON
 #include "embpyqt/embeddedpyqt.h"
+#endif
 
 namespace Ui {
 class WebScriptDialog;

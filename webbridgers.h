@@ -6,7 +6,10 @@
 #include<QVariantMap>
 #include <QPixmap>
 #include <retroshare/rsfiles.h>
+
+#ifdef EMBPYTHON
 #include "embpyqt/embeddedpyqt.h"
+#endif
 #if defined(WIN32) || defined(MINGW) || defined(__CYGWIN__)
 #include "qjsonrpcservice.h"
 #else
@@ -26,7 +29,9 @@ public:
     void pushMsgToJs(QVariantMap message);
     p3JsonRS *p3service;
     QMap<QString,QPixmap> avatars;
+#ifdef EMBPYTHON
     EmbeddedPyQt *embpyqt;
+#endif
 
 //the public slots are exposed to JS
 public slots:
