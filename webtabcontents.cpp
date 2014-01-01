@@ -23,6 +23,8 @@ WebTabContents::WebTabContents(QWidget *parent) :
     //this->ui->verticalLayout->addWidget(jslog,1);
     //jslog->show();
     QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
+    QWebSettings::globalSettings()->setAttribute(QWebSettings::LocalContentCanAccessFileUrls, true);
+    QWebSettings::globalSettings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
 
     //connect(ui->testButton, SIGNAL(clicked()), this->webview, SLOT(reload()));
     connect(ui->testButton, SIGNAL(clicked()), this, SLOT(changeLocation()));

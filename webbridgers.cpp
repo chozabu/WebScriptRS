@@ -588,13 +588,14 @@ QVariantMap WebBridgeRS::searchKeywords(const QString& keywords, QVariantMap sea
         qdd.insert("type",dd.type);
 
         FileInfo info;
-
-        if (rsFiles->FileDetails(dd.hash, fsf, info)){
+        //The flags copied from SearchDialog.cpp:1096
+        if (rsFiles->FileDetails(dd.hash, RS_FILE_HINTS_EXTRA | RS_FILE_HINTS_LOCAL | RS_FILE_HINTS_BROWSABLE | RS_FILE_HINTS_NETWORK_WIDE | RS_FILE_HINTS_SPEC_ONLY, info)){
             /* make path for downloaded or downloading files */
             //QFileInfo qinfo;
             std::string path;
             path = info.path.substr(0,info.path.length()-info.fname.length());
-            qdd.insert("fullpath",QString::fromUtf8(path.c_str()));
+            QDir apath =  QDir(QString::fromUtf8(path.c_str()));
+            qdd.insert("fullpath", apath.absolutePath());
 
             /* open folder with a suitable application */
             /*qinfo.setFile(QString::fromUtf8(path.c_str()));
@@ -632,7 +633,8 @@ QString WebBridgeRS::getOwnId()
 }
 QString WebBridgeRS::getDownloadDirectory()
 {
-    return QString::fromUtf8(rsFiles->getDownloadDirectory().c_str());
+    QDir path =  QDir(QString::fromUtf8(rsFiles->getDownloadDirectory().c_str()));
+    return path.absolutePath();
 }
 
 void WebBridgeRS::broadcastMessage(QString msg)

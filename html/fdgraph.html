@@ -128,7 +128,7 @@ function chartFromLocalSearch(){
 
   filesList = []
   for (r in results){
-    filesList.push(results[r].fullpath+results[r].srname);
+    filesList.push(results[r].fullpath + "/" + results[r].srname);
   }
   handledCount = 0;
   for (f in filesList){
@@ -164,7 +164,7 @@ function ownFileNotFound(){
         window.alert("first run - wait a little for info to gather, and refresh");
 }
 
-var fname =bridge.getDownloadDirectory()+"/global-peer-map-from-"+myOwnHash+".json"
+var fname =bridge.getDownloadDirectory()+"/global-peer-map-from-"+myOwnHash+".json";
 console.log(fname);
 $.ajax({
     url:fname,
