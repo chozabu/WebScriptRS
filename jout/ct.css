@@ -12,6 +12,7 @@ body {
   border: #bbbbbb 1px solid;
   text-align: left;
   margin: 5px;
+  margin-left: 520px;
   border-radius: 5px;
   box-shadow: 2px 2px 2px #bbbbbb;
 }
@@ -46,5 +47,7 @@ body > ul {
 }
 
 body > ul > li {
+  margin-left: 5px;
   width: 500px;
+  float: left;
 }
