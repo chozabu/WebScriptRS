@@ -1,7 +1,10 @@
-<html><head><title>Index</title>
+<html>
+  <head>
+    <title>Index</title>
+    <link rel="stylesheet" href="ct.css" type="text/css">
+  </head>
+<body>
 
-<link rel="stylesheet" href="ct.css" type="text/css">
-</head><body>
 <a href="index.html">Back to Index</a><br/>
 
 <br>
@@ -11,102 +14,107 @@ Messages:
 <script src="zepto.min.js"></script>
 <script>
 var chatout = document.getElementById("chatout");
-  var forumID = getUrlVars()["forumID"];
-  var onlymouseover = getUrlVars()["onlymouseover"];
+var forumID = getUrlVars()["forumID"];
+var onlymouseover = getUrlVars()["onlymouseover"];
 
-  console.log("requesting "+'forum'+forumID+'.json');
-  $.getJSON('forum'+forumID+'.json', handleThreadList);
+console.log("requesting "+'forum'+forumID+'.json');
+$.getJSON('forum'+forumID+'.json', handleThreadList);
+
 function handleThreadList(threadList){
-    console.log("found threads:"+ threadList.length);
-    threadList.sort(function(a,b){return a.ts-b.ts});
+  console.log("found threads:"+ threadList.length);
+  threadList.sort(function(a,b){return a.ts-b.ts});
   for (var f in threadList){
     var threadpost = threadList[f];
     convertRSPost(threadpost);
     if(onlymouseover == "false")
       $.getJSON('thread'+threadpost.msgId+'.json', showChildren);
-    
   }
 }
-  function showChildren(cThread){
-    if (cThread.length == 0) return;
-    cThread.sort(function(a,b){return a.ts-b.ts});
-    //console.log(JSON.stringify(cThread))
-    for (var p in cThread){
-      var cPost = cThread[p];
 
-      convertRSPost(cPost);
-      if(onlymouseover == "false")
-      $.getJSON('thread'+cPost.msgId+'.json', showChildren);//showChildren(newThread);
-      
-    }
-  }
-  function convertRSPost(fpost){
-    $.getJSON('msg'+fpost['msgId']+'.json', addPostToFeedPanel);//showChildren(newThread);
-  }
-    function makeReplyPanel(msgId){
-    
-    var replysListpanel = document.createElement("div");
-    replysListpanel.id=msgId+"replies";
-    
-    var childPanel = document.createElement("div");
-    //childPanel.className = 'PIPanelOdd'
-    childPanel.appendChild(replysListpanel)
-    
-    return childPanel;
-  }
-  function getName(personID){
-  if(typeof(personID)=="undefined")return "AC";
-    if(personID.length>2)
-      return personID;//bridge.getPeerName(personID)
-    return "Anon";
-   }
-   function tryLoadChildren(elem){
-      if(elem.target.hasOwnProperty("requestedchildren")){
-        return;
-      }else{
-        elem.target.requestedchildren = true;
-        var jsonfile = 'thread'+elem.target.id+'.json';
-        //console.log(elem.target)
-        console.log(jsonfile);
-        $.getJSON(jsonfile, showChildren);//showChildren(newThread);
-      }
-   }
-  function addPostToFeedPanel(post){
-    if (document.getElementById(post.msgId))return false;
-    var newPanel = "<b>"+getName(post.srcId)+"</b>: <i>"+post.title+" </i>"+post.msg+" "+post.msgId+" <br><font size='1em'> @"+new Date(post.ts*1000)+"</font>" ;
+function showChildren(cThread){
+  if (cThread.length == 0) return;
+  cThread.sort(function(a,b){return a.ts-b.ts});
+  //console.log(JSON.stringify(cThread))
+  for (var p in cThread){
+    var cPost = cThread[p];
 
-    var finalPanel = document.createElement("div");
-    finalPanel.className = 'PIPanel';
-    finalPanel.innerHTML = newPanel;
-    finalPanel.id = post.msgId;
-    finalPanel.appendChild(makeReplyPanel(post.msgId));
-    if(onlymouseover == "true")
-      finalPanel.onmouseover = tryLoadChildren;
-    //$.getJSON('thread'+cPost.msgId+'.json', showChildren);//showChildren(newThread);
-    //var imgPanel = document.createElement("img");
-    //bridge.getAvatarDetails(post.srcId).assignTo(imgPanel);
-    //finalPanel.insertBefore(imgPanel, finalPanel.firstChild);
-    if(post.hasOwnProperty("parentId") && post.parentId.length>2){
-      var replypanel = document.getElementById(post.parentId+"replies");
-      //imgPanel.style.float="left";
-      replypanel.insertBefore(finalPanel, replypanel.firstChild);
-      //replypanel.appendChild(finalPanel);
-      //imgPanel.width/=3;
-      //imgPanel.height/=3;
-    }else{
-      chatout.insertBefore(finalPanel, chatout.firstChild);
-      //if (finalPanel.height < imgPanel.height)
-      finalPanel.height=100;//imgPanel.height;
-    }
-    return true;
+    convertRSPost(cPost);
+    if(onlymouseover == "false")
+    $.getJSON('thread'+cPost.msgId+'.json', showChildren);//showChildren(newThread);
   }
+}
+
+function convertRSPost(fpost){
+  $.getJSON('msg'+fpost['msgId']+'.json', addPostToFeedPanel);//showChildren(newThread);
+}
   
-    function getUrlVars() {
-    var vars = {};
-    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-        vars[key] = value;
-    });
-    return vars;
+function makeReplyPanel(msgId){
+  var replysListpanel = document.createElement("div");
+  replysListpanel.id=msgId+"replies";
+
+  var childPanel = document.createElement("div");
+  //childPanel.className = 'PIPanelOdd'
+  childPanel.appendChild(replysListpanel)
+  
+  return childPanel;
+}
+
+function getName(personID){
+  if(typeof(personID)=="undefined")
+    return "AC";
+  if(personID.length>2)
+    return personID;//bridge.getPeerName(personID)
+  return "Anon";
+}
+
+function tryLoadChildren(elem){
+  if(elem.target.hasOwnProperty("requestedchildren")){
+    return;
+  }else{
+    elem.target.requestedchildren = true;
+    var jsonfile = 'thread'+elem.target.id+'.json';
+    //console.log(elem.target)
+    console.log(jsonfile);
+    $.getJSON(jsonfile, showChildren);//showChildren(newThread);
+  }
+}
+function addPostToFeedPanel(post){
+  if (document.getElementById(post.msgId)) return false;
+  // Define panel content
+  var newPanel = "<span class=\"postname\">"+getName(post.srcId)+"</span>, <span class=\"postdate\"> @"+new Date(post.ts*1000)+"</span>: <span class=\"posttitle\">"+post.title+"</span> <span class=\"postid\">(ID: "+post.msgId+")</span>\n<div class=\"postmessage\">"+post.msg+"</div>\n";
+
+  var finalPanel = document.createElement("div");
+  finalPanel.className = 'PIPanel';
+  finalPanel.innerHTML = newPanel;
+  finalPanel.id = post.msgId;
+  finalPanel.appendChild(makeReplyPanel(post.msgId));
+  if(onlymouseover == "true")
+    finalPanel.onclick = tryLoadChildren;
+  //$.getJSON('thread'+cPost.msgId+'.json', showChildren);//showChildren(newThread);
+  //var imgPanel = document.createElement("img");
+  //bridge.getAvatarDetails(post.srcId).assignTo(imgPanel);
+  //finalPanel.insertBefore(imgPanel, finalPanel.firstChild);
+  if(post.hasOwnProperty("parentId") && post.parentId.length>2){
+    var replypanel = document.getElementById(post.parentId+"replies");
+    //imgPanel.style.float="left";
+    replypanel.insertBefore(finalPanel, replypanel.firstChild);
+    //replypanel.appendChild(finalPanel);
+    //imgPanel.width/=3;
+    //imgPanel.height/=3;
+  }else{
+    chatout.insertBefore(finalPanel, chatout.firstChild);
+    //if (finalPanel.height < imgPanel.height)
+    finalPanel.height=100;//imgPanel.height;
+  }
+  return true;
+}
+  
+function getUrlVars() {
+  var vars = {};
+  var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+    vars[key] = value;
+  });
+  return vars;
 }
 </script>
 </body>

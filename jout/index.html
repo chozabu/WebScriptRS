@@ -1,13 +1,14 @@
-<html><head><title>Index</title>
-
-<link rel="stylesheet" href="ct.css" type="text/css">
-</head><body>
+<html>
+<head>
+  <title>Index</title>
+  <link rel="stylesheet" href="ct.css" type="text/css">
+</head>
+<body>
 <a href="index.html">Back to Index</a><br/>
 
 <br>
-Subscribed Forumsa:
-<p id="chatout"></p>
-
+Subscribed Forums:
+<ul id="chatout"></ul>
 
 <script src="zepto.min.js"></script>
 <script>
@@ -19,12 +20,8 @@ function handleForums(forums){
   for (fkey in forums){
     f = forums[fkey];
     if (f['forumRelationship'] == 'SUBSCRIBED'){
-          //console.log( f['forumName']);
-          var id = f['forumId'];
-          var forumlink = "<a href=viewforum.html?forumID="+id+"&onlymouseover=true>"+f['forumName']+"</a>"
-          var loadall = "<a href=viewforum.html?forumID="+id+"&onlymouseover=false>loadall</a>"
-        chatout.innerHTML += forumlink+" or "+loadall+" <br/>";
-          //chatout.innerHTML += f['forumName']+"<br>";
+      //console.log( f['forumName']);
+      chatout.innerHTML += "<li><a href=\"viewforum.html?forumID="+f['forumId']+"&onlymouseover=true\">"+f['forumName']+"</a> (<a href=\"viewforum.html?forumID="+f['forumId']+"&onlymouseover=false\">load all</a></li>)";
     }
   }
 }
