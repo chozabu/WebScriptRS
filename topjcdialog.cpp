@@ -8,6 +8,7 @@
 #include <QLocalServer>
 #include <QFile>
 #include <QDir>
+#include <QMessageBox>
 
 #if QT_VERSION >= 0x050000
 #include <QStandardPaths>
@@ -59,14 +60,18 @@ void WebScriptDialog::startRPC(){
     std::cerr << "starting RPC Server\n";
     if (QFile::exists(serviceName) && !QFile::remove(serviceName)) {
          std::cerr << "couldn't delete temporary service";
+         QMessageBox::warning(window(), QString("Error"), QString("Couldn't delete temporary service"));
     }else{
 
         std::cerr << "temp service: "<< serviceName.toStdString().c_str() << "\n";
+        QMessageBox::information(window(), QString("Service name"), serviceName);
         rpcServer.addService(bridge);
-        if (!rpcServer.listen(serviceName)) {
+        if (!rpcServer.listen(QHostAddress("127.0.0.1"), 11111)) {
             std::cerr << "could not start server\n: " << rpcServer.errorString().toStdString().c_str() << "\n";
+            QMessageBox::warning(window(), QString("Error"), QString("Could not start server"));
         } else {
             std::cerr << "Server Started\n";
+            QMessageBox::information(window(), QString(""), QString("Server Started"));
         }
     }
 

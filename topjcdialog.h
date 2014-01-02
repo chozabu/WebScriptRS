@@ -13,7 +13,7 @@
 #include "p3JsonRS.h"
 #include "webviewrs.h"
 
-#include "qjsonrpclocalserver.h"
+#include "qjsonrpctcpserver.h"
 
 #ifdef EMBPYTHON
 #include "embpyqt/embeddedpyqt.h"
@@ -54,7 +54,7 @@ protected:
     void javaScriptConsoleMessage(const QString& message, int lineNumber, const QString& sourceID);
 private:
     Ui::WebScriptDialog *ui;
-    QJsonRpcLocalServer rpcServer;
+    QJsonRpcTcpServer rpcServer;
 };
 
 #endif // TOPJCDIALOG_H

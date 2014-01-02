@@ -7,7 +7,8 @@ import json
 import sys
 
 print "dumping subscribed forums... please wait!"
-rpc = jsonrpc.ServerProxy(jsonrpc.JsonRpc20(), jsonrpc.TransportSocket(addr="/tmp/testservice", sock_type=socket.AF_UNIX))
+#rpc = jsonrpc.ServerProxy(jsonrpc.JsonRpc20(), jsonrpc.TransportSocket(addr="/tmp/testservice", sock_type=socket.AF_UNIX))
+rpc = jsonrpc.ServerProxy(jsonrpc.JsonRpc20(), jsonrpc.TransportSocket(addr=("127.0.0.1",11111)))
 print "loading forums..."
 forums = rpc.bridge.getForums()
 print "loading keyring..."
