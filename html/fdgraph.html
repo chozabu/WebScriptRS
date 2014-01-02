@@ -99,11 +99,8 @@ function filterKeyUp(){
   }
 
 function chartFromLocalSearch(){
-  searchOptions = {"localindexed":true,"remoteindexed":false,"boolexp":false};
-  var sresult = bridge.searchKeywords("global-peer-map-from", searchOptions);
-  //console.log(JSON.stringify(sresult))
-  var results = sresult.results;
   
+  //this ajax reading should be replaced by making sure files made with writeString are indexed.
   var directFriendIds = bridge.getFriendList();
   $.each(directFriendIds, function(key, value){
     var gpgid = bridge.getGPGId(value);
@@ -123,10 +120,24 @@ function chartFromLocalSearch(){
       handleFileInternal(todump);//use this for full local map
     else
       handleFofInternal(todump);
-    
   })
+  
+  
+  searchOptions = {"localindexed":true,"remoteindexed":false,"boolexp":false};
+  var sresult = bridge.searchKeywords("global-peer-map-from", searchOptions);
+  //console.log(JSON.stringify(sresult))
+  var results = sresult.results;
 
   filesList = []
+  for (r in results){
+    filesList.push(results[r].fullpath + "/" + results[r].srname);
+  }
+  
+  searchOptions = {"localindexed":true,"remoteindexed":false,"boolexp":false};
+  var sresult = bridge.searchKeywords("global-peer-map-fof-of", searchOptions);
+  //console.log(JSON.stringify(sresult))
+  var results = sresult.results;
+
   for (r in results){
     filesList.push(results[r].fullpath + "/" + results[r].srname);
   }
@@ -134,6 +145,31 @@ function chartFromLocalSearch(){
   for (f in filesList){
     $.getJSON(filesList[f], handleFile)
   }
+}
+function dumpFoFConnections(){
+  
+  var directFriendIds = bridge.getFriendList();
+  $.each(directFriendIds, function(key, value){
+    var gpgid = bridge.getGPGId(value);
+    var fofs = bridge.getDiscGPGFriends(gpgid);
+    //console.log(fofs);
+    //friendHashs[dhHashId(value)]=value;
+    var dumplist=[];
+    $.each(fofs, function(innerkey, innervalue){
+        dumplist.push(dhHashId(bridge.getGPGId(innervalue)));
+    })
+    //todump['contactHashes']=dumplist;
+    todump = {};
+    todump.ownHash = dhHashId(gpgid);
+    todump.contactHashes = dumplist;
+    //console.log(todump);
+  var dumpdata = JSON.stringify(todump);
+  console.log("Writing data: "+dumpdata);
+  var outfile = "/global-peer-map-fof-of-"+dhHashId(todump.ownHash)+".json";
+  console.log("to: "+outfile);
+  bridge.writeString(outfile, dumpdata);
+    
+  })
 }
 
 function dumpConnections(){
