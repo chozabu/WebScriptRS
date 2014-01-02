@@ -17,7 +17,7 @@ print "gen name hash..."
 gpgIds = {}
 for i in gpgIdList:
   n = rpc.bridge.getPeerName(i)
-  print n
+  #print n
   gpgIds[i]=n
 print "writing forums list..."
 
@@ -26,10 +26,13 @@ with open('../jout/forums.json', 'w') as ffile:
 def dumpMsg(forumID,msgID):
             #print msgID
             msg = rpc.bridge.getForumMessage(forumID,msgID)
-            sys.stdout.write('   '+msg['srcId']+': ')
+            #sys.stdout.write('   '+msg['srcId']+': ')
             if msg['srcId'] != '':
-              msg['srcId'] = gpgIds[msg['srcId']]
-              sys.stdout.write(msg['srcId']+' ')
+              if msg['srcId'] in gpgIds:
+                msg['srcId'] = gpgIds[msg['srcId']]
+              else:
+                msg['srcId'] = "KeyHidden"
+              #sys.stdout.write(msg['srcId']+' ')
             with open("../jout/msg"+msgID+".json", 'w') as ffile:
                 ffile.write(json.dumps(msg))
             msgheaders = rpc.bridge.getForumThreadMsgList(forumID,msgID)
