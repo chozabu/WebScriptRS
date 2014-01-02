@@ -22,7 +22,7 @@ body {
 
 .PIPanel:hover {
   border: gray 1px solid;
-  background-color: #bbbbbb;
+  border-color: #666666;
 }
 
 .PIPanel > span {
@@ -47,9 +47,6 @@ body > ul {
   padding: 0px;
   list-style-type: none;
   text-align: left;
-}
-
-body > ul > li {
-  width: 500px;
   float: left;
+  width: 480px;
 }
