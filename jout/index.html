@@ -21,7 +21,7 @@ function handleForums(forums){
     f = forums[fkey];
     if (f['forumRelationship'] == 'SUBSCRIBED'){
       //console.log( f['forumName']);
-      chatout.innerHTML += "<li><a href=\"viewforum.html?forumID="+f['forumId']+"&onlymouseover=true\">"+f['forumName']+"</a> (<a href=\"viewforum.html?forumID="+f['forumId']+"&onlymouseover=false\">load all</a></li>)";
+      chatout.innerHTML += "<li><a href=\"viewforum.html?forumID="+f['forumId']+"&onlymouseover=true\">"+f['forumName']+"</a> (<a href=\"viewforum.html?forumID="+f['forumId']+"&onlymouseover=false\">load all</a>)</li>";
     }
   }
 }
