@@ -6,22 +6,21 @@
 <body>
 <h1>Forums</h1>
 <ul id="forumsout"></ul>
+<div id="chatoutcontainer">
+<div id="chatheader"></div>
 <div id="chatout"></div>
+</div>
 
 <script src="zepto.min.js"></script>
 <script>
 var forumsout = document.getElementById("forumsout");
 var chatout = document.getElementById("chatout");
+var chatheader = document.getElementById("chatheader");
 //var forumID = getUrlVars()["forumID"];
-var onlymouseover = getUrlVars()["onlymouseover"];
+var onlymouseover = "false";//getUrlVars()["onlymouseover"];
 
 $.getJSON('forums.json', handleForums);
 var forumIDNameDict = {};
-
-function loadForum(forumID){
-  console.log("requesting "+'forum'+forumID+'.json');
-  $.getJSON('forum'+forumID+'.json', handleThreadList);
-}
 
 function handleForums(forums){
   for (fkey in forums){
@@ -34,6 +33,13 @@ function handleForums(forums){
     }
   }
 }
+
+function loadForum(forumID){
+  console.log("requesting "+'forum'+forumID+'.json');
+  chatheader.innerHTML = "<h3>"+forumIDNameDict[forumID]+"</h3>";
+  $.getJSON('forum'+forumID+'.json', handleThreadList);
+}
+
 
 function handleThreadList(threadList){
   console.log("found threads:"+ threadList.length);
@@ -55,7 +61,7 @@ function showChildren(cThread){
 
     convertRSPost(cPost);
     if(onlymouseover == "false")
-    $.getJSON('thread'+cPost.msgId+'.json', showChildren);//showChildren(newThread);
+      $.getJSON('thread'+cPost.msgId+'.json', showChildren);//showChildren(newThread);
   }
 }
 
