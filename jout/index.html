@@ -7,8 +7,8 @@
 <h1>Forums</h1>
 <ul id="forumsout"></ul>
 <div id="chatoutcontainer">
-<div id="chatheader"></div>
-<div id="chatout"></div>
+  <div id="chatheader"></div>
+  <div id="chatout"></div>
 </div>
 
 <script src="zepto.min.js"></script>
@@ -27,7 +27,6 @@ function handleForums(forums){
   for (fkey in forums){
     f = forums[fkey];
     if (f['forumRelationship'] == 'SUBSCRIBED'){
-      //forumsout.innerHTML += "<li><a href=\"index.html?forumID="+f['forumId']+"&onlymouseover=true\">"+f['forumName']+"</a> (<a href=\"index.html?forumID="+f['forumId']+"&onlymouseover=false\">load all</a>)</li>";
       var instantlink = '<a href="#" onclick="loadForum(\''+f['forumId']+'\');return false;">'+f['forumName']+'</a>';
       forumsout.innerHTML += "<li>"+instantlink+"</li>";
       forumIDNameDict[f['forumId']] = f['forumName'];
@@ -59,18 +58,14 @@ function handleThreadList(threadList){
   for (var f in threadList){
     var threadpost = threadList[f];
     convertRSPost(threadpost);
-    //if(onlymouseover == "false")
-    //  $.getJSON('thread'+threadpost.msgId+'.json', showChildren);
   }
 }
 
 function showChildren(cThread){
   if (cThread.length == 0) return;
   cThread.sort(function(a,b){return a.ts-b.ts});
-  //console.log(JSON.stringify(cThread))
   for (var p in cThread){
     var cPost = cThread[p];
-
     convertRSPost(cPost);
     if(onlymouseover == "false")
       $.getJSON('thread'+cPost.msgId+'.json', showChildren);//showChildren(newThread);
@@ -101,9 +96,7 @@ function getName(personID){
 }
 
 function tryLoadChildren(elem){
-  console.log("tryingLoad");
-  console.log(elem);
-  //for (var e in elem)console.log(e)
+  if(onlymouseover == "false") return;
   if(elem.currentTarget.hasOwnProperty("requestedchildren")){
     console.log("no retry");
     return;
@@ -111,7 +104,6 @@ function tryLoadChildren(elem){
     console.log("Loading...");
     elem.currentTarget.requestedchildren = true;
     var jsonfile = 'thread'+elem.currentTarget.id+'.json';
-    console.log(elem.currentTarget)
     console.log(jsonfile);
     $.getJSON(jsonfile, showChildren);//showChildren(newThread);
   }
@@ -126,8 +118,7 @@ function addPostToFeedPanel(post){
   finalPanel.innerHTML = newPanel;
   finalPanel.id = post.msgId;
   finalPanel.appendChild(makeReplyPanel(post.msgId));
-  if(onlymouseover == "true")
-    finalPanel.onclick = tryLoadChildren;
+  finalPanel.onclick = tryLoadChildren;
   //$.getJSON('thread'+cPost.msgId+'.json', showChildren);//showChildren(newThread);
   //var imgPanel = document.createElement("img");
   //bridge.getAvatarDetails(post.srcId).assignTo(imgPanel);
