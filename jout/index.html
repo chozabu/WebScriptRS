@@ -12,18 +12,25 @@
 <script>
 var forumsout = document.getElementById("forumsout");
 var chatout = document.getElementById("chatout");
-var forumID = getUrlVars()["forumID"];
+//var forumID = getUrlVars()["forumID"];
 var onlymouseover = getUrlVars()["onlymouseover"];
 
 $.getJSON('forums.json', handleForums);
-console.log("requesting "+'forum'+forumID+'.json');
-$.getJSON('forum'+forumID+'.json', handleThreadList);
+var forumIDNameDict = {};
+
+function loadForum(forumID){
+  console.log("requesting "+'forum'+forumID+'.json');
+  $.getJSON('forum'+forumID+'.json', handleThreadList);
+}
 
 function handleForums(forums){
   for (fkey in forums){
     f = forums[fkey];
     if (f['forumRelationship'] == 'SUBSCRIBED'){
-      forumsout.innerHTML += "<li><a href=\"index.html?forumID="+f['forumId']+"&onlymouseover=true\">"+f['forumName']+"</a> (<a href=\"index.html?forumID="+f['forumId']+"&onlymouseover=false\">load all</a>)</li>";
+      //forumsout.innerHTML += "<li><a href=\"index.html?forumID="+f['forumId']+"&onlymouseover=true\">"+f['forumName']+"</a> (<a href=\"index.html?forumID="+f['forumId']+"&onlymouseover=false\">load all</a>)</li>";
+      var instantlink = '<a href="#" onclick="loadForum(\''+f['forumId']+'\');return false;">'+f['forumName']+'</a>';
+      forumsout.innerHTML += "<li>"+instantlink+"</li>";
+      forumIDNameDict[f['forumId']] = f['forumName'];
     }
   }
 }
