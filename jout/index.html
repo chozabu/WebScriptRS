@@ -49,6 +49,7 @@ function loadForum(forumID){
 
 function loadAllPosts(){
   onlymouseover = "false";
+  chatheader.innerHTML = "<h3>"+forumIDNameDict[gForumID]+"</h3> "
   for (var f in gThreadList){
     var threadpost = gThreadList[f];
     $.getJSON('thread'+threadpost.msgId+'.json', showChildren);
