@@ -16,9 +16,10 @@
 var forumsout = document.getElementById("forumsout");
 var chatout = document.getElementById("chatout");
 var chatheader = document.getElementById("chatheader");
-//var forumID = getUrlVars()["forumID"];
+var gForumID = getUrlVars()["forumID"];
 var onlymouseover = "false";//getUrlVars()["onlymouseover"];
 var gThreadList = [];
+
 
 $.getJSON('forums.json', handleForums);
 var forumIDNameDict = {};
@@ -27,17 +28,22 @@ function handleForums(forums){
   for (fkey in forums){
     f = forums[fkey];
     if (f['forumRelationship'] == 'SUBSCRIBED'){
-      var instantlink = '<a href="#" onclick="loadForum(\''+f['forumId']+'\');return false;">'+f['forumName']+'</a>';
+      var instantlink = '<a href="#?forumID='+f['forumId']+'" onclick="loadForum(\''+f['forumId']+'\');">'+f['forumName']+'</a>';
       forumsout.innerHTML += "<li>"+instantlink+"</li>";
       forumIDNameDict[f['forumId']] = f['forumName'];
     }
   }
+  if(gForumID){
+    loadForum(gForumID);
+  }
 }
 
 function loadForum(forumID){
+  gForumID = forumID;
   console.log("requesting "+'forum'+forumID+'.json');
   var loadallLink = '<a href="#" onclick="loadAllPosts();return false;">Load All Children</a>';
   chatheader.innerHTML = "<h3>"+forumIDNameDict[forumID]+"</h3> "+loadallLink;
+  chatout.innerHTML = "";
   $.getJSON('forum'+forumID+'.json', handleThreadList);
 }
 
@@ -52,7 +58,6 @@ function loadAllPosts(){
 function handleThreadList(threadList){
   console.log("found threads:"+ threadList.length);
   threadList.sort(function(a,b){return a.ts-b.ts});
-  chatout.innerHTML = "";
   gThreadList = threadList;
   onlymouseover = "true";
   for (var f in threadList){
