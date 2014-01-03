@@ -126,11 +126,11 @@ function addPostToFeedPanel(post){
 function addPostHeaderToFeedPanel(post){
   if (document.getElementById(post.msgId)) return false;
   // Define panel content
-  //var newPanel = "<span class=\"postname\">"+getName(post.srcId)+"</span>, <span class=\"postdate\"> @"+new Date(post.ts*1000)+"</span>: <span class=\"posttitle\">"+post.title+"</span> <span class=\"postid\">(ID: "+post.msgId+")</span>\n<div class=\"postmessage\">"+post.msg.replace(/(\n)+/g, '<br />')+"</div>\n";
+  var newPanel = "<span class=\"postname\">"+getName(post.srcId)+"</span>, <span class=\"postdate\"> @"+new Date(post.ts*1000)+"</span>: <span class=\"posttitle\">"+post.title+"</span> <span class=\"postid\">(ID: "+post.msgId+")</span>\n<div class=\"postmessage\">"+post.msg.replace(/(\n)+/g, '<br />')+"</div>\n";
 
   var finalPanel = document.createElement("div");
   finalPanel.className = 'PIPanel';
-  //finalPanel.innerHTML = newPanel;
+  finalPanel.innerHTML = newPanel;
   finalPanel.id = post.msgId;
   finalPanel.appendChild(makeReplyPanel(post.msgId));
   finalPanel.onclick = tryLoadChildren;
