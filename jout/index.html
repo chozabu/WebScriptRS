@@ -18,6 +18,7 @@ var chatout = document.getElementById("chatout");
 var chatheader = document.getElementById("chatheader");
 //var forumID = getUrlVars()["forumID"];
 var onlymouseover = "false";//getUrlVars()["onlymouseover"];
+var gThreadList = [];
 
 $.getJSON('forums.json', handleForums);
 var forumIDNameDict = {};
@@ -36,19 +37,30 @@ function handleForums(forums){
 
 function loadForum(forumID){
   console.log("requesting "+'forum'+forumID+'.json');
-  chatheader.innerHTML = "<h3>"+forumIDNameDict[forumID]+"</h3>";
+  var loadallLink = '<a href="#" onclick="loadAllPosts();return false;">Load All Children</a>';
+  chatheader.innerHTML = "<h3>"+forumIDNameDict[forumID]+"</h3> "+loadallLink;
   $.getJSON('forum'+forumID+'.json', handleThreadList);
 }
 
+function loadAllPosts(){
+  onlymouseover = "false";
+  for (var f in gThreadList){
+    var threadpost = gThreadList[f];
+    $.getJSON('thread'+threadpost.msgId+'.json', showChildren);
+  }
+}
 
 function handleThreadList(threadList){
   console.log("found threads:"+ threadList.length);
   threadList.sort(function(a,b){return a.ts-b.ts});
+  chatout.innerHTML = "";
+  gThreadList = threadList;
+  onlymouseover = "true";
   for (var f in threadList){
     var threadpost = threadList[f];
     convertRSPost(threadpost);
-    if(onlymouseover == "false")
-      $.getJSON('thread'+threadpost.msgId+'.json', showChildren);
+    //if(onlymouseover == "false")
+    //  $.getJSON('thread'+threadpost.msgId+'.json', showChildren);
   }
 }
 
@@ -89,12 +101,17 @@ function getName(personID){
 }
 
 function tryLoadChildren(elem){
-  if(elem.target.hasOwnProperty("requestedchildren")){
+  console.log("tryingLoad");
+  console.log(elem);
+  //for (var e in elem)console.log(e)
+  if(elem.currentTarget.hasOwnProperty("requestedchildren")){
+    console.log("no retry");
     return;
   }else{
-    elem.target.requestedchildren = true;
-    var jsonfile = 'thread'+elem.target.id+'.json';
-    //console.log(elem.target)
+    console.log("Loading...");
+    elem.currentTarget.requestedchildren = true;
+    var jsonfile = 'thread'+elem.currentTarget.id+'.json';
+    console.log(elem.currentTarget)
     console.log(jsonfile);
     $.getJSON(jsonfile, showChildren);//showChildren(newThread);
   }
