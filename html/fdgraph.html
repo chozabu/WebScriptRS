@@ -285,7 +285,7 @@ function doGraph(){
       .data(links)
     .enter().append("line")
       .attr("class", "link")
-      .style("stroke-width", function(d) { return 2-d.colour/10.0; })
+      //.style("stroke-width", function(d) { return d.width; })
       .style("stroke", function(d) { return color(d.colour); });
 //color(d.group) //style="stroke: black;"
   gnodes = svg.selectAll('g.gnode')
@@ -294,6 +294,7 @@ function doGraph(){
   .append('g')
   .classed('gnode', true)
   .call(force.drag);;
+  
 
 // Add one circle in each group
 var node = gnodes.append("circle")
@@ -301,6 +302,16 @@ var node = gnodes.append("circle")
   .attr("r", 7)
   .style("fill", function(d) { return color(6); })//d.group
   .call(force.drag);
+  
+  
+  node.on('mouseover', function(d) {
+  link.style('stroke-width', function(l) {
+    if (d === l.source || d === l.target)
+      return 4;
+    else
+      return 1;
+    });
+});
 
 // Append the labels to each group
 var labels = gnodes.append("text")
