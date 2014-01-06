@@ -17,6 +17,7 @@ var forumsout = document.getElementById("forumsout");
 var chatout = document.getElementById("chatout");
 var chatheader = document.getElementById("chatheader");
 var gForumID = getUrlVars()["forumID"];
+var gMsgID = getUrlVars()["msgID"];
 var onlymouseover = "false";//getUrlVars()["onlymouseover"];
 var gThreadList = [];
 
@@ -36,6 +37,17 @@ function handleForums(forums){
   if(gForumID){
     loadForum(gForumID);
   }
+  if(gMsgID){
+    $.getJSON('msg'+gMsgID+'.json', loadFullMsg);//showChildren(newThread);
+  }
+}
+
+function loadFullMsg(msgin){
+  onlymouseover = "true";
+  convertRSPost(msgin);
+  //showChildren(msgin)
+  //loadAllPosts();
+  
 }
 
 function loadForum(forumID){
@@ -118,7 +130,10 @@ function tryLoadChildren(elem){
 function addPostToFeedPanel(post){
   finalPanel = document.getElementById(post.msgId);
   // Define panel content
-  var newPanel = "<span class=\"postname\">"+getName(post.srcId)+"</span>, <span class=\"postdate\"> @"+new Date(post.ts*1000)+"</span>: <span class=\"posttitle\">"+post.title+"</span> <span class=\"postid\">(ID: "+post.msgId+")</span>\n<div class=\"postmessage\">"+post.msg.replace(/(\n)+/g, '<br />')+"</div>\n";
+    var permaLink = '<a href="#?msgID='+post.msgId+'">'+post.msgId+'</a>';
+  var newPanel = "<span class=\"postname\">"+getName(post.srcId)+"</span>, <span class=\"postdate\"> @"+new Date(post.ts*1000)+"</span>: <span class=\"posttitle\">"+post.title+"</span> <span class=\"postid\">(ID: "+permaLink+")</span>\n<div class=\"postmessage\">"+post.msg.replace(/(\n)+/g, '<br />')+"</div>\n";
+
+  //var newPanel = "<span class=\"postname\">"+getName(post.srcId)+"</span>, <span class=\"postdate\"> @"+new Date(post.ts*1000)+"</span>: <span class=\"posttitle\">"+post.title+"</span> <span class=\"postid\">(ID: "+post.msgId+")</span>\n<div class=\"postmessage\">"+post.msg.replace(/(\n)+/g, '<br />')+"</div>\n";
 
   //var finalPanel = document.createElement("div");
   finalPanel.className = 'PIPanel';
@@ -132,7 +147,9 @@ function addPostToFeedPanel(post){
 function addPostHeaderToFeedPanel(post){
   if (document.getElementById(post.msgId)) return false;
   // Define panel content
-  var newPanel = "<span class=\"postname\">"+getName(post.srcId)+"</span>, <span class=\"postdate\"> @"+new Date(post.ts*1000)+"</span>: <span class=\"posttitle\">"+post.title+"</span> <span class=\"postid\">(ID: "+post.msgId+")</span>\n<div class=\"postmessage\">"+post.msg.replace(/(\n)+/g, '<br />')+"</div>\n";
+  //onclick="loadForum(\''+f['forumId']+'\');"
+  var permaLink = '<a href="#?msgID='+post.msgId+'">'+post.msgId+'</a>';
+  var newPanel = "<span class=\"postname\">"+getName(post.srcId)+"</span>, <span class=\"postdate\"> @"+new Date(post.ts*1000)+"</span>: <span class=\"posttitle\">"+post.title+"</span> <span class=\"postid\">(ID: "+permaLink+")</span>\n<div class=\"postmessage\">"+post.msg.replace(/(\n)+/g, '<br />')+"</div>\n";
 
   var finalPanel = document.createElement("div");
   finalPanel.className = 'PIPanel';
@@ -144,8 +161,8 @@ function addPostHeaderToFeedPanel(post){
   //var imgPanel = document.createElement("img");
   //bridge.getAvatarDetails(post.srcId).assignTo(imgPanel);
   //finalPanel.insertBefore(imgPanel, finalPanel.firstChild);
-  if(post.hasOwnProperty("parentId") && post.parentId.length>2){
-    var replypanel = document.getElementById(post.parentId+"replies");
+  var replypanel = document.getElementById(post.parentId+"replies");
+  if(replypanel && post.hasOwnProperty("parentId") && post.parentId.length>2){
     //imgPanel.style.float="left";
     replypanel.insertBefore(finalPanel, replypanel.firstChild);
     //replypanel.appendChild(finalPanel);
