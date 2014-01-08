@@ -67,6 +67,24 @@ body {
 	max-width: 250px;
 	min-width:250px;
 }
+.simpleContentPanel{
+  background-color: rgba(240, 240, 240, .9);
+  border-radius:5px;
+  font-size:15px;
+  max-width: 700px;
+  padding-top: 0.1em;
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-bottom: 1em;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 3px;
+  box-shadow: inset 0px 0px 80px rgba(255, 255, 255, .5),  0px 0px 1px rgba(0, 0, 0, 1), inset 0px 0px 6px rgba(0, 0, 0, .4);
+}
+.floatLeftContentPanel{
+  width: 49%;
+  float:left;
+}
 .propMiddlePanel{
   background-color: rgba(240, 240, 240, .9);
   border-radius:5px;
@@ -76,6 +94,7 @@ body {
   padding-top: 1em;
   padding-left: 1em;
   padding-right: 1em;
+  padding-bottom: 1em;
   box-shadow: inset 0px 0px 80px rgba(255, 255, 255, .5), inset 0px 0px 1px rgba(0, 0, 0, 1), inset 0px 0px 6px rgba(0, 0, 0, .4);
 }
 .hListHeader {
