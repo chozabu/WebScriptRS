@@ -304,7 +304,7 @@ var node = gnodes.append("circle")
   .call(force.drag);
   
   
-  node.on('mouseover', function(d) {
+  gnodes.on('mouseover', function(d) {
   link.style('stroke-width', function(l) {
     if (d === l.source || d === l.target)
       return 4;
