@@ -17,8 +17,8 @@
 <a href="index.html">Back to Index</a><br/>
 Filter:<input name="filterInput" id="filterInput" type="text"  onkeyup="return filterKeyUp(event)" />
 <div id="foflink"></div>
-linkStrength<input id="linkStrength" type="number" value="0.3" onkeyup="return fNumsKeyUp(event)"></input>
- charge:<input id="charge" type="number" value="-120" onkeyup="return fNumsKeyUp(event)"></input>
+linkStrength<input id="linkStrength" type="number" value="0.5" onkeyup="return fNumsKeyUp(event)"></input>
+ charge:<input id="charge" type="number" value="-300" onkeyup="return fNumsKeyUp(event)"></input>
  linkDistance:<input id="linkDistance" type="number" value="100" onkeyup="return fNumsKeyUp(event)"></input>
 <div id="mapDiv"></div>
 <p id="downloadEle"></p>
@@ -62,6 +62,13 @@ var friendIds = bridge.getGPGAllList();
 var friendHashs = {};
 $.each(friendIds, function(key, value){
   friendHashs[dhHashId(value)]=value;
+})
+
+
+var dfriendIds = bridge.getFriendList();
+var dfriendHashs = {};
+$.each(dfriendIds, function(key, value){
+  dfriendHashs[dhHashId(value)]=value;
 })
 
 console.log(myOwnHash)
@@ -226,11 +233,22 @@ $.ajax({
 
 function checkAddNode(hash){
   if (!nodesDict.hasOwnProperty(hash)){
-    var name = hash.substr(0,5);
+    var newDict = {}
     if(hash==myOwnHash)name="ME";
-    if(friendHashs.hasOwnProperty(hash))name=bridge.getPeerName(friendHashs[hash]).substr(0,10);
-    nodes.push({"name":name});
-    nodesDict[hash]=nodes.length-1;
+    if(friendHashs.hasOwnProperty(hash)){
+      newDict.name=bridge.getPeerName(friendHashs[hash]);
+      //var imgPanel = document.createElement("img");
+      if (dfriendHashs.hasOwnProperty(hash)){
+        newDict.pic = bridge.getAvatarDetails(friendHashs[hash]).toDataUrl();//.assignTo(imgPanel);
+        console.log(newDict.pic);
+      } else if (hash == myOwnHash)
+        newDict.pic = bridge.getAvatarDetails(bridge.getOwnId()).toDataUrl();//.assignTo(imgPanel);
+      //finalPanel.insertBefore(imgPanel, finalPanel.firstChild);
+    } else {
+      newDict.name = hash.substr(0,5);
+    }
+    nodes.push(newDict);
+    nodesDict[hash]=newDict;
     }
   return nodesDict[hash]
 }
@@ -318,6 +336,14 @@ var labels = gnodes.append("text")
   .attr("dx", 12)
   .attr("dy", ".35em")
   .text(function(d) { return d.name; });
+  
+  
+var pics = gnodes.append("svg:image")
+  .attr("xlink:href", function(d) { if(d.hasOwnProperty("pic")) return d.pic; })
+  .attr("x", -16)
+  .attr("y", -16)
+  .attr("width", 24)
+  .attr("height", 24);
 
   //node.append("title")
   //  .text(function(d) { return d.name; });
