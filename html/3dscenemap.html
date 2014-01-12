@@ -79,7 +79,7 @@ function testSearch(){
         
         console.log(results[i].fullpath)
         console.log(results[i].srname)
-        var imgele = "<img src='"+actualpath+"'></img><br>";
+        var imgele = "<img src='"+actualpath+"' width='100%'></img><br>";
         resultPanel+=imgele;
         resultspanel.innerHTML += resultPanel+"</p>"
       }
@@ -127,7 +127,7 @@ function testSearch(){
                                 searchPanel.style.position = 'absolute';
                                 searchPanel.style.top = '30px';
                                 searchPanel.style.width = '40%';
-                                //searchPanel.style.height = '90%';
+                                searchPanel.style.height = '95%';
                                 searchPanel.style.margin = '0.5em';
                                 searchPanel.style.textAlign = 'left';
                                 //searchPanel.style.overflow="scroll";
@@ -145,8 +145,9 @@ function testSearch(){
                                 searchResults.style.position = 'absolute';
                                 //searchResults.style.top = '30px';
                                 searchResults.style.width = '40%';
+                                searchResults.style.height = '95%';
                                 //searchResults.style.margin = '0.5em';
-                                //searchResults.style.overflow="scroll";
+                                searchResults.style.overflow="scroll";
                                 searchResults.style.textAlign = 'left';
                                 searchPanel.appendChild( searchResults );
                                 
