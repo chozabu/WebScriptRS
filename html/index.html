@@ -1,60 +1,7 @@
 <html><head><title>Index</title>
 
 <link rel="stylesheet" href="ct.css" type="text/css">
-<script>
-var peers = {}
-bridge.msgPush.connect(incomingMsg);
-function incomingMsg(message){
-  //console.log(message)
-  //msg = JSON.parse(message.message);
-  id = message.peerID;
-  name = message.peerName;
 
-//make peer if missing
-  if(!(id in peers)){
-  console.log("adding peer "+id)
-      peers[id] = {"name":name}
-      var peerPanel = document.createElement("div");
-      peerPanel.className = 'PIPanel';
-      peerPanel.innerHTML = peers[id].name;
-      peerPanel.id = id;
-      
-      //var imgPanel = document.createElement("img");
-      //bridge.getAvatarDetails(id).assignTo(imgPanel);
-      //peerPanel.insertBefore(imgPanel, peerPanel.firstChild);
-      //peerPanel = "<p class='PIPanel' id='"+id+"'>"+peers[id].name+"</p>";
-      document.getElementById("peerlist").appendChild(peerPanel);//innerHTML+=peerPanel;
-
-      var peerPanel = document.createElement("div");
-      peerPanel.className = 'PIPanel';
-      peerPanel.innerHTML = peers[id].name+" <a href=directchat.html?peerid="+id+">chat</a><br/>";
-      peerPanel.insertBefore(imgPanel, peerPanel.firstChild);
-      document.getElementById("peerlistplain").appendChild(peerPanel);
-
-   }
-
-   //show peers last  message
-   peerPanel = peers[id].name+"<br/>Last message="+message.message;
-   document.getElementById(id).innerHTML = peerPanel
-
-}
-
-tick();
-
-//send a message to everyone each second, so they know we are alive
-function tick(){
-    var packetdata = {"type":"indexping","msg":"hi there"};
-    bridge.broadcastMessage(JSON.stringify(packetdata));
-    setTimeout(tick,1000);
-}
-
-   function searchKeyDown(e) {
-       if (e.keyCode == 13) {
-            testSearch();
-           return false;
-       }
-   }
-</script>
 </head><body>
 <h1>WebScriptRS</h1>
 <div class="floatLeftContentPanel">
@@ -113,5 +60,62 @@ function tick(){
     <div id="peerlist"></div>
   </div>
 </div>
+
+<script>
+var peers = {}
+bridge.msgPush.connect(incomingMsg);
+function incomingMsg(message){
+  //console.log(message)
+  //msg = JSON.parse(message.message);
+  id = message.peerID;
+  name = message.peerName;
+
+//make peer if missing
+  if(!(id in peers)){
+  console.log("adding peer "+id)
+      peers[id] = {"name":name}
+      var peerPanel = document.createElement("div");
+      peerPanel.className = 'PIPanel';
+      peerPanel.innerHTML = peers[id].name;
+      peerPanel.id = id;
+      
+      var imgPanel = document.createElement("img");
+      bridge.getAvatarDetails(id).assignTo(imgPanel);
+      imgPanel.width=32
+      //peerPanel.insertBefore(imgPanel, peerPanel.firstChild);
+      //peerPanel = "<p class='PIPanel' id='"+id+"'>"+peers[id].name+"</p>";
+      document.getElementById("peerlist").appendChild(peerPanel);//innerHTML+=peerPanel;
+
+      var PpeerPanel = document.createElement("div");
+      PpeerPanel.className = 'PIPanel';
+      PpeerPanel.innerHTML = peers[id].name+" <a href=directchat.html?peerid="+id+">chat</a><br/>";
+      PpeerPanel.insertBefore(imgPanel, PpeerPanel.firstChild);
+      document.getElementById("peerlistplain").appendChild(PpeerPanel);
+
+   }
+
+   //show peers last  message
+   peerPanel = peers[id].name+"<br/>Last message="+message.message;
+   document.getElementById(id).innerHTML = peerPanel
+
+}
+
+tick();
+
+//send a message to everyone each second, so they know we are alive
+function tick(){
+    var packetdata = {"type":"indexping","msg":"hi there"};
+    bridge.broadcastMessage(JSON.stringify(packetdata));
+    setTimeout(tick,1000);
+}
+
+   function searchKeyDown(e) {
+       if (e.keyCode == 13) {
+            testSearch();
+           return false;
+       }
+   }
+</script>
+
 </body>
 </html>
