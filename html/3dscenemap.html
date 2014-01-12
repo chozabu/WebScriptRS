@@ -193,6 +193,28 @@ function testSearch(){
 				//
 
 				window.addEventListener( 'resize', onWindowResize, false );
+				
+                        window.addEventListener( 'keydown', function ( event ) {
+                            console.log(event.which);
+                            
+                            if (control)if (event.keyCode == 27) control.detach();
+                            
+                            if (control){}else return;
+                            switch ( event.keyCode ) {
+                              case 81: // Q
+                                control.setSpace( control.space == "local" ? "world" : "local" );
+                                break;
+                              case 87: // W
+                                control.setMode( "translate" );
+                                break;
+                              case 69: // E
+                                control.setMode( "rotate" );
+                                break;
+                              case 82: // R
+                                control.setMode( "scale" );
+                                break;
+                            }            
+                        });
 
 			}
 			var glbe;
