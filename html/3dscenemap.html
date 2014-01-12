@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+<link rel="stylesheet" href="ct.css" type="text/css">
+		<title>three.js canvas - interactive particles</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #f0f0f0;
+				margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="three.min.js"></script>
+
+                <script src="js/controls/OrbitControls.js"></script>
+                <script src="js/controls/TransformControls.js"></script>
+		<!--<script src="js/libs/stats.min.js"></script>-->
+<script>
+function loadImg(path) {
+  var tex = THREE.ImageUtils.loadTexture(path);
+  var geometry = new THREE.PlaneGeometry(100, 100);//tex.image.height/1.0);
+  var material = new THREE.MeshPhongMaterial({map: tex})
+  return new THREE.Mesh(geometry, material);
+}
+
+var searchResults;
+var searchInput;
+
+
+   function searchKeyDown(e) {
+   console.log(e)
+       if (e.keyCode == 13) {
+            testSearch();
+           return false;
+       }
+   }
+   
+supportedFormats = {".png":true,".jpg":true,".gif":true}
+
+function testSearch(){
+    var resultspanel = searchResults;//document.createElement( 'div' );
+    limit = 20;
+    resultspanel.innerHTML = "";
+    searchTerms = searchInput.value;
+    searchOptions = {"localindexed":true};//,"remoteindexed":remote.checked,"turtle":turtle.checked,"boolexp":boolxp.checked};
+    var sresult = bridge.searchKeywords(searchTerms, searchOptions);
+    console.log(sresult);
+    var results = sresult.results;
+    
+    range = results.length;
+    if (range>limit){
+                range=limit;
+                limit=0;
+        }else{
+                limit -= range;
+        }
+    resultspanel.innerHTML += "" + results.length+ " files:<br/>";
+    var actualpath;
+    //for each result
+    for (var i = 0;i<range;i++){
+      console.log(i);
+      
+      //display image if png/jpg/gif
+      var ext = results[i].srname.slice(results[i].srname.length-4,results[i].srname.length);
+      if(supportedFormats[ext]){
+        var resultPanel = "<p class='PIPanel'>";
+        resultPanel+="<b>"+results[i].srname+"</b>";//+rslink;
+        
+        actualpath = results[i].fullpath + "/" + results[i].srname;
+        console.log("Local file: " + actualpath);
+          var instantlink = '<a id="myLink" href="#" onclick="loadFromPath(\''+actualpath+'\');return false;">Load it up!</a><br>';
+          resultspanel.innerHTML+=instantlink;
+        
+        console.log(results[i].fullpath)
+        console.log(results[i].srname)
+        var imgele = "<img src='"+actualpath+"'></img><br>";
+        resultPanel+=imgele;
+        resultspanel.innerHTML += resultPanel+"</p>"
+      }
+    }
+    console.log(results);
+}
+		
+
+			var container, stats, controls, plane;
+			var camera, scene, projector, renderer;
+			
+			var remoteon = false;
+			var remotepos = [0,0];
+
+			var PI2 = Math.PI * 2;
+			
+			var objects = [];
+			
+			var control;
+
+			//var mouse = { x: 0, y: 0 }, INTERSECTED;
+
+                        var mouse = new THREE.Vector2(),
+                        offset = new THREE.Vector3(),
+                        INTERSECTED, SELECTED;
+                        
+			init();
+			animate();
+			
+			function init() {
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+                                var info = document.createElement( 'div' );
+                                info.style.position = 'absolute';
+                                info.style.top = '10px';
+                                info.style.width = '100%';
+                                info.style.textAlign = 'center';
+                                info.innerHTML = 'based on three.js, canvas - interactive particles <br> <a href="index.html">back to index</a>';
+                                container.appendChild( info );
+                                
+                                
+                                var searchPanel = document.createElement( 'div' );
+                                searchPanel.style.position = 'absolute';
+                                searchPanel.style.top = '30px';
+                                searchPanel.style.width = '40%';
+                                //searchPanel.style.height = '90%';
+                                searchPanel.style.margin = '0.5em';
+                                searchPanel.style.textAlign = 'left';
+                                //searchPanel.style.overflow="scroll";
+                                container.appendChild( searchPanel );
+                                
+                                searchInput = document.createElement("input");
+                                searchInput.name="searchInput"
+                                searchInput.id="searchInput"
+                                searchInput.type="text"
+                                searchInput.value=".png"
+                                searchInput.onkeypress=searchKeyDown
+                                searchPanel.appendChild( searchInput );
+                                
+                                searchResults = document.createElement( 'div' );
+                                searchResults.style.position = 'absolute';
+                                //searchResults.style.top = '30px';
+                                searchResults.style.width = '40%';
+                                //searchResults.style.margin = '0.5em';
+                                //searchResults.style.overflow="scroll";
+                                searchResults.style.textAlign = 'left';
+                                searchPanel.appendChild( searchResults );
+                                
+                                testSearch();
+                                
+				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.set( 0, 300, 500 );
+				
+                                controls = new THREE.OrbitControls( camera );
+                                controls.rotateSpeed = 1.0;
+                                controls.zoomSpeed = 1.2;
+                                controls.panSpeed = 0.8;
+                                controls.noZoom = false;
+                                controls.noPan = false;
+                                controls.staticMoving = true;
+                                controls.dynamicDampingFactor = 0.3;
+
+				scene = new THREE.Scene();
+				
+                                plane = new THREE.Mesh( new THREE.PlaneGeometry( 2000, 2000, 8, 8 ), new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.25, transparent: true, wireframe: true } ) );
+                                plane.visible = false;
+                                scene.add( plane );
+
+				projector = new THREE.Projector();
+
+                                renderer = new THREE.CanvasRenderer();//WebGLRenderer
+                                //renderer = new THREE.WebGLRenderer();//WebGLRenderer
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				container.appendChild( renderer.domElement );
+				
+				
+                                //control = new THREE.TransformControls( camera, renderer.domElement );
+
+				/*stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.top = '0px';
+				container.appendChild( stats.domElement );*/
+
+                                document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+                                window.addEventListener( 'mousedown', onDocumentMouseDown, false );
+                                document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+
+				//
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+			var glbe;
+			function loadFromPath(path){
+			glbe = loadImg(path);
+                          objects.push(glbe);
+                          scene.add(glbe);
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+			
+                        function onDocumentMouseMove( event ) {
+
+                                event.preventDefault();
+
+                                mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+                                mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+                                //
+
+                                var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
+                                projector.unprojectVector( vector, camera );
+
+                                var raycaster = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
+
+
+                                if ( SELECTED ) {
+
+                                        var intersects = raycaster.intersectObject( plane );
+                                        SELECTED.position.copy( intersects[ 0 ].point.sub( offset ) );
+                                        return;
+
+                                }
+
+
+                                var intersects = raycaster.intersectObjects( objects );
+
+                                if ( intersects.length > 0 ) {
+
+                                        if ( INTERSECTED != intersects[ 0 ].object ) {
+
+                                                if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
+
+                                                INTERSECTED = intersects[ 0 ].object;
+                                                INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
+
+                                                plane.position.copy( INTERSECTED.position );
+                                                plane.lookAt( camera.position );
+
+                                        }
+
+                                        container.style.cursor = 'pointer';
+
+                                } else {
+
+                                        if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
+
+                                        INTERSECTED = null;
+
+                                        container.style.cursor = 'auto';
+
+                                }
+
+                        }
+
+                        function onDocumentMouseDown( event ) {
+                                console.log(event);     
+                                if (event.target == searchInput){
+                                  searchInput.focus();
+                                  return;
+                                }
+                                event.preventDefault();
+
+                                var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
+                                projector.unprojectVector( vector, camera );
+
+                                var raycaster = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
+
+                                var intersects = raycaster.intersectObjects( objects );
+                                console.log(intersects);
+
+                                if ( intersects.length > 0 ) {
+
+                                        controls.enabled = false;
+
+                                        SELECTED = intersects[ 0 ].object;
+
+                                        var intersects = raycaster.intersectObject( plane );
+                                        offset.copy( intersects[ 0 ].point ).sub( plane.position );
+
+                                        container.style.cursor = 'move';
+                                        
+                                        if (control != undefined) {
+                                                control.detach();
+                                        }
+                                        control = new THREE.TransformControls(camera, renderer.domElement);
+                
+                                        control.attach(SELECTED);//mismatching 3.js libs?
+                                        scene.add(control);
+                                        console.log(control);
+
+                                }else{
+                                        if (control != undefined) {
+                                                control.detach();
+                                        }
+                                }
+
+                        }
+
+                        function onDocumentMouseUp( event ) {
+
+                                event.preventDefault();
+
+                                controls.enabled = true;
+
+                                if ( INTERSECTED ) {
+
+                                        plane.position.copy( INTERSECTED.position );
+
+                                        SELECTED = null;
+                                }
+
+                                container.style.cursor = 'auto';
+
+                        }
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				render();
+				//stats.update();
+
+			}
+
+			var radius = 600;
+			var theta = 0;
+
+			function render() {
+
+                                controls.update();
+                                
+                                if (control != undefined)control.update();
+
+				camera.updateMatrixWorld();
+
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+
+	</body>
+</html>

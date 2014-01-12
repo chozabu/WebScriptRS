@@ -12,6 +12,7 @@ function incomingMsg(message){
 
 //make peer if missing
   if(!(id in peers)){
+  console.log("adding peer "+id)
       peers[id] = {"name":name}
       var peerPanel = document.createElement("div");
       peerPanel.className = 'PIPanel';
@@ -62,6 +63,7 @@ function tick(){
   <a href="fdgraph.html">Anon Global Peer Map</a> exports anon FoF list, and downloads others. Also has a filter function, slower than RS internal C++ friend graph<br/>
   <a href="broadcastchat.html">Broadcast Chat</a> Talk to all friends using WSRS<br/>
   <a href="ivank/kevents.html">Ivank simple drivable car</a> simple car demo with basic networking added -requires webgl<br/>
+  <a href="3dscenemap.html">3d Scene Map</a> Early stages, arrange images in 3d space<br/>
 </div>
 <div class="simpleContentPanel">
   <h3>Notes or js/HTML fiddles</h3>
