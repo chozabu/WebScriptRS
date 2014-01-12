@@ -25,6 +25,10 @@ FORMS   = topjcdialog.ui \
     webtabcontents.ui
 
 
+#CONFIG += use_GXS
+use_GXS {
+    DEFINES += BRIDGEGXS
+}
 #CONFIG += use_python
 use_python {
     #embedded pyqt
