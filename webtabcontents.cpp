@@ -24,7 +24,9 @@ WebTabContents::WebTabContents(QWidget *parent) :
     //jslog->show();
     QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
     QWebSettings::globalSettings()->setAttribute(QWebSettings::LocalContentCanAccessFileUrls, true);
-    QWebSettings::globalSettings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
+	QWebSettings::globalSettings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
+	QWebSettings::globalSettings()->setAttribute(QWebSettings::WebGLEnabled, true);
+	QWebSettings::globalSettings()->setAttribute(QWebSettings::AcceleratedCompositingEnabled, true);
 
     //connect(ui->testButton, SIGNAL(clicked()), this->webview, SLOT(reload()));
     connect(ui->testButton, SIGNAL(clicked()), this, SLOT(changeLocation()));
