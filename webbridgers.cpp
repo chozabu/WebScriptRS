@@ -43,7 +43,18 @@ WebBridgeRS::WebBridgeRS(QObject *parent) :
     connect(NotifyQt::getInstance(), SIGNAL(downloadComplete(QString)), this, SLOT(onDownloadComplete(QString)));
     connect(NotifyQt::getInstance(), SIGNAL(gotTurtleSearchResult(qulonglong,FileDetail)), this, SLOT(gotTurtleSearchResult(qulonglong,FileDetail)));
 
+#ifdef BRIDGEGXS
+	//mPostedQueue = new TokenQueue(rsPosted->getTokenService(), this);
+#endif
+
 }
+
+
+//virtual void loadRequest(const TokenQueue *queue, const TokenRequest &req) = 0;
+void WebBridgeRS::loadRequest(const TokenQueue *queue, const TokenRequest &req){
+
+}
+
 
 #ifdef EMBPYTHON
 void WebBridgeRS::runPython(QString text){
@@ -136,15 +147,22 @@ void WebBridgeRS::newTabAt(QString url){
 #ifdef BRIDGEGXS
 QVariantList WebBridgeRS::getPostedList(){
     u_int32_t token;
-    std::list<RsGxsGroupId> groupList;
-    rsPosted->getGroupList(token, groupList);
+	mPostedQueue = new TokenQueue(rsPosted->getTokenService(), this);
+	std::list<RsGroupMetaData> groupInfo;
+	rsPosted->getGroupSummary(token, groupInfo);
 
     QVariantList qResults;
-    std::list<RsGxsGroupId>::iterator it;
-    for(it = groupList.begin(); it != groupList.end(); it++) {
-        RsGxsGroupId dd;
+    std::list<RsGroupMetaData>::iterator it;
+    for(it = groupInfo.begin(); it != groupInfo.end(); it++) {
+        RsGroupMetaData dd;
         dd = *it;
-        std::cout << dd << std::endl;
+		QVariantMap qdd;
+		qdd.insert("mGroupName",QString::fromUtf8(dd.mGroupName.c_str()));
+		qdd.insert("mGroupId",QString::fromStdString(dd.mGroupId));
+		//qdd.insert("mAuthorId",dd.mAuthorId);
+		//qdd.insert("mCircleId",dd.mCircleId);
+		qResults.push_back(qdd);//QString::fromStdString(dd));
+        //std::cout << dd << std::endl;
     }
 
     return qResults;

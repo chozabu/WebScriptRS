@@ -6,6 +6,7 @@
 #include<QVariantMap>
 #include <QPixmap>
 #include <retroshare/rsfiles.h>
+#include <util/TokenQueue.h>
 
 #ifdef EMBPYTHON
 #include "embpyqt/embeddedpyqt.h"
@@ -19,7 +20,7 @@
 class p3JsonRS;
 
 /*this class is passed to JS as "bridge"*/
-class WebBridgeRS : public QJsonRpcService
+class WebBridgeRS : public QJsonRpcService, public TokenResponse
 {
 
     Q_OBJECT
@@ -31,6 +32,9 @@ public:
     QMap<QString,QPixmap> avatars;
 #ifdef EMBPYTHON
     EmbeddedPyQt *embpyqt;
+#endif
+#ifdef BRIDGEGXS
+	TokenQueue *mPostedQueue;
 #endif
 
 //the public slots are exposed to JS
@@ -77,6 +81,9 @@ private slots:
     void onUrlDownloaded();
     void onDownloadComplete(QString hash);
     void gotTurtleSearchResult(qulonglong search_id,FileDetail file);
+private:
+
+	void loadRequest(const TokenQueue *queue, const TokenRequest &req);
 signals:
     void msgPush(QVariantMap message);
     void urlDownloaded(QString path, QString url);
