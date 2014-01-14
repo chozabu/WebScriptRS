@@ -383,7 +383,7 @@ function downloadMore(){
     
         var qname = results[i].srname;
         var qsize = results[i].size;
-        var qhash = +results[i].hash;
+        var qhash = results[i].hash;
     var result = bridge.downloadFile(qname, qhash, qsize);
     if (result.status != "downloaded"){
     downloadEle.innerHTML+="Downloading: "+qname+"<br>";
