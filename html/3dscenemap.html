@@ -20,6 +20,8 @@
 
                 <script src="js/controls/OrbitControls.js"></script>
                 <script src="js/controls/TransformControls.js"></script>
+                <script src="js/SceneExporter.js"></script>
+                <script src="zepto.min.js"></script>
 		<!--<script src="js/libs/stats.min.js"></script>-->
 <script>
 function loadImg(path) {
@@ -31,6 +33,7 @@ function loadImg(path) {
 
 var searchResults;
 var searchInput;
+    var ddir = bridge.getDownloadDirectory();
 
 
    function searchKeyDown(e) {
@@ -41,7 +44,8 @@ var searchInput;
        }
    }
    
-supportedFormats = {".png":true,".jpg":true,".gif":true}
+supportedImages = {".png":true,".jpg":true,".gif":true}
+supportedScenes = {"json":true,".dat":true,".idk":true}
 
 function testSearch(){
     var resultspanel = searchResults;//document.createElement( 'div' );
@@ -68,19 +72,32 @@ function testSearch(){
       
       //display image if png/jpg/gif
       var ext = results[i].srname.slice(results[i].srname.length-4,results[i].srname.length);
-      if(supportedFormats[ext]){
+      if(supportedImages[ext]){
         var resultPanel = "<p class='PIPanel'>";
         resultPanel+="<b>"+results[i].srname+"</b>";//+rslink;
         
         actualpath = results[i].fullpath + "/" + results[i].srname;
         console.log("Local file: " + actualpath);
-          var instantlink = '<a id="myLink" href="#" onclick="loadFromPath(\''+actualpath+'\');return false;">Load it up!</a><br>';
+          //var instantlink = '<a id="myLink" href="#" onclick="loadFromPath(\''+actualpath+'\');return false;">Insert image</a><br>';
+          //resultspanel.innerHTML+=instantlink;
+        
+        console.log(results[i].fullpath)
+        console.log(results[i].srname)
+        var imgele = '<a id="myLink" href="#" onclick="loadFromPath(\''+actualpath+'\');return false;">Insert image<br>'+"<img src='"+actualpath+"' width='100%'></img></a><br>";
+        resultPanel+=imgele;
+        resultspanel.innerHTML += resultPanel+"</p>"
+      }
+      if(supportedScenes[ext]){
+        var resultPanel = "<p class='PIPanel'>";
+        resultPanel+="<b>"+results[i].srname+"</b>";//+rslink;
+        
+        actualpath = results[i].fullpath + "/" + results[i].srname;
+        console.log("Local file: " + actualpath);
+          var instantlink = '<a id="myLink" href="#" onclick="loadData(\''+actualpath+'\');return false;">Load the scene!</a><br>';
           resultspanel.innerHTML+=instantlink;
         
         console.log(results[i].fullpath)
         console.log(results[i].srname)
-        var imgele = "<img src='"+actualpath+"' width='100%'></img><br>";
-        resultPanel+=imgele;
         resultspanel.innerHTML += resultPanel+"</p>"
       }
     }
@@ -220,10 +237,59 @@ function testSearch(){
 			}
 			var glbe;
 			function loadFromPath(path){
-			glbe = loadImg(path);
+                          glbe = loadImg(path);
                           objects.push(glbe);
                           scene.add(glbe);
 			}
+			
+                        function loadFromSaved(data){
+                          glbe = loadImg(ddir+data.mat);
+                          glbe.position =data.pos;
+                          glbe.s =data.scale;
+                          glbe.geometry.width =data.w;
+                          glbe.geometry.height =data.h;
+                          glbe.geometry.depth =data.d;
+                          objects.push(glbe);
+                          scene.add(glbe);
+                        }
+
+exportScene = function () {
+  JSONSceneSnapshot = []
+  for (child in objects) {
+    tc = objects[child];
+      data = {
+              pos: tc.position,
+              s: tc.scale,
+              mat: tc.material.map.sourceFile.replace(ddir,""),
+              w: tc.geometry.width,
+              h: tc.geometry.height,
+              d: tc.geometry.depth
+
+      };
+      JSONSceneSnapshot.push(data);
+  }
+  return JSON.stringify(JSONSceneSnapshot);
+}
+function saveData(filename){
+  bridge.writeString(filename,exportScene());
+}
+function loadData(filename){
+  clearScene();
+  $.getJSON(filename, loadScene)
+}
+clearScene = function () {
+    scene = new THREE.Scene();
+}
+
+importScene = function (json) {
+    loadScene(JSON.parse(json));
+}
+loadScene = function (objs) {
+    for (o in objs){
+      obj = objs[o];
+      loadFromSaved(obj);
+    }
+}
 
 			function onWindowResize() {
 
