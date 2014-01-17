@@ -37,7 +37,6 @@ Examples include:
 
 
 #### Warning Included tests do not sanitise HTML. The JS has not been written with security in mind.
-index12nov2013.png  microblog12nov2013.png  search12nov2013.png
 
 ![My image](http://chozabu.net/stuff/microblog12nov2013.png)
 ![My image](http://chozabu.net/stuff/search12nov2013.png)
@@ -52,59 +51,66 @@ index12nov2013.png  microblog12nov2013.png  search12nov2013.png
 
 ###PreReq:
 
-sudo apt-get install libpython-dev libpython-all-dev<br>
-sudo apt-get install python-dev #use this lines instead of above on older systems<br>
-sudo apt-get install python-qt4<br>
-<br>
-if you want to run the Geo Friend Map Test:<br>
-sudo apt-get install python-mpltoolkits.basemap<br>
-sudo pip install pygeoip<br>
+sudo apt-get install libpython-dev libpython-all-dev 
+sudo apt-get install python-dev #use this lines instead of above on older systems 
+sudo apt-get install python-qt4 
+ 
+if you want to run the Geo Friend Map Test: 
+sudo apt-get install python-mpltoolkits.basemap 
+sudo pip install pygeoip 
 
 ###Build/Install
 ##PreReq
-You will need a linux machine <br>
-apt-get install python-dev python-qt4 <br>
-is a good start, <br>
-apt-get install python-mpltoolkits.basemap<br>
-Will let you run the geoip peermap demo <br>
+You will need a linux machine 
+<pre>
+  apt-get install python-dev python-qt4
+</pre>
+is a good start,  
+<pre>
+  apt-get install python-mpltoolkits.basemap 
+</pre>
+Will let you run the geoip peermap demo   
 please let me know if you need to install anything else to make it run.
 ##compile
-you probably want to clone this into the plugins directory of your retroshare source code.<br>
-cd myretrosharesrc/plugins/ <br>
-git clone git@github.com:chozabu/WebScriptRS.git<br>
-cd WebScriptRS<br>
-At this point you can run the initalbuild.sh script or:<br>
-  git clone https://bitbucket.org/devonit/qjsonrpc.git<br>
-  cd qjsonrpc/src/<br>
-  qmake-qt4 QJSONRPC_LIBRARY_TYPE=staticlib; make<br>
-  cd ..<br>
-  qmake-qt4; make<br>
-
+you probably want to clone this into the plugins directory of your retroshare source code. 
+<pre>
+  cd myretrosharesrc/plugins/  
+  git clone git@github.com:chozabu/WebScriptRS.git  
+cd WebScriptRS 
+</pre>
+At this point you can run the initalbuild.sh script or: 
+<pre>
+  git clone https://bitbucket.org/devonit/qjsonrpc.git  
+  cd qjsonrpc/src/  
+  qmake-qt4 QJSONRPC_LIBRARY_TYPE=staticlib; make  
+  cd ..  
+  qmake-qt4; make  
+</pre>
 ###install/run
-copy the .so files to your .retroshare/extensions/ directory<br>
-**run RetroShare from the plugins directory!**<br>
-install/run can be acomplished by running the script ctestit.sh<br>
+copy the .so files to your .retroshare/extensions/ directory  
+**run RetroShare from the plugins directory!**  
+install/run can be acomplished by running the script ctestit.sh 
 
 ###JS Bridge
 
-There is not much documentation yet - but there are examples, and you can look at webbridgers.h <br>
-currently you can send a message like this: <br>
-<code>
-var packetdata = {"type":"chatmessage","pos":"thiscouldbeanything"}; <br>
-bridge.broadcastMessage(JSON.stringify(packetdata)); <br>
-</code>
+There is not much documentation yet - but there are examples, and you can look at webbridgers.h  
+currently you can send a message like this: 
+<pre>
+var packetdata = {"type":"chatmessage","pos":"thiscouldbeanything"};  
+bridge.broadcastMessage(JSON.stringify(packetdata)); 
+</pre>
 
-or directly like this: <br>
-<code>
-var packetdata = {"x":3,"y":5,"name":"Eric"}; <br>
-bridge.sendMessage(peer_id_as_string, JSON.stringify(packetdata)); <br>
-</code>
-And get one like this: <br>
-<code>
-bridge.msgPush.connect(incomingMsg); <br>
-function incomingMsg(message){ <br>
-  var packetdata = JSON.parse(message.message); <br>
-  var peer_id_as_string = message.peerID; <br>
-  var name = message.peerName;
+or directly like this: 
+<pre>
+var packetdata = {"x":3,"y":5,"name":"Eric"};  
+bridge.sendMessage(peer_id_as_string, JSON.stringify(packetdata)); 
+</pre>
+And get one like this: 
+<pre>
+bridge.msgPush.connect(incomingMsg);  
+function incomingMsg(message){  
+  var packetdata = JSON.parse(message.message);  
+  var peer_id_as_string = message.peerID;  
+  var name = message.peerName;  
 }
-</code>
+</pre>
