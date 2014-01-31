@@ -75,7 +75,7 @@ please let me know if you need to install anything else to make it run.
 you probably want to clone this into the plugins directory of your retroshare source code. 
 <pre>
   cd myretrosharesrc/plugins/  
-  git clone git@github.com:chozabu/WebScriptRS.git  
+  git clone https://github.com/chozabu/WebScriptRS.git  
 cd WebScriptRS 
 </pre>
 At this point you can run the initalbuild.sh script or: 
